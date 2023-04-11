@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+@font-face {
+    font-family: "Gries";
+    src: url("../src/assets/fonts/Gries.otf");
+}
+@font-face {
+    font-family: 'n27regular';
+    src: url('../src/assets/fonts/n27-regular-webfont.eot');
+    src: url('../src/assets/fonts/n27-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../src/assets/fonts/n27-regular-webfont.woff2') format('woff2'),
+         url('../src/assets/fonts/n27-regular-webfont.woff') format('woff'),
+         url('../src/assets/fonts/n27-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
