@@ -7,7 +7,8 @@ import EnviarUbicacionIcono from '../../../assets/images/IconoEnviarUbicacion.sv
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Map } from '../components/Map';
 import { useState } from 'react'
-import { Modal } from '../components/Modal'
+import { ModalInfo } from '../components/ModalInfo'
+import { ModalElegir } from '../components/ModalElegir'
 export const EventPage = () => {
 
   const handleDireccion = (event:any) => {
@@ -35,15 +36,25 @@ export const EventPage = () => {
     }
   }
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModalInfo, setShowModalInfo] = useState(false);
+  const [showModalElegir, setShowModalElegir] = useState(false);
 
   const openModal = () => {
-    setShowModal(true);
+    setShowModalInfo(true);
+  };
+
+  const openModalElegir = () => {
+    setShowModalElegir(true);
   };
 
   const closeModal = () => {
-    setShowModal(false);
+    setShowModalInfo(false);
   };
+
+  const closeModalElegir = () => {
+    setShowModalElegir(false);
+  };
+
 
   return (
     <>
@@ -62,7 +73,10 @@ export const EventPage = () => {
         </div>
         <hr className='mr-5 mt-2 opacity-5 pb-3'/>
         <div className='flex justify-center '>
-          <button className='bg-primary text-black font-n27 text-xl p-2 rounded-3xl w-64'>Unirse - 2,95€</button>
+          <button className='bg-primary text-black font-n27 text-xl p-2 rounded-3xl w-64' onClick={openModalElegir}>Unirse - 2,95€</button>
+          {showModalElegir && (
+        <ModalElegir onClose={closeModalElegir}/>
+      )}
         </div>
         <hr className='mr-5 mt-3 opacity-5'/>
           <div className=" border-gray-200 py-5 pt-6">
@@ -91,14 +105,14 @@ export const EventPage = () => {
         <div className="flex items-center justify-start pb-3">
             <div>
             <h5 className='text-white font-n27'>
-        Quedan <b>2</b> huecos libres{' '}
+        Quedan <b>2</b> plazas libres.{' '}
         <a className='text-primary  cursor-pointer' onClick={openModal}>
-          ver equipos...
+          Ver equipos...
         </a>
       </h5>
       {/* Renderiza el componente Modal si showModal es verdadero */}
-      {showModal && (
-        <Modal onClose={closeModal}/>
+      {showModalInfo && (
+        <ModalInfo onClose={closeModal}/>
       )}
             </div>
         </div>
