@@ -12,10 +12,13 @@ import sportime from '../../../assets/images/logo.svg'
 
 import { Navbar } from "../../../ui"
 import { SearchMobile } from "../../../ui/components/SearchMobile"
+import { CircularProgress } from "../../sportsCenter/components/CircularProgress"
+import { useState } from "react"
 
 export const HomePage = () => {
 
-
+  const [progress, setProgress] = useState(8);
+  const total = 10;
 
   return (
     <>
@@ -77,9 +80,9 @@ export const HomePage = () => {
                     <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
+                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                  <CircularProgress value={progress} total={total}/>
+                </div>
               </div>
 
               <div className="relative">
@@ -99,9 +102,9 @@ export const HomePage = () => {
                     <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
+                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                  <CircularProgress value={progress} total={total}/>
+                </div>
               </div>
 
               <div className="relative">
@@ -121,9 +124,9 @@ export const HomePage = () => {
                     <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
+                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                  <CircularProgress value={progress} total={total}/>
+                </div>
               </div>
 
               <div className="relative">
@@ -143,9 +146,9 @@ export const HomePage = () => {
                     <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
+                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                  <CircularProgress value={progress} total={total}/>
+                </div>
               </div>
 
               <div className="relative">

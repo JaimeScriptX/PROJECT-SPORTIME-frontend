@@ -29,8 +29,18 @@ export default {
         'card-secondary': '#262626',
         'footer': '#222222',
       },
+      borderRadius: {
+        'full': '9999px',
+      },
+      strokeWidth: {
+        '3': '3',
+      },
+      strokeDasharray: {
+        'full': '1000',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 }
 
