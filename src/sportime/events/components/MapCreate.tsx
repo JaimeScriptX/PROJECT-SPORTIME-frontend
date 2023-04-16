@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
+import PadelIcon from '../../../assets/images/PadelIcon.png'
+import FutbolIcon from '../../../assets/images/iconFutbol.svg'
+import BaloncestoIcon from '../../../assets/images/iconBaloncesto.svg'
+import TenisIcon from '../../../assets/images/iconTenis.svg'
+import FutbolSalaIcon from '../../../assets/images/iconFutbolSala.svg'
 import type { MapController } from "@maptiler/geocoding-control/types";
 import "@maptiler/geocoding-control/style.css";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import '../../../assets/css/mapCreate.css'
 
 export const MapCreate = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -35,8 +41,9 @@ export const MapCreate = () => {
           'type': 'Feature',
           'properties': {
           'description':
-          '<div class="font-n27 bg-portada text-primary"><strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p></div>',
-          'icon': 'marker'
+          `<div class="bg-portada rounded-lg shadow"><div class="p-4"><h2 class="text-2xl font-bold text-white">Polideportivo municipal de Archena</h2><div class="my-4"><img src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" alt="Descripción de la imagen" class="w-full rounded-lg shadow-md"><hr class="mr-5 mt-3 w-full bg-white opacity-50"/></div><div class="flex flex-wrap mt-2 gap-2"> <span class="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2 centrar"> <img src=${FutbolIcon} width="15px" class="mr-2"/><h1>Fútbol</h1> </span> <span class="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2 centrar"> <img src=${TenisIcon} width="15px" class="mr-2"/><h1>Tenis</h1> </span> <span class="bg-primary text-black font-medium rounded-full py-1 px-2 mr-2 mb-2 centrar"> <img src=${PadelIcon} width="15px" class="mr-2"/><h1>Padel</h1> </span> <span class="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2 centrar"> <img src=${FutbolSalaIcon} width="15px" class="mr-2"/><h1>Fútbol Sala</h1> </span> <span class="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2 centrar"> <img src=${BaloncestoIcon} width="15px" class="mr-2"/><h1>Baloncesto</h1> </span> <div class="mt-4"><hr class="mr-5 mb-3 w-full bg-white opacity-50"/> <a href="/centro-deportivo" class="bg-primary text-black font-medium py-2 px-4 rounded-full mr-2">Saber más</a> <button class="bg-white text-black font-medium py-1 px-4 rounded-full mr-2">Elegir</button> </div>`,
+          'icon': 'marker',
+          'width': '250px'
           },
           'geometry': {
           'type': 'Point',
@@ -163,6 +170,11 @@ export const MapCreate = () => {
             .setLngLat(coordinates)
             .setHTML(description)
             .addTo(map.current!);
+
+
+            map.current?.flyTo({
+              center: e.features[0].geometry.coordinates
+              });
         });
 
       
