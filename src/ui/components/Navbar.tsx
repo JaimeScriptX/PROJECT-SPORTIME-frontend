@@ -64,6 +64,9 @@ export const Navbar = () => {
           <Link to="/auth/login" className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-primary hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">
             Ingresar
           </Link>
+          <button disabled>
+                                <img src="https://picsum.photos/40" className="rounded-full" alt="Profile 03" />
+                            </button>
         </nav>
         <div className={`navbar-menu relative z-50 ${isMenuOpen ? 'block' : 'hidden'} flex`}>
             <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
