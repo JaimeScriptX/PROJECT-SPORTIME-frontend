@@ -59,139 +59,140 @@ export const HomePage = () => {
           <SearchMobile />
         </section>
         <section className="bg-fondo pattern">
-          <h1 className="pt-20 pl-28 font-n27 text-white text-5xl ">Últimos eventos</h1>
+          <h1 className="pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
           <div className="relative pb-12">
-             <div className="scrollbar-hide flex w-full pl-32 pt-5 snap-x snap-mandatory scroll-px-10 gap-14 overflow-x-scroll scroll-smooth">
+             <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
               
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
-                </div>
-                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
                   <CircularProgress value={progress} total={total}/>
                 </div>
               </div>
 
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
-                </div>
-                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
                   <CircularProgress value={progress} total={total}/>
                 </div>
               </div>
 
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
-                </div>
-                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
                   <CircularProgress value={progress} total={total}/>
                 </div>
               </div>
 
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
-                </div>
-                <div className="w-20 h-20 absolute " style={{ right: '2rem', top:'14rem' }}>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
                   <CircularProgress value={progress} total={total}/>
                 </div>
               </div>
 
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
+                  <CircularProgress value={progress} total={total}/>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
               </div>
-              <div className="relative">
-                <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
+
+              <div className="relative ">
+                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>
                   <p className="font-n27">10:30</p>
                   <p className="font-n27">02/04/2023</p>
                 </div>
-                <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                  <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 w-full font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="pr-20 font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute translate-x-20 text-2xl text-gray-300 top-11">5 VS 5</p>
+                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
+                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
+                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
+                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
+                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
                   </div>
-                  <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
+                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
+                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
                   </div>
+                </div> 
+                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
+                  <CircularProgress value={progress} total={total}/>
                 </div>
-                <button className="w-20 h-20 absolute rounded-xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'14rem' }}>
-                  <p className="font-n27 text-center">6 / 10<br />Plazas</p>
-                </button>
               </div>
 
               </div>
@@ -204,9 +205,9 @@ export const HomePage = () => {
            </div>
         </section>
         <section className="bg-fondo pattern2">
-          <h1 className="pt-14 pl-28 font-n27 text-white text-5xl ">Buscar por deporte</h1>
+          <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Buscar por deporte</h1>
             <div className="relative pb-20">
-              <div className="scrollbar-hide flex w-full pl-32 pt-5 snap-x snap-mandatory scroll-px-10 gap-14 overflow-x-scroll scroll-smooth">
+              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
                 <img src={Futbol} width={'375'}/>
                 <img src={Baloncesto} width={'375'}/>
                 <img src={Tenis} width={'375'}/>
@@ -216,12 +217,12 @@ export const HomePage = () => {
             </div>
         </section>
         <section className="bg-fondo pattern pb-5">
-          <h1 className="pt-14 pl-28 font-n27 text-white text-5xl ">Los centros deportivos más buscados de Murcia</h1>
+          <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Los centros deportivos más buscados de Murcia</h1>
             <div className="relative pb-20">
-                <div className="scrollbar-hide flex w-full pl-32 pt-5 snap-x snap-mandatory scroll-px-10 gap-14 overflow-x-scroll scroll-smooth">
+                <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
 
                     <div className="relative">
-                      <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
                           <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
@@ -230,13 +231,13 @@ export const HomePage = () => {
                           <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                         </div>
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'12.5rem' }}>
+                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
                     </div>
 
                     <div className="relative">
-                      <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
                           <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
@@ -245,13 +246,13 @@ export const HomePage = () => {
                           <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                         </div>
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'12.5rem' }}>
+                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
                     </div>
 
                     <div className="relative">
-                      <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
                           <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
@@ -260,13 +261,13 @@ export const HomePage = () => {
                           <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                         </div>
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'12.5rem' }}>
+                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
                     </div>
 
                     <div className="relative">
-                      <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
                           <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
@@ -275,13 +276,13 @@ export const HomePage = () => {
                           <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                         </div>
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'12.5rem' }}>
+                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
                     </div>
 
                     <div className="relative">
-                      <img className="w-96 h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
                           <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
@@ -290,7 +291,7 @@ export const HomePage = () => {
                           <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
                         </div>
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '10px', top:'12.5rem' }}>
+                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
                     </div>
