@@ -7,20 +7,18 @@ export const useAuthStore = () => {
     const {status, user, errorMessage} = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
 
-    const startLogin = async({username,password}:{username:string, password:string}) => {
-        console.log({username, password})
+    const startLogin = async({email,password}:{email:string, password:string}) => {
+        console.log({email, password})
         
         dispatch(onChecking())
         try {
-            const {data} = await sportimeApi.post('/login_check',{username,password})
+            const {data} = await sportimeApi.post('/login_check',{email,password})
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toString())
             dispatch(onLogin({name:data.name, uuid: data.uid}))
         } catch (error) {
-            dispatch(onLogout('Creedenciales incorrectas'))
-            setTimeout(() => {
-                dispatch(clearErrorMessage())
-            }, 10)
+            dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
+
         }
     } 
 
@@ -29,7 +27,7 @@ export const useAuthStore = () => {
         
         dispatch(onChecking())
         try {
-            const {data} = await sportimeApi.post('/auth/new',{name,email,password})
+            const {data} = await sportimeApi.post('/api/register',{name,email,password})
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toString())
             dispatch(onLogin({name:data.name, uuid: data.uid}))
@@ -38,7 +36,7 @@ export const useAuthStore = () => {
             dispatch(onLogout(error.response.data?.msg || error.response.data?.errors.name.msg ||"Error en el registro"))
             setTimeout(() => {
                 dispatch(clearErrorMessage())
-            }, 10)
+            }, 100)
         }
     } 
 

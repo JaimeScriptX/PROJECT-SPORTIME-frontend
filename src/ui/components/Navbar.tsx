@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import logo from '../../assets/images/logo.svg'
 import logoMovil from '../../assets/images/iconologo.webp'
 import { Search } from './Search';
 import { SearchMobile } from './SearchMobile';
 import { Link, NavLink } from 'react-router-dom';
 import { ModalCrearEvento } from './ModalCrearEvento';
+import { useAuthStore } from '../../hooks/useAuthStore';
 export const Navbar = () => {
-
+  const {status} = useAuthStore()
   const [showSearchD, setShowSearchD] = useState(false);
   const [showSearchM, setShowSearchM] = useState(false);
   const [authenticated, setAuthenticated] = useState(false)
@@ -15,6 +16,16 @@ export const Navbar = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if(status === "not-authenticated"){
+      setAuthenticated(false)
+    }
+    if(status === "authenticated"){
+      setAuthenticated(true)
+    }
+  }, [status])
+  
 
   const handleScroll = () => {
     const sectionDesktop = document.getElementById('my-section-desktop');
@@ -66,14 +77,14 @@ export const Navbar = () => {
           )}
 
           {
-            authenticated &&
-            <Link to="/auth/login" className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-primary hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">
+            !authenticated &&
+            <Link to="/auth/login" className="hidden lg:inline-block lg:ml-auto lg:mr-4 py-2 px-6 bg-primary hover:bg-gray-100 text-md text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">
             Ingresar
           </Link>
           }
 
           {
-            !authenticated && 
+            authenticated && 
             <div className='lg:ml-auto flex justify-center pr-5'>
                 <div className=" relative lg:inline-block lg:mr-3 ">
                 <button className="hidden lg:flex items-center justify-center font-n27 px-3 py-2 space-x-2 text-md tracking-wide transition-colors duration-200 transform  bg-primary rounded-md dark:bg-primary dark:hover:bg-lime-500 dark:focus:bg-primary  focus:outline-none  focus:ring-opacity-50"
