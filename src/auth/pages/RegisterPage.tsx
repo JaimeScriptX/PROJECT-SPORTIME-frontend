@@ -1,35 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FutbolRegister from '../../assets/images/Fultbolreunidos.png'
 import Logo from '../../assets/images/logo.svg'
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../../hooks/useAuthStore";
+import Swal from "sweetalert2";
 
 export const RegisterPage = () => {
+  const {startRegister, errorMessage} = useAuthStore()
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleNameChange = (e:any) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e:any) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e:any) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e:any) => {
-    setConfirmPassword(e.target.value);
-  };
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    // Do something with name, email, password, and confirmPassword
+    startRegister({name_and_lastname:name, username:username, email: email, password: password, phone:phone})
   };
+
+  useEffect(() => {
+    if ( errorMessage !== undefined ) {
+      Swal.fire('Error en el registro', errorMessage, 'error');
+    }    
+  }, [errorMessage])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3">
@@ -57,6 +50,25 @@ export const RegisterPage = () => {
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
+              className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm font-n27" 
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-white">
+            Nombre de usuario
+          </label>
+          <div className="mt-1">
+            <input
+              id="name"
+              name="name"
+              type="name"
+              autoComplete="name"
+              placeholder="Ingrese su nombre de usuario"
+              required
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
               className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm font-n27" 
             />
           </div>
@@ -144,16 +156,6 @@ export const RegisterPage = () => {
           </label>
           <div className="mt-1 flex items-center justify-center w-full">
             <div className="relative inline-flex w-full">
-              <select
-                className="w-24 px-2 py-2 mr-1 border rounded-lg border-gray-200 text-sm shadow-sm font-n27"
-                name="prefix"
-                id="prefix"
-              >
-              <option value="+34">+34</option>
-              <option value="+1">+1</option>
-              <option value="+44">+44</option>
-              <option value="+33">+33</option>
-              </select>
               <input
                 type="tel"
                 name="phone"
@@ -171,7 +173,7 @@ export const RegisterPage = () => {
         <div className="text-xl text-center bg-primary font-inter font-bold p-3 rounded-lg">
           <button type="submit">Crear cuenta</button>
         </div>
-        <div className="flex justify-center md:pt-32 pt-20" style={{ whiteSpace: "nowrap" }}>
+        <div className="flex justify-center md:pt-30 pt-20" style={{ whiteSpace: "nowrap" }}>
           <p className="text-white">¿No eres nuevo en SPORTIME? <a href="/auth/login" className="font-medium text-primary hover:text-lime-600">
                       Iniciar sesión
                 </a></p>

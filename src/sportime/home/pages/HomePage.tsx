@@ -10,10 +10,11 @@ import flecha from '../../../assets/images/Arrow.svg'
 import sportime from '../../../assets/images/logo.svg'
 
 
-import { Navbar } from "../../../ui"
 import { SearchMobile } from "../../../ui/components/SearchMobile"
 import { CircularProgress } from "../../sportsCenter/components/CircularProgress"
 import { useState } from "react"
+import { NavbarHome } from "../components/NavbarHome"
+import { EventCard } from "../../components"
 
 export const HomePage = () => {
 
@@ -22,12 +23,12 @@ export const HomePage = () => {
 
   return (
     <>
-        <Navbar />
+        <NavbarHome />
         <section className="bg-portada flex flex-col sm:flex-row items-center py-10 pb-20">
           <div className="w-full sm:w-3/4">
             <div className="mx-4 sm:mx-20 mb-8">
               <div className="ml-4 sm:ml-35 mr-4 sm:mr-20">
-                <h1 className="text-4xl sm:text-6xl font-extrabold text-white font-inter mb-8">Encuentra y crea actividades <br />deportivas en comunidad, <br />¡únete ahora!</h1>
+                <h1 className="text-4xl sm:text-6xl font-extrabold text-white font-inter mb-8">Encuentra y crea eventos <br />deportivos en comunidad, <br />¡únete ahora!</h1>
                 <h5 className="text-xl sm:text-2xl text-white mr-8 sm:mr-95 font-n27 sm:w-3/4 ">¿Te apasiona el deporte y quieres conectar con otros apasionados como tú? Únete a nuestra comunidad en línea y descubre cómo puedes crear y participar en actividades deportivas en tu zona.</h5>
               </div>
             </div>
@@ -63,27 +64,9 @@ export const HomePage = () => {
           <div className="relative pb-12">
              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
               
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
-              </div>
+              <EventCard deporte="Baloncesto" genero="Masculino" nivel="Intermedio" jugadores="4" total={10} plazas={6} hora="12:30" fecha="28/04/2023" nombre="¡Prepárate para el enfrentamiento del siglo! El partido más épico" centroDeportivo="Polideportivo municipal de Archena Archena, Murcia"/>
+
+              <EventCard deporte="Tenis" genero="Femenino" nivel="Fácil" jugadores="2" total={4} plazas={2} hora="10:30" fecha="20/04/2023" nombre="¡El duelo de titanes del tenis!" centroDeportivo="Polideportivo municipal de Archena Archena, Murcia"/>
 
               <div className="relative ">
                 <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
@@ -221,7 +204,7 @@ export const HomePage = () => {
             <div className="relative pb-20">
                 <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
 
-                    <div className="relative">
+                    <a className="relative" href="/centro-deportivo">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
@@ -234,9 +217,9 @@ export const HomePage = () => {
                       <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
-                    </div>
+                    </a>
 
-                    <div className="relative">
+                    <a className="relative" href="/centro-deportivo">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
@@ -249,9 +232,9 @@ export const HomePage = () => {
                       <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
-                    </div>
+                    </a>
 
-                    <div className="relative">
+                    <a className="relative" href="/centro-deportivo">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
                       <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
                         <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
@@ -264,7 +247,7 @@ export const HomePage = () => {
                       <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
                         <img src={flecha}/>
                       </button>
-                    </div>
+                    </a>
 
                     <div className="relative">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { HomePage } from '../home'
 import { CreateEventPage, EventPage } from '../events'
 import { SportCenter } from '../sportsCenter'

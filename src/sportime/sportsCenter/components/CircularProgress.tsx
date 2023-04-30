@@ -2,6 +2,7 @@ import React from 'react'
 
 export const CircularProgress = ({ value, total }:{value:number, total:number}) => {
 
+    const libre = Math.abs(-value + total);
     const radius = 45;
     const strokeWidth = 7.5;
     const normalizedRadius = radius - strokeWidth / 2;
@@ -38,7 +39,7 @@ export const CircularProgress = ({ value, total }:{value:number, total:number}) 
       </svg>
       <span className="absolute left-6 text-sm text-center font-n27" style={{top:'1rem'}}>
         Quedan<br />
-        2<br />
+       {libre}<br />
         plazas
       </span>
     </div>

@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../assets/images/logo.svg'
 import PadelLogin from '../../assets/images/PadelLogin.jpg'
 import Logo from '../../assets/images/logo.svg'
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
-
+import Swal from 'sweetalert2';
 export const LoginPage = () => {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {startLogin} = useAuthStore()
+  const {startLogin, errorMessage} = useAuthStore()
 
   const handleSubmit = (event:any) => {
       event.preventDefault()
-      startLogin({ username:email, password:password})
+      startLogin({ email:email, password:password})
   };
+
+  useEffect(() => {
+    if ( errorMessage !== undefined ) {
+      Swal.fire('Error en la autenticación', errorMessage, 'error');
+    }    
+  }, [errorMessage])
 
   return (
   <>
@@ -65,45 +71,45 @@ export const LoginPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-white">
-                Contraseña
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="Ingrese su contraseña"
-                  required
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm font-n27"
+          <label htmlFor="password" className="block text-sm font-medium text-white">
+            Contraseña
+          </label>
+          <div className="mt-1 relative">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Ingrese su contraseña"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm font-n27"
+            />
+            <span className="absolute inset-y-0 end-0 grid place-content-center px-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 />
-                 <span className="absolute inset-y-0 end-0 grid place-content-center px-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                </span>
-              </div>
-            </div>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center">

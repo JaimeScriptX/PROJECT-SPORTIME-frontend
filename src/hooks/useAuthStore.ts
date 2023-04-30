@@ -1,44 +1,51 @@
 import { sportimeApi } from '../api'
 import { clearErrorMessage, onChecking, onLogin, onLogout} from "../store"
 import { useAppDispatch, useAppSelector } from "../store/hook"
+import { useNavigate } from 'react-router-dom';
 
 export const useAuthStore = () => {
 
     const {status, user, errorMessage} = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
+    const navigate = useNavigate();
 
-    const startLogin = async({username,password}:{username:string, password:string}) => {
-        console.log({username, password})
-        
-        dispatch(onChecking())
-        try {
-            const {data} = await sportimeApi.post('/login_check',{username,password})
-            localStorage.setItem('token', data.token)
-            localStorage.setItem('token-init-date', new Date().getTime().toString())
-            dispatch(onLogin({name:data.name, uuid: data.uid}))
-        } catch (error) {
-            dispatch(onLogout('Creedenciales incorrectas'))
-            setTimeout(() => {
-                dispatch(clearErrorMessage())
-            }, 10)
-        }
-    } 
-
-    const startRegister = async({name,email,password }:{name:string,email:string, password:string}) => {
+    const startLogin = async({email,password}:{email:string, password:string}) => {
         console.log({email, password})
         
         dispatch(onChecking())
         try {
-            const {data} = await sportimeApi.post('/auth/new',{name,email,password})
+            const {data} = await sportimeApi.post('/login_check',{email,password})
+            console.log(data)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toString())
-            dispatch(onLogin({name:data.name, uuid: data.uid}))
-        } catch (error:any) {
+            dispatch(onLogin({name:"prueba", uuid: "5"}))
+            navigate('/');
+        } catch (error) {
             console.log(error)
-            dispatch(onLogout(error.response.data?.msg || error.response.data?.errors.name.msg ||"Error en el registro"))
+            dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
             setTimeout(() => {
                 dispatch(clearErrorMessage())
-            }, 10)
+            }, 100)
+        }
+    } 
+
+    const startRegister = async({name_and_lastname,username,email,password,phone }:{name_and_lastname:string, username:string, email:string, password:string, phone:string}) => {
+        console.log({name_and_lastname,username,email,password,phone})
+        
+        dispatch(onChecking())
+        try {
+            const {data} = await sportimeApi.post('/register',{name_and_lastname,username,email,password,phone})
+            console.log(data)
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('token-init-date', new Date().getTime().toString())
+            dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id}))
+            navigate('/');
+        } catch (error:any) {
+            console.log(error)
+            dispatch(onLogout(error.response.data.message ||"Error en el registro"))
+            setTimeout(() => {
+                dispatch(clearErrorMessage())
+            }, 100)
         }
     } 
 

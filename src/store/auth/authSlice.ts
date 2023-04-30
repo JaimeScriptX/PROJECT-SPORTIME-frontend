@@ -5,7 +5,8 @@ export interface authState {
   status: string
   user: {
     uuid:string,
-    name: string
+    name: string,
+    phone: string
   },
   errorMessage: undefined
 }
@@ -14,7 +15,8 @@ const initialState: authState = {
   status: 'not-authenticated',
   user: {
     uuid:"",
-    name: ""
+    name: "",
+    phone: ""
   },
   errorMessage: undefined
 }

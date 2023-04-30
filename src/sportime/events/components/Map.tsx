@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import '../../../assets/css/map.css'
 
@@ -6,6 +6,12 @@ export const Map = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const API_KEY = 'sUKR19LMrbXi8mWAm7EP';
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  const stopAnimation = () => {
+    setIsAnimating(false);
+    console.log(isAnimating)
+  }
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -21,6 +27,8 @@ export const Map = () => {
     });
 
     function rotateCamera(timestamp: number) {
+      if (!isAnimating) return; // stop animation if isAnimating is false
+
       // clamp the rotation between 0 -360 degrees
       // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
       map.current?.rotateTo((timestamp / 100) % 360, { duration: 0 });
@@ -30,7 +38,8 @@ export const Map = () => {
 
     map.current.on('load', function () {
       // Start the animation.
-      rotateCamera(0);
+      if (isAnimating)  return  rotateCamera(0);; 
+
 
       // Add 3d buildings and remove label layers to enhance the map
       const layers = map.current?.getStyle().layers || [];
@@ -78,11 +87,12 @@ export const Map = () => {
       map.current?.remove();
       map.current = null;
     };
-  }, [API_KEY]);
+  }, [API_KEY, isAnimating ]);
 
   return (
     <div className="map-wrap ">
       <div ref={mapContainer} className="map rounded-2xl" />
+      <button className='absolute bg-primary p-2 rounded-tl-xl' onClick={stopAnimation}>Detener animación</button>
     </div>
   );
 };
