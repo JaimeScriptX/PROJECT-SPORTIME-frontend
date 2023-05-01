@@ -15,17 +15,15 @@ export const useAuthStore = () => {
         dispatch(onChecking())
         try {
             const {data} = await sportimeApi.post('/login_check',{email,password})
-            console.log(data)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toString())
             dispatch(onLogin({name:"prueba", uuid: "5"}))
             navigate('/');
         } catch (error) {
-            console.log(error)
-            dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
+            dispatch(onLogout('Creedenciales incorrectas'))
             setTimeout(() => {
                 dispatch(clearErrorMessage())
-            }, 100)
+            }, 10)
         }
     } 
 
@@ -34,8 +32,7 @@ export const useAuthStore = () => {
         
         dispatch(onChecking())
         try {
-            const {data} = await sportimeApi.post('/register',{name_and_lastname,username,email,password,phone})
-            console.log(data)
+            const {data} = await sportimeApi.post('/auth/new',{name,email,password})
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toString())
             dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id}))

@@ -2,7 +2,7 @@ import sportime from '../../assets/images/logo.svg'
 
 export const Footer = () => {
   return (
-    <footer className="bg-footer w-full p-6">
+    <footer className=" max-lg:hidden bg-footer w-full p-6">
         <div className="bg-portada pb-5  mx-4">
             <div className="max-w-screen-xl pt-4 mx-auto sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center sm:justify-between">

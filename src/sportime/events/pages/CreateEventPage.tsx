@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Footer, Navbar } from "../../../ui";
 import Select from 'react-select';
 import { MapCreate } from "../components/MapCreate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 const options:Array<any> = [
   { value: 'publico', label: 'Público' },
@@ -219,7 +221,7 @@ export const CreateEventPage = () => {
     return (
     <>
     <Navbar />
-        <div className='relative w-full h-80'>
+        <div className='relative w-full h-60'>
             <img src={'https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg'} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
             <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full'>
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left'>
@@ -228,135 +230,326 @@ export const CreateEventPage = () => {
             </div>
         </div>
         <div className="bg-footer">   
-            <div className='bg-fondo rounded-t-3xl relative mx-36 max-md:mx-0' style={{ marginTop: '-60px' }}>
-                <div className='absolute left-1/2 transform -translate-x-1/2 px-32 lg:px-36 py-16' style={{ marginTop: '-110px' }}>
-                    <div className='fixed top-12 py-4 w-full flex justify-center inset-x-0 bg-primary'>
-                        <h1 className='text-black text-3xl lg:text-4xl font-n27'>Crear evento</h1>
+            <div className='bg-fondo'>
+                <div className='absolute left-1/2 transform -translate-x-1/2 px-44 lg:px-72 py-16' style={{ marginTop: '-110px' }}>
+                    <div className='fixed top-14 lg:top-12 py-4 w-full flex justify-center inset-x-0 bg-primary'>
+                        <h1 className='text-black text-2xl lg:text-4xl font-n27'>Crear evento [SPORTIME]</h1>
                     </div>
                 </div>
-                <div className="pt-10 lg:max-w-3xl max-w-sm mx-auto">
-                    <div
-                        className="after:mt-4 after:block after:h-1 after:w-full after:rounded-lg after:bg-gray-200"
-                    >
-                        <ol className="grid grid-cols-3 text-sm font-medium text-gray-500">
-                        <li className="relative text-left text-white">
-                            <span
-                            className="absolute left-0 -bottom-[1.75rem] rounded-full bg-primary text-white"
-                            >
-                            <svg
-                                className="h-5 w-5"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="#181818"
-                            >
-                                <path
-                                fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"
+                <div className="pt-10 lg:max-w-3xl max-w-sm mx-auto pb-16 lg:pb-0">
+                            <p className="text-xl pb-5 text-center text-white">
+                              ¡Crea un evento y conoce a gente nueva con la que compartir tu deporte preferido!
+                            </p>
+
+                            <form className="mt-5" onSubmit={handleSubmit}>
+                            <div>
+                              <label htmlFor="user name" className="block text-md text-primary font-bold">
+                                Nombre del evento
+                              </label>
+                                <div className="relative">
+                                  <input
+                                    placeholder="Arthur Melo"
+                                    type="text"
+                                    className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                                  />
+                                  <span className="absolute inset-y-0 right-0 flex items-center pr-1 pb-1">
+                                    <button className="text-primary bg-footer py-1 px-2 rounded-md hover:text-white">Añadir descripción</button>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="mt-4" id="detalles" style={{display: 'none'}}>
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Descripción
+                                  </label>
+                                  <textarea
+                                      placeholder="Traeros balón"
+                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                                  />
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold capitalize"
+                                  >
+                                      Polideportivo
+                                  </label>
+                                  <Select
+                                  options={sportOptions}
+                                  id="sport"
+                                  value={sport}
+                                  onChange={setSport}
+                                  placeholder="Selecciona un polideportivo"
+                                  className="text-lg mt-2"
+                                  styles={{
+                                    control: (provided) => ({
+                                      ...provided,
+                                      height: '43px',
+                                      backgroundColor: '#181818',
+                                      boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                      border: '0px',
+                                      borderColor:"#a5ff1b",
+                                      color: '#FFFFFF', // establecer el color del texto en blanco
+                                    }),
+                                    placeholder: (provided) => ({
+                                      ...provided,
+                                      color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                    }),
+                                    singleValue: (provided) => ({
+                                      ...provided,
+                                      color: '#FFFFFF',
+                                       // establecer el color del texto seleccionado en blanco
+                                    }),
+                                  }}
+                                  theme={(theme:any) => ({
+                                    ...theme,
+                                    colors: {
+                                      ...theme.colors,
+                                      primary25: '#a5ff1b',
+                                      primary: '#222222',
+                                    },
+                                  })}
                                 />
-                            </svg>
-                            </span>
-
-                            <span className="hidden sm:block"> Información básica </span>
-
-                            <svg
-                            className="ml-0 h-6 w-6 sm:hidden"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentcolor"
-                            stroke-width="2"
-                            >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
-                            />
-                            </svg>
-                        </li>
-
-                        <li className="relative text-center text-white">
-                            <span
-                            className="absolute left-1/2 -bottom-[1.75rem] -translate-x-1/2 rounded-full bg-primary text-white"
-                            >
-                            <svg
-                                className="h-5 w-5"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="#181818"
-                            >
-                                <path
-                                fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="sport"
+                                      className="block text-md text-primary font-bold capitalize"
+                                  >
+                                      Deporte
+                                  </label>
+                                  <Select
+                                  options={sportOptions}
+                                  id="sport"
+                                  value={sport}
+                                  onChange={setSport}
+                                  placeholder="Selecciona un deporte"
+                                  className="text-lg mt-2"
+                                  styles={{
+                                    control: (provided) => ({
+                                      ...provided,
+                                      height: '43px',
+                                      backgroundColor: '#181818',
+                                      boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                      border: '0px',
+                                      borderColor:"#a5ff1b",
+                                      color: '#FFFFFF', // establecer el color del texto en blanco
+                                    }),
+                                    placeholder: (provided) => ({
+                                      ...provided,
+                                      color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                    }),
+                                    singleValue: (provided) => ({
+                                      ...provided,
+                                      color: '#FFFFFF',
+                                       // establecer el color del texto seleccionado en blanco
+                                    }),
+                                  }}
+                                  theme={(theme:any) => ({
+                                    ...theme,
+                                    colors: {
+                                      ...theme.colors,
+                                      primary25: '#a5ff1b',
+                                      primary: '#222222',
+                                    },
+                                  })}
                                 />
-                            </svg>
-                            </span>
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Fecha
+                                  </label>
+                                  <input
+                                      placeholder="arthurmelo@example.app"
+                                      type="date"
+                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                                  />
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Hora
+                                  </label>
+                                  <input
+                                      placeholder="arthurmelo@example.app"
+                                      type="time"
+                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                                  />
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Nº de jugadores por equipo
+                                  </label>
+                                  <input
+                                      placeholder="5"
+                                      type="number"
+                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                                  />
+                              </div>
+                              <div className="mt-4">
+                                  <label
+                                      htmlFor="email"
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Género
+                                  </label>
+                                  <Select
+                                      options={genderOptions}
+                                      id="sport"
+                                      value={sport}
+                                      onChange={setSport}
+                                      placeholder="Selecciona un género"
+                                      className=" text-lg mt-2"
+                                      styles={{
+                                        control: (provided) => ({
+                                          ...provided,
+                                          height: '43px',
+                                          backgroundColor: '#181818',
+                                          boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                          border: '0px',
+                                          borderColor:"#a5ff1b",
+                                          color: '#FFFFFF', // establecer el color del texto en blanco
+                                        }),
+                                        placeholder: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                        }),
+                                        singleValue: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF',
+                                           // establecer el color del texto seleccionado en blanco
+                                        }),
+                                      }}
+                                      theme={(theme:any) => ({
+                                        ...theme,
+                                        colors: {
+                                          ...theme.colors,
+                                          primary25: '#a5ff1b',
+                                          primary: '#222222',
+                                        },
+                                      })}
+                                  />
+                              </div>
 
-                            <span className="hidden sm:block"> Polideportivo </span>
-
-                            <svg
-                            className="mx-auto h-6 w-6 sm:hidden"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentcolor"
-                            stroke-width="2"
-                            >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                            </svg>
-                        </li>
-
-                        <li className="relative text-right">
-                            <span className="hidden sm:block"> Detalles </span>
-
-                            <svg
-                            className="ml-auto h-6 w-6 sm:hidden"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentcolor"
-                            stroke-width="2"
-                            >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                            />
-                            </svg>
-                        </li>
-                        </ol>
-                    </div>
-                </div>
-                <div className="lg:max-w-xl max-w-sm mx-auto py-10">
-                    <form onSubmit={handleSubmit}>
-                        <div className={currentStep === 1 ? "" : "hidden"}>
-                            <Step1 name={name} setName={setName} publicPrivate={publicPrivate} setPublicPrivate={setPublicPrivate} />
-                            <button type="button" onClick={() => setCurrentStep(2)} className="bg-primary text-black py-2 px-4 rounded">Siguiente</button>
-                        </div>
-                        <div className={currentStep === 2 ? "" : "hidden"}>
-                            <Step2 sport={sport} setSport={setSport} polideportivo={polideportivo} setPolideportivo={setPolideportivo} date={date} setDate={setDate} playerCount={playerCount} setPlayerCount={setPlayerCount} />
-                            <button type="button" onClick={() => setCurrentStep(1)} className="mr-4 bg-gray-500 text-white py-2 px-4 rounded">Anterior</button>
-                            <button type="button" onClick={() => setCurrentStep(3)} className="bg-primary text-black py-2 px-4 rounded">Siguiente</button>
-                        </div>
-                        <div className={currentStep === 3 ? "" : "hidden"}>
-                            <Step3 gender={gender} setGender={setGender} difficulty={difficulty} setDifficulty={setDifficulty} color={color} setColor={setColor} />
-                            <button type="button" onClick={() => setCurrentStep(2)} className="mr-4 bg-gray-500 text-white py-2 px-4 rounded">Anterior</button>
-                            <button type="submit" className="bg-primary text-black py-2 px-4 rounded">Crear evento</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                              <div className="mt-4">
+                                  <label
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Colores de las camisetas
+                                  </label>
+                                  <Select
+                                      options={colorOptions}
+                                      id="sport"
+                                      value={sport}
+                                      onChange={setSport}
+                                      placeholder="Selecciona colores de las camisetas"
+                                      className=" text-lg mt-2"
+                                      styles={{
+                                        control: (provided) => ({
+                                          ...provided,
+                                          height: '43px',
+                                          backgroundColor: '#181818',
+                                          boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                          border: '0px',
+                                          borderColor:"#a5ff1b",
+                                          color: '#FFFFFF', // establecer el color del texto en blanco
+                                        }),
+                                        placeholder: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                        }),
+                                        singleValue: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF',
+                                           // establecer el color del texto seleccionado en blanco
+                                        }),
+                                      }}
+                                      theme={(theme:any) => ({
+                                        ...theme,
+                                        colors: {
+                                          ...theme.colors,
+                                          primary25: '#a5ff1b',
+                                          primary: '#222222',
+                                        },
+                                      })}
+                                  />
+                              </div>
+                              <div className="mt-4">
+                              <label
+                                      className="block text-md text-primary font-bold"
+                                  >
+                                      Dificultad
+                                  </label>
+                                    <Select
+                                      options={difficultyOptions}
+                                      id="difficulty"
+                                      value={difficulty}
+                                      onChange={setDifficulty}
+                                      placeholder="Seleccione una dificultad"
+                                      styles={{
+                                        control: (provided) => ({
+                                          ...provided,
+                                          height: '43px',
+                                          backgroundColor: '#181818',
+                                          boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                          border: '0px',
+                                          borderColor:"#a5ff1b",
+                                          color: '#FFFFFF', // establecer el color del texto en blanco
+                                        }),
+                                        placeholder: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                        }),
+                                        singleValue: (provided) => ({
+                                          ...provided,
+                                          color: '#FFFFFF',
+                                           // establecer el color del texto seleccionado en blanco
+                                        }),
+                                      }}
+                                      theme={(theme:any) => ({
+                                        ...theme,
+                                        colors: {
+                                          ...theme.colors,
+                                          primary25: '#a5ff1b',
+                                          primary: '#222222',
+                                        },
+                                      })}
+                                    />
+                                  </div>
+ç                                
+                              <div className="flex items-center ">
+                                <label
+                                    htmlFor="permission2"
+                                    className=" block text-mdleading-5 text-white"
+                                    >
+                                      <FontAwesomeIcon icon={faLock} size="lg" style={{color: "#ffffff", marginRight:"5px"}} />  Marcar evento como privado 
+                                    </label>
+                                <div className="relative ml-3 mt-2">
+                                  <label htmlFor="toggle" className="inline-block w-10 h-6 bg-gray-400 rounded-full"></label>
+                                  <input type="checkbox" id="toggle" className="hidden" />
+                                  <label htmlFor="toggle" className="absolute left-0 bg-white border-2 border-gray-400 rounded-full w-4 h-4 top-1"></label>
+                                </div>
+                              </div>
+                              <button className="bg-white px-4 py-2 mt-4 mb-6  rounded-md hover:bg-red-400 mr-2" >
+                                  Reiniciar
+                              </button>
+                              <button className="bg-primary px-4 py-2 mt-4 rounded-md hover:bg-lime-500">
+                                  Crear evento
+                              </button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
     <Footer />
     </>
 );
