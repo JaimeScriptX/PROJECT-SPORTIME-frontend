@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { Footer, Navbar } from "../../../ui";
 import Select from 'react-select';
-import { MapCreate } from "../components/MapCreate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
-
-const options:Array<any> = [
-  { value: 'publico', label: 'Público' },
-  { value: 'privado', label: 'Privado' }
-];
 
 const sportOptions:Array<any> = [
   { value: 'baloncesto', label: 'Baloncesto' },
@@ -36,151 +30,8 @@ const colorOptions:Array<any> = [
   { value: 'azul- verde', label: 'Azul y verde' }
 ];
 
-const locations = [
-  {
-    name: 'Location 1',
-    longitude: -74.0059,
-    latitude: 40.7128,
-    scrollPosition: 0,
-  },
-  {
-    name: 'Location 2',
-    longitude: -73.9352,
-    latitude: 40.7306,
-    scrollPosition: 800,
-  },
-  {
-    name: 'Location 3',
-    longitude: -73.9928,
-    latitude: 40.7193,
-    scrollPosition: 1600,
-  },
-  {
-    name: 'Location 4',
-    longitude: -74.0049,
-    latitude: 40.7423,
-    scrollPosition: 2400,
-  },
-];
 
-const Step1 = ({ name, setName, publicPrivate, setPublicPrivate }:{name:string, setName:React.Dispatch<React.SetStateAction<string>>, publicPrivate:any, setPublicPrivate:React.Dispatch<React.SetStateAction<null>>}) => (
-  <div>
-    <div className="mb-4">
-      <label htmlFor="name" className="block font-n27 pb-1 text-primary">Nombre del evento</label>
-      <input
-        type="text"
-        id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded border border-gray-400 py-2 px-3 dark:focus:border-primary"
-      />
-    </div>
-
-    <div className="mb-4">
-      <label htmlFor="public-private" className="block font-n27 pb-1 text-primary">Tipo de evento</label>
-      <Select
-        options={options}
-        id="public-private"
-        value={publicPrivate}
-        onChange={setPublicPrivate}
-        placeholder="Seleccione una opción"
-      />
-    </div>
-  </div>
-);
-
-const Step2 = ({ sport, setSport, polideportivo, setPolideportivo, date, setDate, playerCount, setPlayerCount }:{sport:any, setSport:React.Dispatch<React.SetStateAction<null>>, polideportivo:any, setPolideportivo:React.Dispatch<React.SetStateAction<string>>, date:any, 
-    setDate:React.Dispatch<React.SetStateAction<string>>, playerCount:any, setPlayerCount:React.Dispatch<React.SetStateAction<string>> }) => (
-  <div>
-    <div className="mb-4">
-      <label htmlFor="sport" className="block font-n27 text-primary pb-1">Deporte</label>
-      <Select
-        options={sportOptions}
-        id="sport"
-        value={sport}
-        onChange={setSport}
-        placeholder="Selecciona un deporte"
-      />
-    </div>
-
-    <div className="mb-4">
-    <label htmlFor="polideportivo" className="block font-n27 text-primary pb-1">Polideportivo</label>
-  <input
-    type="text"
-    id="polideportivo"
-    value={polideportivo}
-    onChange={(e) => setPolideportivo(e.target.value)}
-    className="w-full rounded border border-gray-400 py-2 px-3"
-  />
-</div>
-
-<div className="">
-    <MapCreate/>
-</div>
-
-<div className="mb-4">
-  <label htmlFor="date" className="block font-n27 text-primary pb-1">Fecha</label>
-  <input
-    type="date"
-    id="date"
-    value={date}
-    onChange={(e) => setDate(e.target.value)}
-    className="w-full rounded border border-gray-400 py-2 px-3"
-  />
-</div>
-
-<div className="mb-4">
-  <label htmlFor="player-count" className="block font-n27 text-primary pb-1">Número de jugadores</label>
-  <input
-    type="number"
-    id="player-count"
-    value={playerCount}
-    onChange={(e) => setPlayerCount(e.target.value)}
-    className="w-full rounded border border-gray-400 py-2 px-3"
-  />
-</div>
-</div>
-);
-
-const Step3 = ({ gender, setGender, difficulty, setDifficulty, color, setColor }:{gender:any, setGender:React.Dispatch<React.SetStateAction<null>>, difficulty:any, setDifficulty: React.Dispatch<React.SetStateAction<null>>, 
-    color:any, setColor:React.Dispatch<React.SetStateAction<null>>}) => (
-
-    <div>
-      <div className="mb-4">
-        <label htmlFor="gender" className="block font-n27 text-primary pb-1">Género</label>
-        <Select
-          options={genderOptions}
-          id="gender"
-          value={gender}
-          onChange={setGender}
-          placeholder="Seleccione un género"
-        />
-      </div>
-      <div className="mb-4">
-  <label htmlFor="difficulty" className="block font-n27 text-primary pb-1">Dificultad</label>
-  <Select
-    options={difficultyOptions}
-    id="difficulty"
-    value={difficulty}
-    onChange={setDifficulty}
-    placeholder="Seleccione la dificultad"
-  />
-</div>
-
-<div className="mb-4">
-  <label htmlFor="color" className="block font-n27 text-primary pb-1">Colores de las camisetas</label>
-  <Select
-    options={colorOptions}
-    id="color"
-    value={color}
-    onChange={setColor}
-    placeholder="Seleccione los colores"
-  />
-</div>
-</div>
-);
-
-export const CreateEventPage = () => {
+export const CreateEventSportimePage = () => {
     
     const [currentStep, setCurrentStep] = useState(1);
     const [name, setName] = useState('');

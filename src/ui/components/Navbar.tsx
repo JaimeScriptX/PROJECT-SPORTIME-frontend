@@ -3,19 +3,13 @@ import logo from '../../assets/images/logo.svg'
 import logoMovil from '../../assets/images/iconologo.webp'
 import { Search } from './Search';
 import { SearchMobile } from './SearchMobile';
-import { Link, NavLink } from 'react-router-dom';
-import { ModalCrearEvento } from './ModalCrearEvento';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
 export const Navbar = () => {
   const {status} = useAuthStore()
-  const [showSearchD, setShowSearchD] = useState(false);
-  const [showSearchM, setShowSearchM] = useState(false);
   const [authenticated, setAuthenticated] = useState(false)
-  const [isOpen, setIsOpen] = useState(false);
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  const [menuOpenDes, setMenuOpenDes] = useState(false);
+  const [menuOpenMob, setMenuOpenMob] = useState(false);
 
   useEffect(() => {
     if(status === "not-authenticated"){
@@ -25,42 +19,10 @@ export const Navbar = () => {
       setAuthenticated(true)
     }
   }, [status])
-  
-
-  const handleScroll = () => {
-    const sectionDesktop = document.getElementById('my-section-desktop');
-    const sectionMobile = document.getElementById('my-section-mobile');
-    if (sectionDesktop) {
-      if (sectionDesktop.getBoundingClientRect().top < 0) {
-        setShowSearchD(true);
-      } else {
-        setShowSearchD(false);
-      }
-    }
-
-    if (sectionMobile) {
-      if (sectionMobile.getBoundingClientRect().top < 0) {
-        setShowSearchM(true);
-      } else {
-        setShowSearchM(false);
-      }
-    }
-  };
-
-  window.addEventListener('scroll', handleScroll);
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () =>{ console.log(isMenuOpen)
-  setIsMenuOpen(!isMenuOpen);
-  }
-
-  const [menuOpenDes, setMenuOpenDes] = useState(false);
 
   const handleMenuToggleDes = () => {
     setMenuOpenDes(!menuOpenDes);
   };
-  const [menuOpenMob, setMenuOpenMob] = useState(false);
 
   const handleMenuToggleMob = () => {
     setMenuOpenMob(!menuOpenMob);
@@ -76,16 +38,14 @@ export const Navbar = () => {
             <img src={logoMovil} width={'80'}/>
           </a>
 
-          {showSearchD && (
           <div className="hidden lg:inline-block relative ml-auto transform -translate-y-1/1 ">
             <Search />
           </div>
-          )}
-          {showSearchM && (
+
           <div className="lg:hidden pl-2 w-full relative py-2">
             <SearchMobile />
           </div>
-          )}
+
 
           {
             authenticated &&
@@ -134,9 +94,6 @@ export const Navbar = () => {
           </a>
         </div>
       )}
-                      {isOpen && (
-                        <ModalCrearEvento onClose={closeModal}/>
-                      )}
                 </div>
               <Link className='hidden lg:inline-block' to={'/auth/profile'}>
                   <img src="https://picsum.photos/40" className="rounded-full" alt="Profile 03" />

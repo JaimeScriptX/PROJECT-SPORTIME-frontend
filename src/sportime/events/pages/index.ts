@@ -1,2 +1,3 @@
 export * from './EventPage'
-export * from './CreateEventPage'
+export * from './CreateEventSportimePage'
+export * from './CreateEventCustomPage'
