@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import logo from '../../../assets/images/logo.svg'
 import logoMovil from '../../../assets/images/iconologo.webp'
 import { Search } from '../../../ui/components/Search';
 import { SearchMobile } from '../../../ui/components/SearchMobile';
-import { Link, NavLink } from 'react-router-dom';
-import { ModalCrearEvento } from '../../../ui/components/ModalCrearEvento';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../hooks/useAuthStore';
 
 export const NavbarHome = () => {
 
   const {status} = useAuthStore()
+  const navigate = useNavigate()
+
   const [showSearchD, setShowSearchD] = useState(false);
   const [showSearchM, setShowSearchM] = useState(false);
   const [authenticated, setAuthenticated] = useState(false)
@@ -24,6 +25,15 @@ export const NavbarHome = () => {
       setAuthenticated(true)
     }
   }, [status])
+
+  const handleMenu = (): MouseEventHandler<HTMLElement> | undefined => {
+    if (!authenticated) {
+      navigate('/auth/login');
+      return undefined;
+    } else {
+      return undefined;
+    }
+  }
 
   const handleScroll = () => {
     const sectionDesktop = document.getElementById('my-section-desktop');
@@ -108,7 +118,7 @@ export const NavbarHome = () => {
           </a>
           <hr className=''/>
           <a
-            href="#"
+            href="/crear-evento-custom"
             className="block py-2 px-2 text-gray-800 hover:bg-primary"
           >
             <div className="flex items-center">
@@ -149,7 +159,7 @@ export const NavbarHome = () => {
       <span className="tab block text-xs">Crear evento</span>
     </button>
     {menuOpenMob && (
-        <div className="absolute bottom-20 sm:left-64 left-12 py-2 w-96 bg-white rounded-lg shadow-xl z-10">
+        <div className="absolute bottom-20 py-2 w-96 bg-white rounded-lg left-1/2 transform -translate-x-1/2">
           <a
             href="/crear-evento-sportime"
             className="block py-2 px-6 text-gray-800 hover:bg-primary"
@@ -163,7 +173,7 @@ export const NavbarHome = () => {
           </a>
           <hr className=''/>
           <a
-            href="#"
+            href="/crear-evento-custom"
             className="block py-2 px-2 text-gray-800 hover:bg-primary"
           >
             <div className="flex items-center">
@@ -176,7 +186,7 @@ export const NavbarHome = () => {
           </a>
         </div>
       )}
-    <Link to={'/auth/profile'}
+    <Link to={'/auth/profile'} 
       className="w-full focus:text-royal hover:text-royal justify-center inline-block text-center pt-2 pb-1 hover:bg-primary hover:text-black"
 >
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

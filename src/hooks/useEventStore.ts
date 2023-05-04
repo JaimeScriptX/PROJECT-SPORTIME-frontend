@@ -9,15 +9,15 @@ export const useEventStore = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
-    const startCreateCustom = async({email,password}:{email:string, password:string}) => {
-
+    const startCreateCustom = async({name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor}:{
+        name:string,is_private:boolean,details:string,price:number,date:Date,time:string,duration:string,number_players:number,fk_sport:object, fk_difficulty:object, fk_sex:object, 
+        fk_person:number, fk_teamcolor:number}) => {
+        console.log(name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor)
         try {
-            const {data} = await sportimeApi.post('/login_check',{email,password})
+            const {data} = await sportimeApi.post('/eventsCustom',{name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor})
+            console.log(data)
         } catch (error) {
-            dispatch(onLogout('Creedenciales incorrectas'))
-            setTimeout(() => {
-                dispatch(clearErrorMessage())
-            }, 10)
+            console.log(error)
         }
     } 
 

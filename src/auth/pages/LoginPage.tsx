@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import logo from '../../assets/images/logo.svg'
 import PadelLogin from '../../assets/images/PadelLogin.jpg'
 import Logo from '../../assets/images/logo.svg'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
 import Swal from 'sweetalert2';
 
 export const LoginPage = () => {
+
+  const navigate = useNavigate()
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +17,7 @@ export const LoginPage = () => {
   const handleSubmit = (event:any) => {
       event.preventDefault()
       startLogin({ email:email, password:password})
+      navigate('/')
   };
 
   useEffect(() => {

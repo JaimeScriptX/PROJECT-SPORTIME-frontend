@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import FutbolRegister from '../../assets/images/Fultbolreunidos.png'
 import Logo from '../../assets/images/logo.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import Swal from "sweetalert2";
 
 export const RegisterPage = () => {
+
+  const navigate = useNavigate()
+
   const {startRegister, errorMessage} = useAuthStore()
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -16,6 +19,7 @@ export const RegisterPage = () => {
   const handleSubmit = (e:any) => {
     e.preventDefault();
     startRegister({name_and_lastname:name, username:username, email: email, password: password, phone:phone})
+    navigate('/')
   };
 
   useEffect(() => {

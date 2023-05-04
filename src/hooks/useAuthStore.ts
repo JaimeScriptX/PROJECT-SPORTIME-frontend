@@ -1,13 +1,12 @@
+import jwtDecode from 'jwt-decode';
 import { sportimeApi } from '../api'
 import { clearErrorMessage, onChecking, onLogin, onLogout} from "../store"
 import { useAppDispatch, useAppSelector } from "../store/hook"
-import { useNavigate } from 'react-router-dom';
 
 export const useAuthStore = () => {
 
     const {status, user, errorMessage} = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
-    const navigate = useNavigate();
 
     const startLogin = async({email,password}:{email:string, password:string}) => {
         console.log({email, password})
@@ -15,10 +14,12 @@ export const useAuthStore = () => {
         dispatch(onChecking())
         try {
             const {data} = await sportimeApi.post('/login_check',{email,password})
+            const decoded:any = jwtDecode(data.token)
             localStorage.setItem('token', data.token)
-            localStorage.setItem('token-init-date', new Date().getTime().toString())
-            dispatch(onLogin({name:"prueba", uuid: "5"}))
-            navigate('/');
+            const expirate = decoded.exp * 1000
+            localStorage.setItem('expiration', expirate.toString())
+            dispatch(onLogin({name:decoded.email, uuid: "5"}))
+    
         } catch (error) {
             dispatch(onLogout('Creedenciales incorrectas'))
             setTimeout(() => {
@@ -33,10 +34,10 @@ export const useAuthStore = () => {
         dispatch(onChecking())
         try {
             const {data} = await sportimeApi.post('/register',{name_and_lastname,username,email,password,phone })
+            const decoded:any = jwtDecode(data.token)
+            localStorage.setItem('expiration', decoded.exp)
             localStorage.setItem('token', data.token)
-            localStorage.setItem('token-init-date', new Date().getTime().toString())
-            dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id}))
-            navigate('/');
+            dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id, tokenExpiration: decoded.exp}))
         } catch (error:any) {
             console.log(error)
             dispatch(onLogout(error.response.data.message ||"Error en el registro"))
@@ -46,20 +47,32 @@ export const useAuthStore = () => {
         }
     } 
 
-    const checkAuthToken = async() => {
+    const checkAuthToken =() => {
 
         const token = localStorage.getItem('token')
+        const tokenExpiration = localStorage.getItem('expiration')
+
+        dispatch(onChecking())
+
         if (!token) return dispatch( onLogout(undefined) )
 
-        try {
-            const {data} = await sportimeApi.get('token/renew')
-            localStorage.setItem('token', data.token)
-            localStorage.setItem('token-init-date', new Date().getTime().toString())
-            dispatch(onLogin({name:data.name, uuid: data.uid}))
-        } catch (error) {
-            localStorage.clear()
-            dispatch( onLogout(undefined) ) 
-        }
+        if (token !== null && tokenExpiration) {
+            const decoded: any = jwtDecode(token);
+            const tokenExpirationTime =  parseInt(tokenExpiration) 
+            const nowTime = Date.now(); // Obtener la fecha actual en milisegundos
+            console.log(tokenExpirationTime)
+            console.log(nowTime)
+            if (tokenExpirationTime > nowTime) {
+              // El token aún no ha expirado
+              dispatch(onLogin({ name: decoded.email, uuid: "5" }));
+            } else {
+              // El token ha expirado
+              localStorage.removeItem('token')
+              localStorage.removeItem('expiration')
+              dispatch(onLogout(undefined));
+            }
+          }
+
     } 
 
     const startLogout = () => {

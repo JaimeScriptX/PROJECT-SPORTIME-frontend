@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import logo from '../../assets/images/logo.svg'
 import logoMovil from '../../assets/images/iconologo.webp'
 import { Search } from './Search';
 import { SearchMobile } from './SearchMobile';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
+
 export const Navbar = () => {
   const {status} = useAuthStore()
+  const navigate = useNavigate()
+
   const [authenticated, setAuthenticated] = useState(false)
   const [menuOpenDes, setMenuOpenDes] = useState(false);
   const [menuOpenMob, setMenuOpenMob] = useState(false);
@@ -28,6 +31,15 @@ export const Navbar = () => {
     setMenuOpenMob(!menuOpenMob);
   };
 
+  const handleMenu = (): MouseEventHandler<HTMLElement> | undefined => {
+    if (status === "not-authenticated") {
+      navigate('/auth/login');
+      return undefined;
+    } else {
+      return undefined;
+    }
+  }
+
   return (
     <>
         <nav className="sticky top-0 z-50 lg:px-4 lg:py-4 flex justify-between items-center bg-portada">
@@ -48,14 +60,14 @@ export const Navbar = () => {
 
 
           {
-            authenticated &&
+            !authenticated &&
             <Link to="/auth/login" className="hidden lg:inline-block lg:ml-auto lg:mr-4 py-2 px-6 bg-primary hover:bg-gray-100 text-md text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">
             Ingresar
           </Link>
           }
 
           {
-            !authenticated && 
+            !!authenticated && 
             <div className='lg:ml-auto flex justify-center pr-5'>
                 <div className=" relative lg:inline-block lg:mr-3 ">
                 <button className="hidden lg:flex items-center justify-center font-n27 px-3 py-2 space-x-2 text-md tracking-wide transition-colors duration-200 transform  bg-primary rounded-md dark:bg-primary dark:hover:bg-lime-500 dark:focus:bg-primary  focus:outline-none  focus:ring-opacity-50"
@@ -67,33 +79,33 @@ export const Navbar = () => {
                     <span>Crear evento</span>
                 </button>
                 {menuOpenDes && (
-        <div className="absolute top-0 right-0 mt-14 py-2 w-96 bg-white rounded-lg shadow-xl z-10">
-          <a
-            href="/crear-evento-sportime"
-            className="block py-2 px-6 text-gray-800 hover:bg-primary"
-          >
-            <div className="flex items-center ">
-              <div>
-                <div className="font-medium"><h1><img src={logo} alt={''} width={'122'} className="" />En un centro deportivo SPORTIME</h1></div>
-                <div className="text-sm text-gray-500">Selecciona el centro deportivo de SPORTIME en el que deseas jugar y anuncia tu partido para que cualquier jugador tenga la oportunidad de unirse.</div>
-              </div>
-            </div>
-          </a>
-          <hr className=''/>
-          <a
-            href="#"
-            className="block py-2 px-2 text-gray-800 hover:bg-primary"
-          >
-            <div className="flex items-center">
-              <img src={''} alt={''} className="h-12 mx-2 rounded-sm" />
-              <div>
-                <div className="font-medium">Ya tengo decidido dónde voy a jugar</div>
-                <div className="text-sm text-gray-500">Disputa un encuentro deportivo en una instalación o centro deportivo que no se encuentra entre las alternativas disponibles en SPORTIME.</div>
-              </div>
-            </div>
-          </a>
-        </div>
-      )}
+                  <div className="absolute top-0 right-0 mt-14 py-2 w-96 bg-white rounded-lg shadow-xl z-10">
+                    <a
+                      href="/crear-evento-sportime"
+                      className="block py-2 px-6 text-gray-800 hover:bg-primary"
+                    >
+                      <div className="flex items-center ">
+                        <div>
+                          <div className="font-medium"><h1><img src={logo} alt={''} width={'122'} className="" />En un centro deportivo SPORTIME</h1></div>
+                          <div className="text-sm text-gray-500">Selecciona el centro deportivo de SPORTIME en el que deseas jugar y anuncia tu partido para que cualquier jugador tenga la oportunidad de unirse.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <hr className=''/>
+                    <a
+                      href="/crear-evento-custom"
+                      className="block py-2 px-2 text-gray-800 hover:bg-primary"
+                    >
+                      <div className="flex items-center">
+                        <img src={''} alt={''} className="h-12 mx-2 rounded-sm" />
+                        <div>
+                          <div className="font-medium">Ya tengo decidido dónde voy a jugar</div>
+                          <div className="text-sm text-gray-500">Disputa un encuentro deportivo en una instalación o centro deportivo que no se encuentra entre las alternativas disponibles en SPORTIME.</div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                )}
                 </div>
               <Link className='hidden lg:inline-block' to={'/auth/profile'}>
                   <img src="https://picsum.photos/40" className="rounded-full" alt="Profile 03" />
@@ -136,7 +148,7 @@ export const Navbar = () => {
           </a>
           <hr className=''/>
           <a
-            href="#"
+            href="/crear-evento-custom"
             className="block py-2 px-2 text-gray-800 hover:bg-primary"
           >
             <div className="flex items-center">
