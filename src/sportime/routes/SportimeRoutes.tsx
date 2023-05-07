@@ -7,7 +7,7 @@ import { SportCenter } from '../sportsCenter'
 
 export const childSportimeRoutes = [
     { path: "inicio", element: <HomePage /> },
-    { path: "evento", element: <EventPage/>},
+    { path: "evento/:id", element: <EventPage/>},
     { path: "centro-deportivo", element: <SportCenter/>},
     { path: "crear-evento-sportime", element: <CreateEventSportimePage/>},
     { path: "crear-evento-custom", element: <CreateEventCustomPage/>},

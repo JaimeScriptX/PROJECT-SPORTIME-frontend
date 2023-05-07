@@ -40,12 +40,17 @@ export const useEventStore = () => {
         }
     } 
 
+    const getEventById = async(id:any) => {
+        const {data} = await sportimeApi.get(`/eventsSportime/${id}`)
+        console.log(data)
+        return data
+    }   
 
     return {
         // Propiedades
         status, user, errorMessage,
 
         // Metodos
-        startCreateCustom, startCreateSportime
+        startCreateCustom, startCreateSportime, getEventById
     }
 }
