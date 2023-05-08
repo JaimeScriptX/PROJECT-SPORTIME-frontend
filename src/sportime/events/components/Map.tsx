@@ -3,15 +3,14 @@ import maplibregl from 'maplibre-gl';
 import '../../../assets/css/map.css'
 
 export const Map = () => {
+
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  console.log(isAnimating)
+
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const API_KEY = 'sUKR19LMrbXi8mWAm7EP';
-  const [isAnimating, setIsAnimating] = useState(true);
-
-  const stopAnimation = () => {
-    setIsAnimating(false);
-    console.log(isAnimating)
-  }
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -27,9 +26,8 @@ export const Map = () => {
     });
 
     function rotateCamera(timestamp: number) {
-      if (!isAnimating) return; // stop animation if isAnimating is false
-
       // clamp the rotation between 0 -360 degrees
+      if(!isAnimating) return
       // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
       map.current?.rotateTo((timestamp / 100) % 360, { duration: 0 });
       // Request the next frame of the animation.
@@ -37,9 +35,8 @@ export const Map = () => {
     }
 
     map.current.on('load', function () {
-      // Start the animation.
-      if (isAnimating)  return  rotateCamera(0);; 
 
+    rotateCamera(0)
 
       // Add 3d buildings and remove label layers to enhance the map
       const layers = map.current?.getStyle().layers || [];
@@ -59,7 +56,7 @@ export const Map = () => {
         minzoom: 15,
         paint: {
           'fill-extrusion-color': '#aaa',
-
+      
           // use an 'interpolate' expression to add a smooth transition effect to the
           // buildings as the user zooms in
           'fill-extrusion-height': [
@@ -81,18 +78,18 @@ export const Map = () => {
           'fill-extrusion-opacity': 0.6
         }
       });
+      
     });
 
     return () => {
       map.current?.remove();
       map.current = null;
     };
-  }, [API_KEY, isAnimating ]);
+  }, [isAnimating]);
 
   return (
     <div className="map-wrap ">
       <div ref={mapContainer} className="map rounded-2xl" />
-      <button className='absolute bg-primary p-2 rounded-tl-xl' onClick={stopAnimation}>Detener animación</button>
     </div>
   );
 };

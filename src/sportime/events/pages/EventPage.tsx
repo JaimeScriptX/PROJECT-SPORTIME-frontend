@@ -6,7 +6,7 @@ import UbicacionIcono from '../../../assets/images/IconUbicacion.svg'
 import EnviarUbicacionIcono from '../../../assets/images/IconoEnviarUbicacion.svg'
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Map } from '../components/Map';
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ModalInfo } from '../components/ModalInfo'
 import { ModalElegir } from '../components/ModalElegir'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -108,6 +108,7 @@ export const EventPage = () => {
 
   const { id } = useParams();
   const {getEventById} = useEventStore()
+  const navigate = useNavigate()
 
   const [eventData, setEventData] = useState<initialState | null>(null);
 
@@ -152,6 +153,10 @@ export const EventPage = () => {
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [showModalElegir, setShowModalElegir] = useState(false);
 
+  const onNavigateBack = () => {
+    navigate(-1)
+  }
+
   const openModal = () => {
     setShowModalInfo(true);
   };
@@ -177,8 +182,8 @@ export const EventPage = () => {
     <Navbar />
     <div className='relative w-full h-80'>
       <img src={'https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg'} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
-      <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full'>
-        <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left'>
+      <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80 cursor-pointer rounded-full' onClick={onNavigateBack}>
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left '>
           <path d='M19 12H5M12 19l-7-7 7-7' />
         </svg>
       </div>

@@ -8,7 +8,7 @@ export const EventCard = ({id, deporte, hora, fecha, nivel, genero, jugadores, n
     const plazasOcupadas = plazas
     const [progress, setProgress] = useState(plazasOcupadas);
 
-
+    const nombreClase = nombre.length >= 35 ? "h-14" : "h-8";
   return (
     <a className="relative" href={`/evento/${id}`}>
     <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
@@ -27,11 +27,11 @@ export const EventCard = ({id, deporte, hora, fecha, nivel, genero, jugadores, n
     </div>
     <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
       <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-        <p className="pl-6 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: {nivel}</p>
+        <p className="pl-6 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300" style={{fontSize:''}}>Nivel: {nivel}</p>
         <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: {genero}</p>
         <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">{jugadores} VS {jugadores}</p>
       </div>
-      <div className="md:w-64 w-52 h-14 flex items-center absolute left-0 bottom-16 rounded-tr-3xl bg-white">
+      <div className={`md:w-64 w-52 ${nombreClase} flex items-center absolute left-0 bottom-16 rounded-tr-3xl bg-white`}>
         <p className="absolute text-left pl-1 pr-1 text-sm md:text-base text-black font-n27">{nombre}</p>
       </div>
     </div> 
