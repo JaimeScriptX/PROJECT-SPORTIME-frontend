@@ -5,6 +5,7 @@ import { Search } from '../../../ui/components/Search';
 import { SearchMobile } from '../../../ui/components/SearchMobile';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../hooks/useAuthStore';
+import Filter from '../../../assets/images/IconoFilter.svg'
 
 export const NavbarHome = () => {
 
@@ -84,6 +85,11 @@ export const NavbarHome = () => {
           <div className="lg:hidden pl-2 w-full relative py-2">
             <SearchMobile />
           </div>
+          )}
+          {showSearchM && (
+          <button className="lg:hidden pl-2 pr-2 relative ">
+            <img src={Filter} width={'65'}/>
+          </button>
           )}
           {
             !authenticated &&

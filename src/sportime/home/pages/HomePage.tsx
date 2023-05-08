@@ -12,14 +12,123 @@ import sportime from '../../../assets/images/logo.svg'
 
 import { SearchMobile } from "../../../ui/components/SearchMobile"
 import { CircularProgress } from "../../sportsCenter/components/CircularProgress"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { NavbarHome } from "../components/NavbarHome"
 import { EventCard } from "../../components"
+import { useEventStore } from "../../../hooks/useEventStore"
+
+
+interface initialState {
+  id: number,
+  name: string,
+  is_private: boolean,
+  details: string,
+  price: number,
+  date: {
+      date: string,
+  },
+  time: {
+      date: string,
+  },
+  duration: {
+      date: string,
+  },
+  number_players: number,
+  sport_center_custom: string,
+  fk_sportcenter_id:{
+    id: number,
+    fk_services_id: {
+        id: number,
+        type: string
+    },
+    name:string,
+    municipality: string,
+    address: string,
+    image: null,
+    phone: string
+  },
+  fk_sports_id: {
+      id: number,
+      name: string,
+      need_team: boolean,
+      image: null
+  },
+  fk_difficulty_id: {
+      id: number,
+      type: string
+  },
+  fk_sex_id: {
+      id: number,
+      gender: string
+  },
+  fk_person_id: {
+      id: number,
+      image_profile: null,
+      name: string,
+      last_name: string,
+      birthday: {
+          date: string,
+      },
+      weight: number,
+      geight: number,
+      nationality: string,
+      fk_sex_id: {
+          id: number,
+          gender: string
+      },
+      fk_teamcolor_id: {
+          id: number,
+          team_a: string,
+          team_b: string
+      }
+  },
+}
+
+const formatTime = (dateString:any) => {
+  const date = new Date(dateString);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+const formatearFecha = (fecha:string) => {
+  const fechaObj = new Date(fecha);
+  const dia = fechaObj.getDate();
+  const mes = fechaObj.getMonth() + 1;
+  const anio = fechaObj.getFullYear();
+  return `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${anio}`;
+}
 
 export const HomePage = () => {
 
+  const {getEvents} = useEventStore()
+  const [events, setEvents] = useState<Array<initialState>>(Array)
+  const eventListRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(8);
   const total = 10;
+
+  const eventPromise = async () => {
+    await getEvents().then((data) => {
+      setEvents(data);
+    })}
+
+  useEffect(() => {
+
+    eventPromise()
+
+  }, [])
+  
+  const scrollToLeft = () => {
+    if (eventListRef.current) {
+      eventListRef.current.scrollLeft -= 150;
+    }
+  };
+
+  const scrollToRight = () => {
+    if (eventListRef.current) {
+      eventListRef.current.scrollLeft += 150;
+    }
+  };
 
   return (
     <>
@@ -62,128 +171,22 @@ export const HomePage = () => {
         <section className="bg-fondo pattern">
           <h1 className="pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
           <div className="relative pb-12">
-             <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
-              
-              <EventCard deporte="Baloncesto" genero="Masculino" nivel="Intermedio" jugadores="4" total={10} plazas={6} hora="12:30" fecha="28/04/2023" nombre="¡Prepárate para el enfrentamiento del siglo! El partido más épico" centroDeportivo="Polideportivo municipal de Archena Archena, Murcia"/>
-
-              <EventCard deporte="Tenis" genero="Femenino" nivel="Fácil" jugadores="2" total={4} plazas={2} hora="10:30" fecha="20/04/2023" nombre="¡El duelo de titanes del tenis!" centroDeportivo="Polideportivo municipal de Archena Archena, Murcia"/>
-
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
+             <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
+              {events.map((event:any) =>
+               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={10} plazas={6} hora={formatTime(event.time.date)} fecha={formatearFecha(event.date.date)} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+              )}
               </div>
-
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
-              </div>
-
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
-              </div>
-
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
-              </div>
-
-              <div className="relative ">
-                <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
-                  <p className="font-n27">Fútbol sala</p>
-                  <p className="font-n27">10:30</p>
-                  <p className="font-n27">02/04/2023</p>
-                </div>
-                <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-                  <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                    <p className="pl-5 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300">Nivel: Intermedio</p>
-                    <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: Masculino</p>
-                    <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">5 VS 5</p>
-                  </div>
-                  <div className="md:w-64 w-52 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                    <p className="absolute text-center pl-2 text-sm md:text-base text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                  </div>
-                </div> 
-                <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-                  <CircularProgress value={progress} total={total}/>
-                </div>
-              </div>
-
-              </div>
-              <button className="absolute top-4/4 top-44  transform -translate-y-1/2  left-10 text-white text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27">
-              &lt;
+              <button
+                className="absolute top-4/4 top-44  transform -translate-y-1/2  left-10 text-white text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27"
+                onClick={scrollToLeft}
+              >
+                &lt;
               </button>
-              <button className="absolute top-4/4 top-44 transform -translate-y-1/2 right-2 text-white text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27">
-              &gt;
+              <button
+                className="absolute top-4/4 top-44 transform -translate-y-1/2 right-2 text-white text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27"
+                onClick={scrollToRight}
+              >
+                &gt;
               </button>
            </div>
         </section>

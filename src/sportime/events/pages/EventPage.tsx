@@ -208,7 +208,7 @@ export const EventPage = () => {
         <div className='pl-5'>
           <div className="flex items-center justify-between py-3">
               <div>
-                <h1 className="pt-5 text-white text-2xl font-n27">{eventData?.name} <FontAwesomeIcon icon={faLockOpen} size="sm" style={{color: "#ffffff",}} /></h1>
+                <h1 className="pt-5 text-white text-2xl font-n27">{eventData?.name} {eventData?.is_private === false ? <FontAwesomeIcon icon={faLockOpen} size="sm" style={{color: "#ffffff",}} /> :  <FontAwesomeIcon icon={faLock} size="sm" style={{color: "#ffffff",}} />}</h1>
                 <h6 className="text-white">Jose David</h6>
               </div>
               <img src={FutbolIcono} className="pt-6 pr-5"/>
@@ -260,6 +260,13 @@ export const EventPage = () => {
         )}
               </div>
           </div>
+          { eventData?.details &&
+          <div>
+            <hr className='mr-5 opacity-5 pb-2'/>
+            <h1 className='text-white text-base font-n27 mb-2'>Detalles</h1>
+            <p className='text-white bg-footer p-2 mr-5 mb-2'>{eventData?.details}</p>
+          </div>
+          } 
           <hr className='mr-5 opacity-5 pb-3'/>
           <div className="flex items-center justify-start pb-2">
               <img src={RelojIcono} width={'60'} className="pr-3"/>

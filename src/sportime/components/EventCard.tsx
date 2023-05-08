@@ -2,15 +2,15 @@ import { useState } from "react";
 import { CircularProgress } from "../sportsCenter/components/CircularProgress"
 import { Link } from "react-router-dom";
 
-export const EventCard = ({deporte, hora, fecha, nivel, genero, jugadores, nombre, centroDeportivo, total, plazas}:
-    {deporte:string, hora:string, fecha:string, nivel:string, genero:string, jugadores:string, nombre:string, centroDeportivo:string, total:number, plazas:number}) => {
+export const EventCard = ({id, deporte, hora, fecha, nivel, genero, jugadores, nombre, centroDeportivo, total, plazas }:
+    {id: number, deporte:string, hora:string, fecha:string, nivel:string, genero:string, jugadores:number, nombre:string, centroDeportivo:string, total:number, plazas:number}) => {
 
     const plazasOcupadas = plazas
     const [progress, setProgress] = useState(plazasOcupadas);
 
 
   return (
-    <a className="relative" href={'/evento'}>
+    <a className="relative" href={`/evento/${id}`}>
     <div className="flex items-center justify-center gap-10 md:gap-20 max-sm:pt-1 pt-1 bg-primary">
       <p className="font-n27">{deporte}</p>
       <p className="font-n27">{hora}</p>

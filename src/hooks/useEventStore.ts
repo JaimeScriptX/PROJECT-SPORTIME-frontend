@@ -46,11 +46,17 @@ export const useEventStore = () => {
         return data
     }   
 
+    const getEvents = async() => {
+        const {data} = await sportimeApi.get(`/eventsCustom/`)
+        console.log(data)
+        return data
+    }   
+
     return {
         // Propiedades
         status, user, errorMessage,
 
         // Metodos
-        startCreateCustom, startCreateSportime, getEventById
+        startCreateCustom, startCreateSportime, getEventById, getEvents
     }
 }

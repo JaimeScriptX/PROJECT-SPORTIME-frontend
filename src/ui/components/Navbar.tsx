@@ -1,5 +1,6 @@
 import { MouseEventHandler, useEffect, useState } from 'react'
 import logo from '../../assets/images/logo.svg'
+import Filter from '../../assets/images/IconoFilter.svg'
 import logoMovil from '../../assets/images/iconologo.webp'
 import { Search } from './Search';
 import { SearchMobile } from './SearchMobile';
@@ -58,6 +59,9 @@ export const Navbar = () => {
             <SearchMobile />
           </div>
 
+          <button className="lg:hidden pl-2 pr-2 relative ">
+            <img src={Filter} width={'65'}/>
+          </button>
 
           {
             !authenticated &&

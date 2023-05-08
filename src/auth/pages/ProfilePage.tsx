@@ -4,6 +4,7 @@ import Baloncesto from '../../assets/images/Baloncesto.svg'
 import Tenis from '../../assets/images/Tenis.svg'
 import FutbolSala from '../../assets/images/FutbolSala.svg'
 import Padel from '../../assets/images/Padel.svg'
+import Edit from '../../assets/images/IconoEdit.svg'
 
 export const ProfilePage = () => {
   return (
@@ -25,11 +26,16 @@ export const ProfilePage = () => {
                 </div>
             </div>
             <div className="mt-12 pl-6">
-            <h2 className="text-xl font-medium text-gray-800">John Doe</h2>
-            <p className="text-gray-500 text-sm">Molina de segura, Murcia</p>
-            <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>
-            <p className="text-gray-500 text-sm">Estatura: 190 cm</p>
-            <p className="text-gray-500 text-sm">Peso: 80kg</p>
+              <div className="absolute right-12 pt-1">
+                <button>
+                  <img src={Edit} width={'40'}/>
+                </button>
+              </div>
+              <h2 className="text-xl font-medium text-gray-800">John Doe</h2> 
+              <p className="text-gray-500 text-sm">Molina de segura, Murcia</p>
+              <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>
+              <p className="text-gray-500 text-sm">Estatura: 190 cm</p>
+              <p className="text-gray-500 text-sm">Peso: 80kg</p>
             </div>
             <div className="border-t border-gray-200 mt-6 pt-6">
                 <h3 className="text-lg font-n27 text-gray-800 pl-6">Estadisticas generales</h3>
