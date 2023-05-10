@@ -5,8 +5,60 @@ import Tenis from '../../assets/images/Tenis.svg'
 import FutbolSala from '../../assets/images/FutbolSala.svg'
 import Padel from '../../assets/images/Padel.svg'
 import Edit from '../../assets/images/IconoEdit.svg'
+import { useEffect, useState } from "react"
+import { useAuthStore } from "../../hooks/useAuthStore"
+import { usePersonStore } from "../../hooks/usePersonStore"
+import { ModalEditarPerfil } from "../components/ModalCrearEvento"
+
+interface initialState {
+    id: number,
+    image_profile: null,
+    name: string,
+    last_name: string,
+    birthday: {
+        date: string,
+        timezone_type: number,
+        timezone: string
+    },
+    weight: number,
+    height: number,
+    nationality: string,
+    games_played: number,
+    victories: number,
+    ratio:number,
+    fk_sex_id: {
+        id: number,
+        gender: string
+    },
+}
+
+
 
 export const ProfilePage = () => {
+
+  const [PersonData, setPersonData] = useState<initialState | null>(null);
+  const {user} = useAuthStore()
+  const {getPersonById} = usePersonStore()
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const profilePromise = async () => {
+    await getPersonById(user.uuid).then((data) => {
+      setPersonData(data[0]);
+      console.log(data)
+    })}
+
+  useEffect(() => {
+
+    profilePromise()
+    console.log()
+
+  }, [user.uuid])
+    
+
   return (
     <>
     <Navbar />
@@ -27,15 +79,21 @@ export const ProfilePage = () => {
             </div>
             <div className="mt-12 pl-6">
               <div className="absolute right-12 pt-1">
-                <button>
+                <button onClick={() => setIsOpen(!isOpen)}>
                   <img src={Edit} width={'40'}/>
                 </button>
+                {isOpen && (
+                  <ModalEditarPerfil onClose={closeModal}/>
+                )}
               </div>
-              <h2 className="text-xl font-medium text-gray-800">John Doe</h2> 
+              <h2 className="text-xl font-medium text-gray-800">{PersonData?.name}</h2> 
+              <h2 className="text-sm text-gray-700">@GuilleMamon</h2> 
+              <p className="text-gray-500 text-sm">Nacionalidad: {PersonData?.nationality}</p>
               <p className="text-gray-500 text-sm">Molina de segura, Murcia</p>
               <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>
-              <p className="text-gray-500 text-sm">Estatura: 190 cm</p>
-              <p className="text-gray-500 text-sm">Peso: 80kg</p>
+              <p className="text-gray-500 text-sm">Estatura: {PersonData?.height} cm</p>
+              <p className="text-gray-500 text-sm">Peso: {PersonData?.weight}kg</p>
+              <p className="text-gray-500 text-sm">Sexo: {PersonData?.fk_sex_id.gender}</p>
             </div>
             <div className="border-t border-gray-200 mt-6 pt-6">
                 <h3 className="text-lg font-n27 text-gray-800 pl-6">Estadisticas generales</h3>
@@ -67,6 +125,7 @@ export const ProfilePage = () => {
                 </div>
             </div>
         </div>
+        {/*
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Skills</h3>
             <div className="flex flex-wrap mt-2">
@@ -86,7 +145,7 @@ export const ProfilePage = () => {
                 Baloncesto
                 </span>
             </div>
-        </div>
+  </div>*/}
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Mis deportes favoritos</h3>
             <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth">

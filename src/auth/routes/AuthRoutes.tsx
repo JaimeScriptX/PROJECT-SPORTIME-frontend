@@ -9,7 +9,7 @@ export const childhAuthRoutes = [
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
   { path: 'reset-password', element: <ResetPasswordPage />},
-  { path: 'profile', element: <ProfilePage />},
+  { path: 'mi-perfil', element: <ProfilePage />},
   {
     path: "/auth/*",
     element: <Navigate to={"/auth/login"} />,
