@@ -1,14 +1,22 @@
 import { useState } from "react";
-import Select from "react-select";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import ReactSelect  from 'react-select';
+import Select from "react-select/dist/declarations/src/Select";
 
+const genderOptions:Array<any> = [
+  { value: 'Masculino', label: 'Masculino' },
+  { value: 'femenino', label: 'Femenino' },
+  { value: 'mixto', label: 'Mixto' }
+];
 
-export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacionality, place, age, height, weight, sex }:{onClose:any, photo_profile:string, name_lastname:string, nacionality:string, place:string, age:string, height:number, weight:number, sex:string}) => {
+export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacionality, location, age, height, weight, sex }:{onClose:any, photo_profile:string, name_lastname:string, nacionality:string, location:string, age:string, height:number, weight:number, sex:string}) => {
 
-    const [sport, setSport] = useState(null);
-    const [polideportivo, setPolideportivo] = useState(null);
-    const [difficulty, setDifficulty] = useState(null);
+    const [nameLastname, setNameLastname] = useState(name_lastname)
+    const [nacionalityE, setNacionalityE] = useState(nacionality)
+    const [locationE, setLocationE] = useState(location)
+    const [ageE, setAgeE] = useState(age)
+    const [heightE, setHeightE] = useState<number>(height)
+    const [weightE, setWeightE] = useState<number>(weight)
+    const [sexE, setSexE] = useState<{ value: string; label: string } | null>(genderOptions.find(option => option.value === sex) || null)
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
@@ -18,7 +26,7 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
 
     const handleSubmit = (e:any) => {
       e.preventDefault()
-      console.log(sport, polideportivo, difficulty)
+      console.log(sexE)
       onClose()
     }
   return (
@@ -99,8 +107,9 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                   </label>
                     <div className="relative">
                       <input
-                        value="Arthur Melo"
+                        value={nameLastname}
                         type="text"
+                        onChange={(e) => setNameLastname(e.target.value)}
                         className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                     </div>
@@ -114,8 +123,9 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                           Nacionalidad
                       </label>
                       <input
-                        value="Arthur Melo"
+                        value={nacionalityE}
                         type="text"
+                        onChange={(e) => setNacionalityE(e.target.value)}
                         className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>
@@ -124,11 +134,12 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                           htmlFor="sport"
                           className="block text-sm text-primary font-bold capitalize"
                       >
-                        Lugar
+                        Ubicación
                       </label>
                       <input
-                        value="Arthur Melo"
+                        value={locationE}
                         type="text"
+                        onChange={(e) => setLocationE(e.target.value)}
                         className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>
@@ -140,31 +151,9 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                           Edad
                       </label>
                       <input
-                          placeholder="arthurmelo@example.app"
+                          value={ageE}
                           type="text"
-                          className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-                      />
-                  </div>
-                  <div className="mt-4">
-                      <label
-                          htmlFor="email"
-                          className="block text-sm text-primary font-bold"
-                      >
-                          Estatura
-                      </label>
-                      <input
-                          placeholder="arthurmelo@example.app"
-                          type="text"
-                          className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-                      />
-                  </div>
-                  <div className="mt-4">
-                      <label htmlFor="duration" className="block text-sm text-primary font-bold">
-                          Peso
-                      </label>
-                      <input
-                          placeholder="arthurmelo@example.app"
-                          type="text"
+                          onChange={(e) => setAgeE(e.target.value)}
                           className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>
@@ -175,18 +164,68 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                       >
                           Sexo
                       </label>
+                      <ReactSelect
+                      options={genderOptions}
+                      id="sport"
+                      value={sexE}
+                      onChange={setSexE}
+                      placeholder="Selecciona un género"
+                      className=" text-lg"
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          height: '33px',
+
+                          boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                          border: '0px',
+                          borderColor:"#a5ff1b",
+                        }),
+                        placeholder: (provided) => ({
+                          ...provided,
+                        }),
+                      }}
+                      theme={(theme:any) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#a5ff1b',
+                          primary: '#222222',
+                        },
+                      })}
+                  />
+                  </div>
+                  <div className="mt-4">
+                      <label
+                          htmlFor="email"
+                          className="block text-sm text-primary font-bold"
+                      >
+                          Estatura
+                      </label>
                       <input
-                          placeholder="arthurmelo@example.app"
-                          type="text"
+                          value={heightE}
+                          onChange={(e) => setHeightE(Number(e.target.value))}
+                          type="number"
                           className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>
+                  <div className="mt-4">
+                      <label htmlFor="duration" className="block text-sm text-primary font-bold">
+                          Peso
+                      </label>
+                      <input
+                          value={weightE}
+                          onChange={(e) => setWeightE(Number(e.target.value))}
+                          type="number"
+                          className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                      />
+                  </div>
+                  
 
 
-                <button className="bg-white px-4 py-2 mt-6 rounded-md hover:bg-indigo-600 mr-2" onClick={handleOverlayClick}>
+                <button className="bg-white px-4 py-2 mt-10 rounded-md hover:bg-gray-500 mr-2" onClick={handleOverlayClick}>
                     Cancelar
                 </button>
-                <button className="bg-primary px-4 py-2 mt-4 rounded-md hover:bg-indigo-600">
+                <button className="bg-primary px-4 py-2 mt-6 rounded-md hover:bg-lime-500">
                     Actualizar perfil
                 </button>
                 </form>

@@ -8,7 +8,7 @@ import Edit from '../../assets/images/IconoEdit.svg'
 import { useEffect, useState } from "react"
 import { useAuthStore } from "../../hooks/useAuthStore"
 import { usePersonStore } from "../../hooks/usePersonStore"
-import { ModalEditarPerfil } from "../components/ModalCrearEvento"
+import { ModalEditarPerfil } from "../components/ModalEditarPerfil"
 
 interface initialState {
     id: number,
@@ -83,7 +83,8 @@ export const ProfilePage = () => {
                   <img src={Edit} width={'40'}/>
                 </button>
                 {isOpen && (
-                  <ModalEditarPerfil onClose={closeModal}/>
+                  <ModalEditarPerfil name_lastname={PersonData?.name} age={'25'} photo_profile={PersonData?.image_profile} height={PersonData?.height}
+                  weight={PersonData?.weight} sex={PersonData?.fk_sex_id.gender} nacionality={PersonData?.nationality} location={'Molina de segura, Murcia'} onClose={closeModal}/>
                 )}
               </div>
               <h2 className="text-xl font-medium text-gray-800">{PersonData?.name}</h2> 
