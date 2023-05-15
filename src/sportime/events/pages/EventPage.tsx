@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEventStore } from '../../../hooks/useEventStore'
+import { useAuthStore } from '../../../hooks/useAuthStore'
 
 
 interface initialState {
@@ -79,6 +80,12 @@ interface initialState {
             team_b: string
         }
     },
+    event_players: {
+          event_players_A: [],
+          event_players_B: []
+      },
+    players_registered: number,
+    missing_players: number
 }
 
 const formatDate = (dateString:any) => {
@@ -109,8 +116,11 @@ export const EventPage = () => {
   const { id } = useParams();
   const {getEventById} = useEventStore()
   const navigate = useNavigate()
-
+  const { status } = useAuthStore()
+  
   const [eventData, setEventData] = useState<initialState | null>(null);
+  const [showModalInfo, setShowModalInfo] = useState(false);
+  const [showModalElegir, setShowModalElegir] = useState(false);
 
   const eventPromise = async () => {
     await getEventById(id).then((data) => {
@@ -150,9 +160,6 @@ export const EventPage = () => {
     }
   }
 
-  const [showModalInfo, setShowModalInfo] = useState(false);
-  const [showModalElegir, setShowModalElegir] = useState(false);
-
   const onNavigateBack = () => {
     navigate(-1)
   }
@@ -162,7 +169,11 @@ export const EventPage = () => {
   };
 
   const openModalElegir = () => {
-    setShowModalElegir(true);
+    if(status === "not-authenticated"){
+      navigate('/iniciar-sesion')
+    } else {
+      setShowModalElegir(true);
+    }
   };
 
   const closeModal = () => {
@@ -224,7 +235,7 @@ export const EventPage = () => {
             Unirse - {eventData?.price === 0 ? "Gratis" : `${eventData?.price}€`}
           </button>
             {showModalElegir && (
-          <ModalElegir onClose={closeModalElegir}/>
+          <ModalElegir event_id={id || '0'} number_players={eventData?.number_players} event_players_team_a={eventData?.event_players?.event_players_A} event_players_team_b={eventData?.event_players.event_players_B}  onClose={closeModalElegir}/>
         )}
           </div>
           <hr className='mr-5 mt-3 opacity-5'/>
@@ -254,14 +265,14 @@ export const EventPage = () => {
           <div className="flex items-center justify-start pb-3">
               <div>
               <h5 className='text-white font-n27'>
-          Quedan <b>2</b> plazas libres.{' '}
+          Quedan <b>{eventData?.missing_players}</b> plazas libres.{' '}
           <a className='text-primary  cursor-pointer' onClick={openModal}>
             Ver equipos...
           </a>
         </h5>
         {/* Renderiza el componente Modal si showModal es verdadero */}
         {showModalInfo && (
-          <ModalInfo onClose={closeModal}/>
+          <ModalInfo number_players={eventData?.number_players || 0}  onClose={closeModal}/>
         )}
               </div>
           </div>

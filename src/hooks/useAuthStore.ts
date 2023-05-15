@@ -18,7 +18,7 @@ export const useAuthStore = () => {
             localStorage.setItem('token', data.token)
             const expirate = decoded.exp * 1000
             localStorage.setItem('expiration', expirate.toString())
-            dispatch(onLogin({name:"Jaime",username:"GuilleMamon",email:decoded.email, uuid: "5"}))
+            dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
     
         } catch (error) {
             dispatch(onLogout('Creedenciales incorrectas'))
@@ -64,7 +64,7 @@ export const useAuthStore = () => {
             console.log(nowTime)
             if (tokenExpirationTime > nowTime) {
               // El token aún no ha expirado
-              dispatch(onLogin({name:"Jaime",username:"GuilleMamon",email:decoded.email, uuid: "5"}));
+              dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
             } else {
               // El token ha expirado
               localStorage.removeItem('token')

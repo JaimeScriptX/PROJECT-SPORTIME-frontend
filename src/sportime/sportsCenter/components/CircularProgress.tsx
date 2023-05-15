@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 export const CircularProgress = ({ value, total }:{value:number, total:number}) => {
 
-    const libre = Math.abs(-value + total);
+    const libre = total;
     const radius = 45;
     const strokeWidth = 7.5;
     const normalizedRadius = radius - strokeWidth / 2;

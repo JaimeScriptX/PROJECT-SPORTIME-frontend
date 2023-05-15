@@ -1,7 +1,13 @@
 import iconofalta from '../../../assets/images/IconoFalta.svg'
 import CamisetaNegra from '../../../assets/images/CamisetaNegra.svg'
 import CamisetaBlanca from '../../../assets/images/CamisetaBlanca.svg'
-export const ModalInfo = ({onClose}:{onClose:any}) => {
+
+interface ModalInfoProps {
+    onClose: any;
+    number_players: number;
+  }
+
+export const ModalInfo = ({onClose, number_players}: ModalInfoProps) => {
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
@@ -23,61 +29,25 @@ export const ModalInfo = ({onClose}:{onClose:any}) => {
                 <div className="text-center border-r pr-5">
                     <h6 className="text-lg text-white pb-5 font-bold lg:text-xl xl:text-xl">Equipo A</h6>
                     <div className="grid grid-cols-3 gap-5">
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 02" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button className="rounded-full">
-                                <img src={iconofalta} />
-                            </button>
-                        </div>
-                        <div>
-                            <button className="rounded-full">
-                                <img src={iconofalta} />
-                            </button>
-                        </div>
+                    {Array.from({ length: number_players }).map((_, index) => (
+                            <div key={index}>
+                                <button disabled>
+                                    <img src='https://picsum.photos/65' className='rounded-full' alt={`Profile ${index}`} />
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="text-center pr-2 ">
                     <h6 className="text-lg font-bold text-white pb-5 lg:text-xl xl:text-xl">Equipo B</h6>
                     <div className="grid grid-cols-3 gap-5 pb-2">
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
+                    {Array.from({ length: number_players }).map((_, index) => (
+                            <div key={index}>
+                                <button disabled>
+                                    <img src='https://picsum.photos/65' className='rounded-full' alt={`Profile ${index}`} />
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

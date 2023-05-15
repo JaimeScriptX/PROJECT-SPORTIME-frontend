@@ -129,7 +129,7 @@ export const LoginPage = () => {
               </div>
 
               <div className="text-sm">
-                <a href="/auth/reset-password" className="font-medium text-primary hover:text-lime-600">
+                <a href="/restablecer-contraseña" className="font-medium text-primary hover:text-lime-600">
                   ¿Olvidaste la contraseña?
                 </a>
               </div>
@@ -139,7 +139,7 @@ export const LoginPage = () => {
               <button type="submit">Iniciar sesión</button>
             </div>
             <div className="flex justify-center md:pt-52 pt-24" style={{ whiteSpace: "nowrap" }}>
-              <p className='text-white'>¿Nuevo en SPORTIME? <a href="/auth/register" className="font-medium text-primary hover:text-lime-600">Crear cuenta</a></p>
+              <p className='text-white'>¿Nuevo en SPORTIME? <a href="/registro" className="font-medium text-primary hover:text-lime-600">Crear cuenta</a></p>
             </div>
           </form>
         </div>

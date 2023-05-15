@@ -64,8 +64,8 @@ export const ResetPasswordPage = () => {
           <button type="submit">Enviar correo</button>
         </div>
         <div className="flex justify-center md:pt-52 pt-24" style={{ whiteSpace: "nowrap" }}>
-          <p className='text-white'>¿Te acuerdas de tu contraseña? <a href="/auth/login" className="font-medium text-primary hover:text-lime-600">
-                      Crear cuenta
+          <p className='text-white'>¿Te acuerdas de tu contraseña? <a href="/iniciar-sesion" className="font-medium text-primary hover:text-lime-600">
+                     Iniciar sesión
                 </a></p>
         </div>
       </form>

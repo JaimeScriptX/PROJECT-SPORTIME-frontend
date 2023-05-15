@@ -1,14 +1,22 @@
 import iconofalta from '../../../assets/images/IconoFalta.svg'
 import CamisetaNegra from '../../../assets/images/CamisetaNegra.svg'
 import CamisetaBlanca from '../../../assets/images/CamisetaBlanca.svg'
+import { useEventStore } from '../../../hooks/useEventStore'
 
-export const ModalElegir = ({onClose}:{onClose:any}) => {
+export const ModalElegir = ({onClose, number_players, event_players_team_a, event_players_team_b, event_id}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, event_id:string}) => {
+
+    const {startJoinEvent} = useEventStore()
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
           onClose();
         }
       };
+
+    const handleJoinEvent = (team:any) => {
+        startJoinEvent({fk_event_id: Number(event_id), fk_person_id: 1, team})
+        onClose();
+    }
 
   return (
     <>
@@ -24,61 +32,41 @@ export const ModalElegir = ({onClose}:{onClose:any}) => {
                 <div className="text-center border-r pr-5">
                     <h6 className="text-lg text-white pb-5 font-bold lg:text-xl xl:text-xl">Equipo A</h6>
                     <div className="grid grid-cols-3 gap-5">
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 02" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button className="rounded-full">
-                                <img src={iconofalta} />
-                            </button>
-                        </div>
-                        <div>
-                            <button className="rounded-full">
-                                <img src={iconofalta} />
-                            </button>
-                        </div>
+                    {event_players_team_a.map((player:any, index:any) => (
+                            <div key={index}>
+                                <button>
+                                    <img src={player.image_profile} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                </button>
+                            </div>
+                        ))}
+                        {/* Añade botones adicionales si hay menos participantes que el total */}
+                        {Array.from({ length: number_players - event_players_team_a.length }).map((_, index) => (
+                            <div key={index}>
+                                <button className="rounded-full" onClick={()=> handleJoinEvent(1)}>
+                                    <img src={iconofalta} width={'63'} />
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="text-center pr-2 ">
                     <h6 className="text-lg font-bold text-white pb-5 lg:text-xl xl:text-xl">Equipo B</h6>
                     <div className="grid grid-cols-3 gap-5 pb-2">
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
-                        <div>
-                            <button disabled>
-                                <img src="https://picsum.photos/65" className="rounded-full" alt="Profile 03" />
-                            </button>
-                        </div>
+                    {event_players_team_b.map((player:any, index:any) => (
+                            <div key={index}>
+                                <button>
+                                    <img src={player.image_profile} className='rounded-full' alt={`Profile ${index}`} />
+                                </button>
+                            </div>
+                        ))}
+                        {/* Añade botones adicionales si hay menos participantes que el total */}
+                        {Array.from({ length: number_players - event_players_team_b.length }).map((_, index) => (
+                            <div key={index}>
+                                <button className="rounded-full" onClick={()=> handleJoinEvent(2)}>
+                                    <img src={iconofalta} width={'65'} />
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

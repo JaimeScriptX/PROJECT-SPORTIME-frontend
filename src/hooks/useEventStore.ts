@@ -40,6 +40,17 @@ export const useEventStore = () => {
         }
     } 
 
+    const startJoinEvent = async({fk_event_id, fk_person_id, team}:{
+        fk_event_id:number, fk_person_id:number, team:number}) => {
+        try {
+            const {data} = await sportimeApi.post('/eventPlayers',{fk_event_id, fk_person_id, team})
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+    } 
+
+
     const getEventById = async(id:any) => {
         const {data} = await sportimeApi.get(`/events/${id}`)
         console.log(data)
@@ -47,8 +58,13 @@ export const useEventStore = () => {
     }   
 
     const getEvents = async() => {
-        const {data} = await sportimeApi.get(`/eventsCustom/`)
+        const {data} = await sportimeApi.get(`/events`)
         console.log(data)
+        return data
+    }   
+
+    const getEventsPersona= async(id:any) => {
+        const {data} = await sportimeApi.get(`/eventsPersona/${id}`)
         return data
     }   
 
@@ -57,6 +73,6 @@ export const useEventStore = () => {
         status, user, errorMessage,
 
         // Metodos
-        startCreateCustom, startCreateSportime, getEventById, getEvents
+        startCreateCustom, startCreateSportime, startJoinEvent, getEventById, getEvents, getEventsPersona
     }
 }

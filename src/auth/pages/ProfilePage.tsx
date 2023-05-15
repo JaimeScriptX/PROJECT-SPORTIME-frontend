@@ -13,8 +13,7 @@ import { ModalEditarPerfil } from "../components/ModalEditarPerfil"
 interface initialState {
     id: number,
     image_profile: null,
-    name: string,
-    last_name: string,
+    name_and_lastname: string,
     birthday: {
         date: string,
         timezone_type: number,
@@ -23,9 +22,12 @@ interface initialState {
     weight: number,
     height: number,
     nationality: string,
+    city: string,
     games_played: number,
     victories: number,
-    ratio:number,
+    defeat: number,
+    ratio: number,
+    image_banner: null,
     fk_sex_id: {
         id: number,
         gender: string
@@ -83,12 +85,12 @@ export const ProfilePage = () => {
                   <img src={Edit} width={'40'}/>
                 </button>
                 {isOpen && (
-                  <ModalEditarPerfil name_lastname={PersonData?.name} age={'25'} photo_profile={PersonData?.image_profile} height={PersonData?.height}
-                  weight={PersonData?.weight} sex={PersonData?.fk_sex_id.gender} nacionality={PersonData?.nationality} location={'Molina de segura, Murcia'} onClose={closeModal}/>
+                  <ModalEditarPerfil name_lastname={PersonData?.name_and_lastname || ""} age={'25'} photo_profile={PersonData?.image_profile || ""} height={PersonData?.height || 0}
+                  weight={PersonData?.weight || 0} sex={PersonData?.fk_sex_id.gender || ""} nacionality={PersonData?.nationality || ""} location={'Molina de segura, Murcia'} onClose={closeModal}/>
                 )}
               </div>
-              <h2 className="text-xl font-medium text-gray-800">{PersonData?.name}</h2> 
-              <h2 className="text-sm text-gray-700">@GuilleMamon</h2> 
+              <h2 className="text-xl font-medium text-gray-800">{PersonData?.name_and_lastname}</h2> 
+              <h2 className="text-sm text-gray-700">@{user?.username}</h2> 
               <p className="text-gray-500 text-sm">Nacionalidad: {PersonData?.nationality}</p>
               <p className="text-gray-500 text-sm">Molina de segura, Murcia</p>
               <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>

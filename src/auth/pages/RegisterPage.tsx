@@ -178,7 +178,7 @@ export const RegisterPage = () => {
           <button type="submit">Crear cuenta</button>
         </div>
         <div className="flex justify-center md:pt-30 pt-20" style={{ whiteSpace: "nowrap" }}>
-          <p className="text-white">¿No eres nuevo en SPORTIME? <a href="/auth/login" className="font-medium text-primary hover:text-lime-600">
+          <p className="text-white">¿No eres nuevo en SPORTIME? <a href="/iniciar-sesion" className="font-medium text-primary hover:text-lime-600">
                       Iniciar sesión
                 </a></p>
         </div>

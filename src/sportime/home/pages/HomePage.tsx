@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react"
 import { NavbarHome } from "../components/NavbarHome"
 import { EventCard } from "../../components"
 import { useEventStore } from "../../../hooks/useEventStore"
+import { NavbarBottom } from "../components/NavbarBottom"
 
 
 interface initialState {
@@ -133,6 +134,7 @@ export const HomePage = () => {
   return (
     <>
         <NavbarHome />
+        <NavbarBottom />
         <section className="bg-portada flex flex-col sm:flex-row items-center py-10 pb-20">
           <div className="w-full sm:w-3/4">
             <div className="mx-4 sm:mx-20 mb-8">
@@ -173,7 +175,7 @@ export const HomePage = () => {
           <div className="relative pb-12">
              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
               {events.map((event:any) =>
-               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={10} plazas={6} hora={formatTime(event.time.date)} fecha={formatearFecha(event.date.date)} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={formatTime(event.time.date)} fecha={formatearFecha(event.date.date)} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
               )}
               </div>
               <button
