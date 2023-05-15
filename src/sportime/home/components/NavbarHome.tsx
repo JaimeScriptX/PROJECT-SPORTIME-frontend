@@ -122,7 +122,7 @@ export const NavbarHome = () => {
                 <button className="hidden lg:flex items-center justify-center font-n27 px-3 py-2 space-x-2 text-md tracking-wide transition-colors duration-200 transform  bg-primary rounded-md dark:bg-primary dark:hover:bg-lime-500 dark:focus:bg-primary  focus:outline-none  focus:ring-opacity-50"
                 onClick={handleMenuToggleDes}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
                     </svg>
 
                     <span>Crear evento</span>
@@ -142,13 +142,13 @@ export const NavbarHome = () => {
           </a>
           <hr className=''/>
           <a
-            href="/crear-evento-custom"
+            href="/crear-evento-personalizado"
             className="block py-2 px-2 text-gray-800 hover:bg-primary"
           >
             <div className="flex items-center">
               <img src={''} alt={''} className="h-12 mx-2 rounded-sm" />
               <div>
-                <div className="font-medium">Ya tengo decidido dónde voy a jugar</div>
+                <div className="font-medium">En un centro deportivo personalizado</div>
                 <div className="text-sm text-gray-500">Disputa un encuentro deportivo en una instalación o centro deportivo que no se encuentra entre las alternativas disponibles en SPORTIME.</div>
               </div>
             </div>
@@ -168,6 +168,13 @@ export const NavbarHome = () => {
                         <p className="text-gray-500">@{user.username}</p>
                       </div>
                     </div>
+                    <hr className=''/>
+                      <a
+                        href="/dashboard"
+                        className="block py-2 text-center text-gray-800 hover:bg-primary"
+                      >
+                        Panel de eventos
+                      </a>
                     <hr className=''/>
                     <a
                       href="/perfil"

@@ -25,15 +25,10 @@ interface initialState {
   is_private: boolean,
   details: string,
   price: number,
-  date: {
-      date: string,
-  },
-  time: {
-      date: string,
-  },
-  duration: {
-      date: string,
-  },
+  date:  string,
+  time: string,
+  time_end: string,
+  duration:  string,
   number_players: number,
   sport_center_custom: string,
   fk_sportcenter_id:{
@@ -83,6 +78,8 @@ interface initialState {
           team_b: string
       }
   },
+  players_registered: number,
+  missing_players: number
 }
 
 const formatTime = (dateString:any) => {
@@ -175,7 +172,7 @@ export const HomePage = () => {
           <div className="relative pb-12">
              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
               {events.map((event:any) =>
-               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={formatTime(event.time.date)} fecha={formatearFecha(event.date.date)} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time} fecha={event.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
               )}
               </div>
               <button
@@ -205,7 +202,7 @@ export const HomePage = () => {
             </div>
         </section>
         <section className="bg-fondo pattern pb-5">
-          <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Los centros deportivos más buscados de Murcia</h1>
+          <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Los centros deportivos asociados a SPORTIME</h1>
             <div className="relative pb-20">
                 <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
 
@@ -296,7 +293,7 @@ export const HomePage = () => {
               </span>
               </h1>
               <div className="mx-auto rounded-lg font-black mt-5 text-zinc-400 md:mt-12 md:max-w-lg text-center lg:text-lg">
-              <button className="bg-tkb border text-sm text-white py-3 px-7 rounded-full">
+              <button className="bg-tkb border text-sm text-white py-3 px-7 rounded-full hover:bg-primary hover:text-black hover:border-black">
               Unete a la comunidad
               </button>
               </div>

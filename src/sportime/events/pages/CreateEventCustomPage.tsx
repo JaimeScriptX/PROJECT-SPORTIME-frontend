@@ -47,7 +47,7 @@ export const CreateEventCustomPage = () => {
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
     const [sport, setSport] = useState<Select | null>(null);
-    const [polideportivo, setPolideportivo] = useState('');
+    const [centroDeportivo, setCentroDeportivo] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [duration, setDuration] = useState('');
@@ -101,7 +101,7 @@ export const CreateEventCustomPage = () => {
           name,
           details,
           sportS,
-          polideportivo,
+          centroDeportivo,
           date,
           time,
           duration,
@@ -122,9 +122,13 @@ export const CreateEventCustomPage = () => {
       setIsPrivate(!isPrivate)
     }
 
-    const handlePrice = () => {
-      setPriceOpen(!priceOpen)
-      console.log(priceOpen)
+    const handlePrice = (event:any) => {
+      const isOpen = event.target.checked;
+      setPriceOpen(isOpen);
+  
+      if (!isOpen) {
+        setPrice('0');
+      }
     }
 
     return (
@@ -142,7 +146,7 @@ export const CreateEventCustomPage = () => {
             <div className='bg-fondo'>
                 <div className='absolute left-1/2 transform -translate-x-1/2 px-44 lg:px-72 py-16' style={{ marginTop: '-110px' }}>
                     <div className='fixed top-14 lg:top-12 py-4 w-full flex justify-center inset-x-0 bg-primary'>
-                        <h1 className='text-black text-2xl lg:text-4xl font-n27'>Crear evento [CUSTOM]</h1>
+                        <h1 className='text-black text-xl lg:text-3xl font-n27'>Crear evento [PERSONALIZADO]</h1>
                     </div>
                 </div>
                 <div className="pt-10 lg:max-w-3xl max-w-sm mx-auto pb-16 lg:pb-0">
@@ -157,7 +161,7 @@ export const CreateEventCustomPage = () => {
                               </label>
                                 <div className="relative">
                                   <input
-                                    placeholder="Arthur Melo"
+                                    placeholder="¡Unete a pasartlo bien jugando con unos amigos!"
                                     type="text"
                                     maxLength={69}
                                     name="name"
@@ -185,17 +189,17 @@ export const CreateEventCustomPage = () => {
                               </div>
                               <div className="mt-4">
                                   <label
-                                      htmlFor="polideportivo"
-                                      className="block text-md text-primary font-bold capitalize"
+                                      htmlFor="centro-deportivo"
+                                      className="block text-md text-primary font-bold"
                                   >
-                                      Polideportivo
+                                      Centro deportivo
                                   </label>
                                   <input
-                                    placeholder="Busca el polideportivo donde vas a jugar"
+                                    placeholder="Busca el centro deportivo donde vas a jugar"
                                     type="text"
-                                    name="polideportivo"
-                                    value={polideportivo}
-                                    onChange={(e) => setPolideportivo(e.target.value)}
+                                    name="centro-deportivo"
+                                    value={centroDeportivo}
+                                    onChange={(e) => setCentroDeportivo(e.target.value)}
                                     className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
                                   />
                               </div>
@@ -454,30 +458,30 @@ export const CreateEventCustomPage = () => {
                                       })}
                                     />
                                   </div>        
-                              <div className="flex items-center pt-7">
-                                <label
-                                    htmlFor="precio"
-                                    className="block text-mdleading-5 text-white pr-2"
-                                    >
-                                      <FontAwesomeIcon icon={faCircleCheck} size="lg" style={{color: "#ffffff", marginRight:"5px"}} /> Es de pago la pista y esta reservada
-                                </label>
-                                <Toggle
-                                          defaultChecked={priceOpen}
-                                          icons={false}
-                                          onChange={handlePrice} 
-                                      />
-                              </div>      
-                              {priceOpen && (
-                                <h1 className="text-white pt-2"><FontAwesomeIcon icon={faWallet} size="lg" style={{color: "#ffffff", marginRight:"10px"}} />Precio por persona 
-                                <input 
-                                type="number"
-                                 name="precio" 
-                                 value={price}
-                                 min={0}
-                                 onChange={(e) => setPrice(e.target.value)}
-                                 className="w-12 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none" required={priceOpen}/>€</h1>
-                              )}      
-                              <div className="flex items-center pt-7">
+                                  <div className="flex items-center pt-8">
+                                    <label htmlFor="precio" className="block text-mdleading-5 text-white pr-2">
+                                      <FontAwesomeIcon icon={faCircleCheck} size="lg" style={{ color: "#ffffff", marginRight: "5px" }} /> Es de pago la pista y esta reservada
+                                    </label>
+                                    <Toggle
+                                      defaultChecked={priceOpen}
+                                      icons={false}
+                                      onChange={handlePrice}
+                                    />
+                                  </div>
+                                  <h1 className="text-white pt-2">
+                                    <FontAwesomeIcon icon={faWallet} size="lg" style={{ color: "#ffffff", marginRight: "10px" }} /> Precio por persona
+                                    <input
+                                      type="number"
+                                      name="precio"
+                                      value={price}
+                                      min={0}
+                                      onChange={(e) => setPrice(e.target.value)}
+                                      className={`w-12 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none ${priceOpen ? '' : 'opacity-50'}`}
+                                      required={priceOpen}
+                                      disabled={!priceOpen}
+                                    />€
+                                  </h1>
+                              <div className="flex items-center pt-8">
                                 <label
                                     htmlFor="privado"
                                     className="block text-mdleading-5 text-white pr-2"

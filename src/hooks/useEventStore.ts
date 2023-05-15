@@ -65,6 +65,7 @@ export const useEventStore = () => {
 
     const getEventsPersona= async(id:any) => {
         const {data} = await sportimeApi.get(`/eventsPersona/${id}`)
+        console.log(data)
         return data
     }   
 

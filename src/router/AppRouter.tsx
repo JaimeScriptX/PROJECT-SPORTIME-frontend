@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     element: <CreateEventSportimePage />
   },
   { 
-    path: "crear-evento-custom", 
+    path: "crear-evento-personalizado", 
     element: <CreateEventCustomPage />
   },
   { 

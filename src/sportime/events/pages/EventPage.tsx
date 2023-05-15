@@ -22,15 +22,10 @@ interface initialState {
     is_private: boolean,
     details: string,
     price: number,
-    date: {
-        date: string,
-    },
-    time: {
-        date: string,
-    },
-    duration: {
-        date: string,
-    },
+    date: string,
+    time: string,
+    time_end: string,
+    duration:string,
     number_players: number,
     sport_center_custom: string,
     fk_sportcenter_id:{
@@ -86,29 +81,6 @@ interface initialState {
       },
     players_registered: number,
     missing_players: number
-}
-
-const formatDate = (dateString:any) => {
-  const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
-  const date = new Date(dateString);
-  return date.toLocaleDateString('es-Es', options);
-}
-
-
-const formatTime = (dateString:any) => {
-  const date = new Date(dateString);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
-
-function sumTimes(time1:any, time2:any) {
-  const [hours1, minutes1] = time1.split(':').map(parseFloat);
-  const [hours2, minutes2] = time2.split(':').map(parseFloat);
-  const totalMinutes = (hours1 * 60 + minutes1) + (hours2 * 60 + minutes2);
-  const hours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
-  const minutes = (totalMinutes % 60).toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
 }
 
 export const EventPage = () => {
@@ -183,10 +155,6 @@ export const EventPage = () => {
   const closeModalElegir = () => {
     setShowModalElegir(false);
   };
-  
-  const startTime = formatTime(eventData?.time.date);
-  const durationTime = formatTime(eventData?.duration.date);
-  const endTime = sumTimes(startTime, durationTime);
 
   return (
     <>
@@ -287,8 +255,8 @@ export const EventPage = () => {
           <div className="flex items-center justify-start pb-2">
               <img src={RelojIcono} width={'60'} className="pr-3"/>
               <div>
-                <h6 className="text-slate-200 font-n27">{formatDate(eventData?.date.date)}</h6>
-                <h6 className="text-white text-lg  font-n27">{startTime} - {endTime} H</h6>
+                <h6 className="text-slate-200 font-n27">{eventData?.date}</h6>
+                <h6 className="text-white text-lg  font-n27">{eventData?.time} - {eventData?.time_end} H</h6>
               </div>
           </div>
           <div className="flex items-center justify-start pb-2">
