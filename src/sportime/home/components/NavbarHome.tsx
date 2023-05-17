@@ -6,6 +6,7 @@ import { SearchMobile } from '../../../ui/components/SearchMobile';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../hooks/useAuthStore';
 import Filter from '../../../assets/images/IconoFilter.svg'
+import { FilterModal } from '../../../ui/components/FilterModal';
 
 export const NavbarHome = () => {
 
@@ -16,9 +17,12 @@ export const NavbarHome = () => {
   const [authenticated, setAuthenticated] = useState(false)
   const [menuOpenDes, setMenuOpenDes] = useState(false);
   const [menuOpenDesPer, setMenuOpenDesPer] = useState(false)
-
+  const [openFilter, setOpenFilter] = useState(false)
   const ref = useRef<HTMLDivElement>(null);
 
+  const handleMenuToggleFilter = () => {
+    setOpenFilter(!openFilter);
+  };
 
   const handleLogout = () => {
     startLogout()
@@ -105,10 +109,12 @@ export const NavbarHome = () => {
           </div>
           )}
           {showSearchM && (
-          <button className="lg:hidden pl-2 pr-2 relative ">
+          <button className="lg:hidden pl-2 pr-2 relative " onClick={handleMenuToggleFilter}>
             <img src={Filter} width={'65'}/>
           </button>
           )}
+
+          {openFilter && <FilterModal closeModal={handleMenuToggleFilter} />}
           {
             !authenticated &&
             <Link to="/iniciar-sesion" className="hidden lg:inline-block lg:ml-auto lg:mr-5 py-2 px-6 bg-primary hover:bg-gray-100 text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">

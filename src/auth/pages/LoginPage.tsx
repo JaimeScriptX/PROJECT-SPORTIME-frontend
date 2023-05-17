@@ -14,17 +14,17 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const {startLogin, errorMessage} = useAuthStore()
 
-  const handleSubmit = (event:any) => {
-      event.preventDefault()
-      startLogin({ email:email, password:password})
-      navigate('/')
-  };
-
   useEffect(() => {
     if ( errorMessage !== undefined ) {
       Swal.fire('Error en la autenticación', errorMessage, 'error');
     }    
   }, [errorMessage])
+
+  const handleSubmit = async(event:any) => {
+      event.preventDefault()
+      await startLogin({ email:email, password:password})
+
+  };
 
   return (
   <>

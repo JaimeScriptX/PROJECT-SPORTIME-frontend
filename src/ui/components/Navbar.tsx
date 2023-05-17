@@ -6,6 +6,7 @@ import { Search } from './Search';
 import { SearchMobile } from './SearchMobile';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
+import { FilterModal } from './FilterModal';
 
 export const Navbar = () => {
   const {status, user, startLogout} = useAuthStore()
@@ -16,6 +17,7 @@ export const Navbar = () => {
   const [menuOpenMob, setMenuOpenMob] = useState(false);
   const [menuOpenDesPer, setMenuOpenDesPer] = useState(false)
   const [menuOpenMobPer, setMenuOpenMobPer] = useState(false)
+  const [openFilter, setOpenFilter] = useState(false)
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,6 +35,10 @@ export const Navbar = () => {
   
   const handleMenuToggleDesPer = () => {
     setMenuOpenDesPer(!menuOpenDesPer);
+  };
+  
+  const handleMenuToggleFilter = () => {
+    setOpenFilter(!openFilter);
   };
 
   const handleMenuToggleMobPer = () => {
@@ -108,9 +114,11 @@ export const Navbar = () => {
             <SearchMobile />
           </div>
 
-          <button className="lg:hidden pl-2 pr-2 relative ">
+          <button className="lg:hidden pl-2 pr-2 relative" onClick={handleMenuToggleFilter}>
             <img src={Filter} width={'65'}/>
           </button>
+
+          {openFilter && <FilterModal closeModal={handleMenuToggleFilter} />}
 
           {
             !authenticated &&

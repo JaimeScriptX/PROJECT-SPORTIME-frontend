@@ -14,24 +14,23 @@ interface initialState {
     id: number,
     image_profile: null,
     name_and_lastname: string,
-    birthday: {
-        date: string,
-        timezone_type: number,
-        timezone: string
-    },
-    weight: number,
-    height: number,
-    nationality: string,
-    city: string,
-    games_played: number,
-    victories: number,
-    defeat: number,
-    ratio: number,
+    birthday: null
+    weight: null,
+    height: null,
+    nationality: null,
+    city: null,
+    games_played: null,
+    victories: null,
+    defeat: null,
+    ratio: null,
     image_banner: null,
     fk_sex_id: {
-        id: number,
-        gender: string
+      id: number,
+      gender: string
     },
+    fk_user_id: {
+      username: string
+    }
 }
 
 
@@ -49,14 +48,13 @@ export const ProfilePage = () => {
 
   const profilePromise = async () => {
     await getPersonById(user.uuid).then((data) => {
-      setPersonData(data[0]);
+      setPersonData(data);
       console.log(data)
     })}
 
   useEffect(() => {
 
     profilePromise()
-    console.log()
 
   }, [user.uuid])
     
@@ -90,13 +88,13 @@ export const ProfilePage = () => {
                 )}
               </div>
               <h2 className="text-xl font-medium text-gray-800">{PersonData?.name_and_lastname}</h2> 
-              <h2 className="text-sm text-gray-700">@{user?.username}</h2> 
+              <h2 className="text-sm text-gray-700">@{PersonData?.fk_user_id.username}</h2> 
               <p className="text-gray-500 text-sm">Nacionalidad: {PersonData?.nationality}</p>
-              <p className="text-gray-500 text-sm">Molina de segura, Murcia</p>
+              <p className="text-gray-500 text-sm">Ciudad: {PersonData?.city}</p>
               <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>
               <p className="text-gray-500 text-sm">Estatura: {PersonData?.height} cm</p>
               <p className="text-gray-500 text-sm">Peso: {PersonData?.weight}kg</p>
-              <p className="text-gray-500 text-sm">Sexo: {PersonData?.fk_sex_id.gender}</p>
+              <p className="text-gray-500 text-sm">Sexo: {PersonData?.fk_sex_id?.gender || ""}</p>
             </div>
             <div className="border-t border-gray-200 mt-6 pt-6">
                 <h3 className="text-lg font-n27 text-gray-800 pl-6">Estadisticas generales</h3>
@@ -151,7 +149,7 @@ export const ProfilePage = () => {
   </div>*/}
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Mis deportes favoritos</h3>
-            <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth">
+            <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
                 <img src={Futbol} width={'225'}/>
                 <img src={Baloncesto} width={'225'}/>
                 <img src={Tenis} width={'225'}/>
@@ -161,7 +159,7 @@ export const ProfilePage = () => {
         </div>
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Mis ultimos eventos</h3>
-            <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth">
+            <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
             <div className="relative">
                 <div className="flex items-center justify-center gap-20 pt-1 bg-primary">
                   <p className="font-n27">Fútbol sala</p>

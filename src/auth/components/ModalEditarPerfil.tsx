@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactSelect  from 'react-select';
 import Select from "react-select/dist/declarations/src/Select";
+import { usePersonStore } from "../../hooks/usePersonStore";
 
 const genderOptions:Array<any> = [
   { value: 'Masculino', label: 'Masculino' },
@@ -13,10 +14,12 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
     const [nameLastname, setNameLastname] = useState(name_lastname)
     const [nacionalityE, setNacionalityE] = useState(nacionality)
     const [locationE, setLocationE] = useState(location)
-    const [ageE, setAgeE] = useState(age)
+    const [date, setDate] = useState('');
     const [heightE, setHeightE] = useState<number>(height)
     const [weightE, setWeightE] = useState<number>(weight)
     const [sexE, setSexE] = useState<{ value: string; label: string } | null>(genderOptions.find(option => option.value === sex) || null)
+    const {UpdatePersonById, user} = usePersonStore()
+
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
@@ -26,7 +29,7 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
 
     const handleSubmit = (e:any) => {
       e.preventDefault()
-      console.log(sexE)
+      UpdatePersonById({id: user.uuid, image_profile:null, image_banner:null, name_and_lastname: nameLastname, nationality:nacionalityE, city:locationE, birthday:date ,height:heightE, weight:weightE, fk_sex:sexE, fk_user:user.uuid})
       onClose()
     }
   return (
@@ -148,12 +151,12 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                           htmlFor="email"
                           className="block text-sm text-primary font-bold"
                       >
-                          Edad
+                          Fecha de nacimiento
                       </label>
                       <input
-                          value={ageE}
-                          type="text"
-                          onChange={(e) => setAgeE(e.target.value)}
+                          value={date}
+                          type="date"
+                          onChange={(e) => setDate(e.target.value)}
                           className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>

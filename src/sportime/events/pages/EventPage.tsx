@@ -57,8 +57,7 @@ interface initialState {
     fk_person_id: {
         id: number,
         image_profile: null,
-        name: string,
-        last_name: string,
+        name_and_lastname: string
         birthday: {
             date: string,
         },
@@ -177,8 +176,8 @@ export const EventPage = () => {
       </div>
     </div>
     <div className="bg-footer">
-      <div className='bg-fondo rounded-t-3xl relative mx-36 max-md:mx-0' style={{ marginTop: '-60px' }}>
-        <div className='absolute left-1/2 transform -translate-x-1/2 px-32 py-16' style={{ marginTop: '-110px' }}>
+    <div className={`bg-fondo rounded-t-3xl relative mx-36 max-md:mx-0 ${eventData?.fk_sportcenter_id !== null ? '' : 'h-screen'}`} style={{ marginTop: '-60px' }}>
+        <div className='absolute left-1/2 transform -translate-x-1/2 px-32 py-16 ' style={{ marginTop: '-110px' }}>
           <div className='fixed top-0 w-full pb-1 pt-0.5 flex justify-center gap-16 inset-x-0 bg-portada' >
             <h1 className='text-white font-n27'>Equipo A</h1>
             <h1 className='text-white font-n27'>Equipo B</h1>
@@ -193,7 +192,7 @@ export const EventPage = () => {
           <div className="flex items-center justify-between py-3">
               <div>
                 <h1 className="pt-5 text-white text-2xl font-n27">{eventData?.name} {eventData?.is_private === false ? <FontAwesomeIcon icon={faLockOpen} size="sm" style={{color: "#ffffff",}} /> :  <FontAwesomeIcon icon={faLock} size="sm" style={{color: "#ffffff",}} />}</h1>
-                <h6 className="text-white">Jose David</h6>
+                <h6 className="text-white">{eventData?.fk_person_id.name_and_lastname}</h6>
               </div>
               <img src={FutbolIcono} className="pt-6 pr-5"/>
           </div>
@@ -271,10 +270,13 @@ export const EventPage = () => {
         onClick={handleDireccion}
       />
           </div>
+          {eventData?.fk_sportcenter_id !== null && 
+          <div>
           <div className='pt-3 pb-2'>
             <h1 className='text-white text-lg font-n27'>Lugar</h1>
           </div>
           <Map />
+          </div>}
         </div>
       </div>
     </div>

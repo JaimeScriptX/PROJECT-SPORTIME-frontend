@@ -74,44 +74,52 @@ export const DashboardPage = () => {
     const [eventsCreated, setEventsCreated] = useState([])
     const [eventsJoin, setEventsJoin] = useState([])
     const {getEventsPersona, user} = useEventStore()
-    const eventListRef = useRef<HTMLDivElement>(null);
+    const eventListRefCreated = useRef<HTMLDivElement>(null);
+    const eventListRefJoin = useRef<HTMLDivElement>(null);
       
     useEffect(() => {
         const eventPromise = async () => {
-          const data = await getEventsPersona(1);
+          const data = await getEventsPersona(user.uuid);
           const { created_events, participating_events } = data;
-          console.log(created_events)
           setEventsCreated(created_events);
           setEventsJoin(participating_events);
+          console.log(eventsJoin)
         };
     
         eventPromise();
-      }, []);
+      }, [user.uuid]);
 
-      useEffect(() => {
-        console.log(eventsCreated);
-      }, [eventsCreated]);
-    
-
-    const scrollToLeft = () => {
-        if (eventListRef.current) {
-        eventListRef.current.scrollLeft -= 150;
+    const scrollToLeftCreated = () => {
+        if (eventListRefCreated.current) {
+          eventListRefCreated.current.scrollLeft -= 150;
         }
     };
 
-    const scrollToRight = () => {
-        if (eventListRef.current) {
-        eventListRef.current.scrollLeft += 150;
+    const scrollToLeftJoin = () => {
+        if (eventListRefJoin.current) {
+          eventListRefJoin.current.scrollLeft -= 150;
+        }
+    };
+
+    const scrollToRightCreated = () => {
+        if (eventListRefCreated.current) {
+          eventListRefCreated.current.scrollLeft += 150;
+        }
+    };
+
+    const scrollToRightJoin = () => {
+        if (eventListRefJoin.current) {
+          eventListRefJoin.current.scrollLeft += 150;
         }
     };
 
   return (
     <>
         <Navbar />
-        <div className="bg-fondo h-screen" >
-            <div className="px-2 grid grid-flow-col w-full ">
-                <h1 className="text-6xl ml-7 mt-3 max-sm:text-5xl text-white font-n27 ">Hola {user.name}</h1>
-                <div className="mt-5 mb-5 mr-7 bg-white rounded-2xl ">
+        <div className="bg-fondo pb-96 lg:pb-10 h-screen" >
+            <div className="px-2 grid grid-flow-row  lg:grid-flow-col w-full ">
+                <h1 className="text-6xl ml-2 mt-3 max-sm:text-5xl text-white font-n27 ">Hola, {user.name}</h1>
+                <div className="mt-5 mb-5 lg:mr-7 mr-2 ml-2 bg-white rounded-2xl">
                     <div className="grid grid-cols-2 md:grid-cols-4 p-2">
                         <div className="text-center md:border-r">
                             <h6 className="text-xl font-bold lg:text-xl xl:text-xl">14</h6>
@@ -140,49 +148,64 @@ export const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-white mt-10 mx-10 rounded-2xl">
+            <hr className="mx-5 opacity-5 pb-5"/>
+            <div className="bg-white mt-15  mx-5 rounded-2xl">
                 <h1 className="md:pl-16 pt-4 pl-5 text-2xl font-n27 text-black lg:text-4xl">Mis eventos</h1>
-                <div className="relative pb-12">
-                    <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
+                {eventsCreated.length > 0 &&
+                <div className="relative pt-5">
+                    <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRefCreated} style={{ maxHeight: '100%', overflowY: 'hidden' }}>
                     {eventsCreated.map((event:any) =>
-                    <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time.date} fecha={event.date.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                   <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time} fecha={event.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
                     )}
                     </div>
                     <button
-                        className="absolute top-4/4 top-34  transform -translate-y-1/2 left-10 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27 "
-                        onClick={scrollToLeft}
+                        className="absolute top-2/4 top-33  transform -translate-y-1/2 left-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27 "
+                        onClick={scrollToLeftCreated}
                     >
                         &lt;
                     </button>
                     <button
-                        className="absolute top-4/4 top-34 transform -translate-y-1/2 right-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27"
-                        onClick={scrollToRight}
+                        className="absolute top-2/4 top-33 transform -translate-y-1/2 right-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27"
+                        onClick={scrollToRightCreated}
                     >
                         &gt;
                     </button>
                 </div>
+                }
+                {eventsCreated.length === 0 && 
+                  <div className="flex justify-center py-12">
+                      <h1 className="lg:text-4xl text-2xl text-center font-n27">No has creado aún ningún evento</h1>
+                  </div>
+                }
             </div>  
-            <div className="bg-white mt-10 mx-10 rounded-2xl">
-                <h1 className="md:pl-16 pt-4 pl-5 text-2xl font-n27 text-black lg:text-4xl">Eventos a los que me uní</h1>
+            <div className="bg-white mt-10 mx-5 rounded-2xl">
+                <h1 className="md:pl-16 pt-4 pl-5 text-2xl font-n27 text-black lg:text-4xl">Eventos inscritos</h1>
+                {eventsJoin.length > 0 &&
                 <div className="relative pb-1">
-                    <div className="scrollbar-hide flex w-full md:pl-28 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
-                    {/* {eventsJoin.map((event:any) =>
-                    <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time.date} fecha={event.date.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
-                    )} */}
+                    <div className="scrollbar-hide flex w-full md:pl-28 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRefJoin} style={{ maxHeight: '100%', overflowY: 'hidden' }}>
+                    {eventsJoin.map((event:any) =>
+                    <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time} fecha={event.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    )}
                     </div>
                     <button
                         className="absolute top-4/4 top-44  transform -translate-y-1/2 left-5 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27 "
-                        onClick={scrollToLeft}
+                        onClick={scrollToLeftJoin}
                     >
                         &lt;
                     </button>
                     <button
                         className="absolute top-4/4 top-44 transform -translate-y-1/2 right-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27"
-                        onClick={scrollToRight}
+                        onClick={scrollToRightJoin}
                     >
                         &gt;
                     </button>
                 </div>
+                }
+                {eventsJoin.length === 0 && 
+                <div className="flex justify-center py-12">
+                  <h1 className="lg:text-4xl text-2xl text-center font-n27">Todavía no te has unido a ningún evento</h1>
+                </div>
+                }
             </div>  
         </div>
         <Footer/>

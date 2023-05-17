@@ -3,6 +3,7 @@ import { sportimeApi } from '../api'
 import { clearErrorMessage, onChecking, onLogin, onLogout} from "../store"
 import { useAppDispatch, useAppSelector } from "../store/hook"
 
+
 export const useAuthStore = () => {
 
     const {status, user, errorMessage} = useAppSelector(state => state.auth)
@@ -19,12 +20,12 @@ export const useAuthStore = () => {
             const expirate = decoded.exp * 1000
             localStorage.setItem('expiration', expirate.toString())
             dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
-    
+            window.location.href = '/';
         } catch (error) {
-            dispatch(onLogout('Creedenciales incorrectas'))
+            dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
             setTimeout(() => {
                 dispatch(clearErrorMessage())
-            }, 10)
+            }, 10000)
         }
     } 
 
@@ -34,16 +35,17 @@ export const useAuthStore = () => {
         dispatch(onChecking())
         try {
             const {data} = await sportimeApi.post('/register',{name_and_lastname,username,email,password,phone })
-            const decoded:any = jwtDecode(data.token)
-            localStorage.setItem('expiration', decoded.exp)
-            localStorage.setItem('token', data.token)
+            const decoded:any = jwtDecode(data.user.token)
+            const expirate = decoded.exp * 1000
+            localStorage.setItem('expiration', expirate.toString())
+            localStorage.setItem('token', data.user.token)
             dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id, tokenExpiration: decoded.exp}))
+            window.location.href = '/';
         } catch (error:any) {
-            console.log(error)
             dispatch(onLogout(error.response.data.message ||"Error en el registro"))
             setTimeout(() => {
                 dispatch(clearErrorMessage())
-            }, 100)
+            }, 10000)
         }
     } 
 

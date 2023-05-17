@@ -11,11 +11,13 @@ export const useEventStore = () => {
 
     const startCreateCustom = async({name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor}:{
         name:string,is_private:boolean,details:string,price:number,date:Date,time:string,duration:string,number_players:number,fk_sport:object, fk_difficulty:object, fk_sex:object, 
-        fk_person:number, fk_teamcolor:number}) => {
+        fk_person:string, fk_teamcolor:number}) => {
         console.log(name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor)
+
         try {
             const {data} = await sportimeApi.post('/eventsCustom',{name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor})
             console.log(data)
+            window.location.href = `/evento/${data.id}`;
         } catch (error) {
             console.log(error)
         }
@@ -41,7 +43,7 @@ export const useEventStore = () => {
     } 
 
     const startJoinEvent = async({fk_event_id, fk_person_id, team}:{
-        fk_event_id:number, fk_person_id:number, team:number}) => {
+        fk_event_id:number, fk_person_id:string, team:number}) => {
         try {
             const {data} = await sportimeApi.post('/eventPlayers',{fk_event_id, fk_person_id, team})
             console.log(data)

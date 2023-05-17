@@ -6,6 +6,7 @@ import { faCircleCheck, faLock, faWallet } from '@fortawesome/free-solid-svg-ico
 import Toggle from 'react-toggle'
 import "react-toggle/style.css" 
 import { useEventStore } from "../../../hooks/useEventStore";
+import CustomSelect from "../components/MultiSelect";
 
 const sportOptions:Array<any> = [
   { value: 'Baloncesto', label: 'Baloncesto' },
@@ -42,7 +43,7 @@ interface Select {
 
 export const CreateEventCustomPage = () => {
     
-    const {startCreateCustom} = useEventStore()
+    const {startCreateCustom, user} = useEventStore()
 
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
@@ -57,6 +58,7 @@ export const CreateEventCustomPage = () => {
     const [gender, setGender] = useState<Select | null>(null);
     const [difficulty, setDifficulty] = useState<Select | null>(null);
     const [color, setColor] = useState<Select | null>(null);
+    const [colorsM, setColorsM] = useState([]);
     const [price, setPrice] = useState('0');
     const [isPrivate, setIsPrivate] = useState(false)
     const [priceOpen, setPriceOpen] = useState(false)
@@ -64,6 +66,21 @@ export const CreateEventCustomPage = () => {
     const calculateDuration = () => {
       const totalMinutes = parseInt(hour) * 60 + parseInt(minutes);
       return totalMinutes
+    };
+
+    const colorOptions = [
+      { value: 'red', label: 'Rojo', color: '#ef233c' },
+      { value: 'green', label: 'Verde', color: '#9cf21a' },
+      { value: 'blue', label: 'Azul', color: '#3a86ff' },
+      { value: 'yellow', label: 'Amarillo', color: '#FFFF00' },
+      { value: 'white', label: 'Blanco', color: '#dee2e6' },
+      { value: 'black', label: 'Negro', color: '#343a40' },
+    ];
+
+    const handleColorChange = (selectedOptions:any) => {
+      if (selectedOptions.length <= 2) {
+        setColorsM(selectedOptions);
+      }
     };
 
     const handleSubmit = (e:any) => {
@@ -114,7 +131,7 @@ export const CreateEventCustomPage = () => {
         };
         
         console.log(eventData);
-        startCreateCustom({name, details, price:parseInt(price), date, duration, is_private:isPrivate, number_players:parseInt(playerCount), time, fk_difficulty, fk_person:1, fk_sex, fk_sport, fk_teamcolor:1  })
+        startCreateCustom({name, details, price:parseInt(price), date, duration, is_private:isPrivate, number_players:parseInt(playerCount), time, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1  })
 
     };
     
@@ -319,6 +336,7 @@ export const CreateEventCustomPage = () => {
                                   <input
                                       placeholder="5"
                                       type="number"
+                                      min={1}
                                       required
                                       name="jugadores"
                                       value={playerCount}
@@ -404,7 +422,7 @@ export const CreateEventCustomPage = () => {
                                           color: '#FFFFFF',
                                            // establecer el color del texto seleccionado en blanco
                                         }),
-                                      }}
+                                      }} 
                                       theme={(theme:any) => ({
                                         ...theme,
                                         colors: {
@@ -414,6 +432,7 @@ export const CreateEventCustomPage = () => {
                                         },
                                       })}
                                   />
+                                   <CustomSelect colorOptions={colorOptions} color={colorsM} setColor={handleColorChange} />
                               </div>
                               <div className="mt-4">
                               <label

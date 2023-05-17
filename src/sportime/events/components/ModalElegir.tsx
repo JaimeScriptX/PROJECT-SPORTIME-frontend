@@ -5,7 +5,7 @@ import { useEventStore } from '../../../hooks/useEventStore'
 
 export const ModalElegir = ({onClose, number_players, event_players_team_a, event_players_team_b, event_id}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, event_id:string}) => {
 
-    const {startJoinEvent} = useEventStore()
+    const {startJoinEvent, user} = useEventStore()
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
@@ -14,7 +14,7 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
       };
 
     const handleJoinEvent = (team:any) => {
-        startJoinEvent({fk_event_id: Number(event_id), fk_person_id: 1, team})
+        startJoinEvent({fk_event_id: Number(event_id), fk_person_id: user.uuid, team})
         onClose();
     }
 

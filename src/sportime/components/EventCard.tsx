@@ -5,9 +5,6 @@ import { Link } from "react-router-dom";
 export const EventCard = ({id, deporte, hora, fecha, nivel, genero, jugadores, nombre, centroDeportivo, total, plazas }:
     {id: number, deporte:string, hora:string, fecha:string, nivel:string, genero:string, jugadores:number, nombre:string, centroDeportivo:string, total:number, plazas:number}) => {
 
-    const plazasOcupadas = plazas
-    const [progress, setProgress] = useState(plazasOcupadas);
-
     const nombreClase = nombre.length >= 35 ? "h-14" : "h-8";
   return (
     <a className="relative" href={`/evento/${id}`}>
@@ -36,7 +33,7 @@ export const EventCard = ({id, deporte, hora, fecha, nivel, genero, jugadores, n
       </div>
     </div> 
     <div className="md:w-20 w-14 h-20 absolute md:top-56 max-md:top-52" style={{ right: '2rem' }}> 
-      <CircularProgress value={progress} total={total}/>
+      <CircularProgress value={plazas} total={total}/>
     </div>
   </a>
   )

@@ -19,7 +19,6 @@ export const RegisterPage = () => {
   const handleSubmit = (e:any) => {
     e.preventDefault();
     startRegister({name_and_lastname:name, username:username, email: email, password: password, phone:phone})
-    navigate('/')
   };
 
   useEffect(() => {
@@ -65,10 +64,10 @@ export const RegisterPage = () => {
           </label>
           <div className="mt-1">
             <input
-              id="name"
-              name="name"
+              id="username"
+              name="username"
               type="name"
-              autoComplete="name"
+              autoComplete="username"
               placeholder="Ingrese su nombre de usuario"
               required
               value={username}

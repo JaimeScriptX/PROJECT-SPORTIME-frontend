@@ -132,17 +132,17 @@ export const HomePage = () => {
     <>
         <NavbarHome />
         <NavbarBottom />
-        <section className="bg-portada flex flex-col sm:flex-row items-center py-10 pb-20">
-          <div className="w-full sm:w-3/4">
-            <div className="mx-4 sm:mx-20 mb-8">
+        <div className="bg-portada flex flex-col sm:flex-row items-center py-10 pb-20">
+          <div className="w-full lg:w-3/4">
+            <div className="mx-4 lg:mx-20 mb-8">
               <div className="ml-4 sm:ml-35 mr-4 sm:mr-20">
-                <h1 className="text-4xl sm:text-6xl font-extrabold text-white font-inter mb-8">Encuentra y crea eventos <br />deportivos en comunidad, <br />¡únete ahora!</h1>
+                <h1 className="text-4xl lg:text-6xl font-extrabold text-white font-inter mb-8">Encuentra y crea eventos <br />deportivos en comunidad, <br />¡únete ahora!</h1>
                 <h5 className="text-xl sm:text-2xl text-white mr-8 sm:mr-95 font-n27 sm:w-3/4 ">¿Te apasiona el deporte y quieres conectar con otros apasionados como tú? Únete a nuestra comunidad en línea y descubre cómo puedes crear y participar en actividades deportivas en tu zona.</h5>
               </div>
             </div>
           </div>
-          <div className="w-full sm:w-1/4 relative flex justify-center items-center sm:ml-0">
-            <p className="text-10xl leading-none font-gries bg-clip-text text-transparent" style={{backgroundImage: `url('https://murciaplaza.com/public/Image/2023/4/RealMurcia-Cornell%C3%A0-F%C3%BAtbol27_forCrop.jpg')`}}>
+          <div className="w-full lg:w-1/4 relative flex justify-center items-center sm:ml-0">
+            <p className="text-9xl lg:text-10xl leading-none font-gries bg-clip-text text-transparent" style={{backgroundImage: `url('https://murciaplaza.com/public/Image/2023/4/RealMurcia-Cornell%C3%A0-F%C3%BAtbol27_forCrop.jpg')`}}>
               <span>
                 <span>SP</span>
               </span>
@@ -160,17 +160,19 @@ export const HomePage = () => {
               </span>
             </p>
           </div>
-        </section>
-        <section id="my-section-desktop" className="absolute 2xl:left-2/4  align-middle transform -translate-x-1/2 -translate-y-1/2 hidden lg:inline-block">
+        </div>
+        <div className="bg-fondo pattern">
+        <section id="my-section-desktop" className="relative left-2/4 transform -translate-x-1/2 -translate-y-1/2 hidden lg:inline-block">
           <SearchHome />
         </section>
+        </div>
         <section id="my-section-mobile" className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:hidden w-full px-5">
           <SearchMobile />
         </section>
         <section className="bg-fondo pattern">
-          <h1 className="pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
+          <h1 className="lg:pt-0 pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
           <div className="relative pb-12">
-             <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}>
+             <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}  style={{ maxHeight: '100%', overflowY: 'hidden' }}>
               {events.map((event:any) =>
                <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time} fecha={event.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
               )}
@@ -192,7 +194,7 @@ export const HomePage = () => {
         <section className="bg-fondo pattern2">
           <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Buscar por deporte</h1>
             <div className="relative pb-20">
-              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
+              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
                 <img src={Futbol} width={'375'}/>
                 <img src={Baloncesto} width={'375'}/>
                 <img src={Tenis} width={'375'}/>
@@ -204,7 +206,7 @@ export const HomePage = () => {
         <section className="bg-fondo pattern pb-5">
           <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Los centros deportivos asociados a SPORTIME</h1>
             <div className="relative pb-20">
-                <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth">
+                <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
 
                     <a className="relative" href="/centro-deportivo">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
@@ -293,9 +295,9 @@ export const HomePage = () => {
               </span>
               </h1>
               <div className="mx-auto rounded-lg font-black mt-5 text-zinc-400 md:mt-12 md:max-w-lg text-center lg:text-lg">
-              <button className="bg-tkb border text-sm text-white py-3 px-7 rounded-full hover:bg-primary hover:text-black hover:border-black">
+              <a href="/registro" className="bg-tkb border text-sm text-white py-3 px-7 rounded-full hover:bg-primary hover:text-black hover:border-black">
               Unete a la comunidad
-              </button>
+              </a>
               </div>
               </div>
             </section>

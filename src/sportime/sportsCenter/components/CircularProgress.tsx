@@ -3,11 +3,12 @@
 export const CircularProgress = ({ value, total }:{value:number, total:number}) => {
 
     const libre = total;
+    const totalP = total * 2
     const radius = 45;
     const strokeWidth = 7.5;
     const normalizedRadius = radius - strokeWidth / 2;
     const circumference = normalizedRadius * 2 * Math.PI;
-    const progress = value / total;
+    const progress = value / totalP;
     const strokeDasharray = `${circumference} ${circumference}`;
     const strokeDashoffset = circumference - progress * circumference;
 
