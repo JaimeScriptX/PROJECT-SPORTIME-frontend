@@ -1,14 +1,13 @@
 
 
-export const CircularProgress = ({ value, total }:{value:number, total:number}) => {
+export const CircularProgress = ({players_registred ,missing_players, full }:{players_registred:number ,missing_players:number, full:number}) => {
 
-    const libre = total;
-    const totalP = total * 2
+    const totalP = full * 2
     const radius = 45;
     const strokeWidth = 7.5;
     const normalizedRadius = radius - strokeWidth / 2;
     const circumference = normalizedRadius * 2 * Math.PI;
-    const progress = value / totalP;
+    const progress = players_registred / totalP;
     const strokeDasharray = `${circumference} ${circumference}`;
     const strokeDashoffset = circumference - progress * circumference;
 
@@ -40,7 +39,7 @@ export const CircularProgress = ({ value, total }:{value:number, total:number}) 
       </svg>
       <span className="absolute left-6 text-sm text-center font-n27" style={{top:'1rem'}}>
         Quedan<br />
-       {libre}<br />
+       {missing_players}<br />
         plazas
       </span>
     </div>

@@ -18,6 +18,7 @@ export const NavbarHome = () => {
   const [menuOpenDes, setMenuOpenDes] = useState(false);
   const [menuOpenDesPer, setMenuOpenDesPer] = useState(false)
   const [openFilter, setOpenFilter] = useState(false)
+  const [filters, setFilters] = useState({});
   const ref = useRef<HTMLDivElement>(null);
 
   const handleMenuToggleFilter = () => {
@@ -36,6 +37,10 @@ export const NavbarHome = () => {
       setAuthenticated(true)
     }
   }, [status])
+
+  const handleUpdateFilters = (newFilters:any) => {
+    setFilters(newFilters);
+  };
 
   const handleScroll = () => {
     const sectionDesktop = document.getElementById('my-section-desktop');
@@ -114,7 +119,7 @@ export const NavbarHome = () => {
           </button>
           )}
 
-          {openFilter && <FilterModal closeModal={handleMenuToggleFilter} />}
+          {openFilter && <FilterModal closeModal={handleMenuToggleFilter} updateFilters={handleUpdateFilters} />}
           {
             !authenticated &&
             <Link to="/iniciar-sesion" className="hidden lg:inline-block lg:ml-auto lg:mr-5 py-2 px-6 bg-primary hover:bg-gray-100 text-gray-900 font-bold rounded-xl transition duration-200 mt-4 lg:mt-0">

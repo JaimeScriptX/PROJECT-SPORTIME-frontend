@@ -1,38 +1,77 @@
 import { useState } from "react";
+import Select  from 'react-select';
 
-export const FilterModal = ({ closeModal }:{closeModal:any}) => {
 
-  const [deporte, setDeporte] = useState('');
+const sportOptions:Array<any> = [
+  { value: 'Baloncesto', label: 'Baloncesto' },
+  { value: 'Futbol', label: 'Fútbol' },
+  { value: 'Futbol sala', label: 'Fútbol sala' },
+  { value: 'Padel', label: 'Pádel' },
+  { value: 'Tenis', label: 'Tenis' }
+];
+
+export const FilterModal = ({ closeModal, updateFilters  }:{closeModal:any, updateFilters: any}) => {
+
+  const [sport, setSport] = useState<Select | null>(null);
   const [fecha, setFecha] = useState('');
   const [hora, setHora] = useState('');
 
   const applyFilters = () => {
+    updateFilters(sport, fecha, hora);
+    console.log(updateFilters)
     closeModal();
   };
 
   return (
-<div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white p-5 justify-center rounded-lg shadow-lg">
+<div className="fixed mt-5 inset-0 items-center justify-center z-50" style={{paddingTop: '3rem'}}>
+      <div className="bg-white px-10 pt-3 pb-5 rounded-b-xl">
         <h2 className="text-xl font-semibold mb-4">Filtros</h2>
 
         <div className="mb-4">
           <label htmlFor="deporte" className="mr-2">
             Deporte:
           </label>
-          <select
-            id="deporte"
-            className="py-1 px-2 border-x-2 border-gray text-gray-500 bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-transparent dark:text-black dark:focus:ring-gray-500 dark:focus:border-gray-300"
-            value={deporte}
-            onChange={(e) => setDeporte(e.target.value)}
-          >
-            <option value="">Selecciona un deporte</option>
-            <option value="">Option 2</option>
-            <option value="">Option 3</option>
-          </select>
+          <Select
+            options={sportOptions}
+            id="sport"
+            value={sport}
+            required
+            onChange={setSport}
+            placeholder="Selecciona un deporte"
+            className="text-lg mt-2"
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                height: '43px',
+                backgroundColor: '#181818',
+                boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                border: '0px',
+                borderColor:"#a5ff1b",
+                color: '#FFFFFF', // establecer el color del texto en blanco
+              }),
+              placeholder: (provided) => ({
+                ...provided,
+                color: '#FFFFFF', // establecer el color del placeholder en blanco
+              }),
+              singleValue: (provided) => ({
+                ...provided,
+                color: '#FFFFFF',
+                 // establecer el color del texto seleccionado en blanco
+              }),
+            }}
+            theme={(theme:any) => ({
+              ...theme,
+              colors: {
+                ...theme.colors,
+                primary25: '#a5ff1b',
+                primary: '#222222',
+              },
+            })}
+          />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="fecha" className="mr-2">
+          <label htmlFor="fecha" className="mr-2 ">
             Fecha:
           </label>
           <select

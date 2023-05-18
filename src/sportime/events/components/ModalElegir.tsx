@@ -24,7 +24,6 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
         className='fixed z-10 inset-0 overflow-y-auto bg-gray-500 bg-opacity-75'
         onClick={onClose}
       ></div>
-      {/* Agrega el contenido del modal */}
       <div className='fixed z-20 inset-0 flex items-center justify-center' onClick={handleOverlayClick}>
         <div className='bg-portada rounded-lg overflow-hidden shadow-xl max-w-lg mx-5'>
           <div className='text-center py-4 text-white text-xl'><h1>Elegir</h1></div>
@@ -39,7 +38,6 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
                                 </button>
                             </div>
                         ))}
-                        {/* Añade botones adicionales si hay menos participantes que el total */}
                         {Array.from({ length: number_players - event_players_team_a.length }).map((_, index) => (
                             <div key={index}>
                                 <button className="rounded-full" onClick={()=> handleJoinEvent(1)}>

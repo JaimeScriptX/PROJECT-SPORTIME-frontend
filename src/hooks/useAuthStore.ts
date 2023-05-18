@@ -20,7 +20,6 @@ export const useAuthStore = () => {
             const expirate = decoded.exp * 1000
             localStorage.setItem('expiration', expirate.toString())
             dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
-            window.location.href = '/';
         } catch (error) {
             dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
             setTimeout(() => {
@@ -62,8 +61,6 @@ export const useAuthStore = () => {
             const decoded: any = jwtDecode(token);
             const tokenExpirationTime =  parseInt(tokenExpiration) 
             const nowTime = Date.now(); // Obtener la fecha actual en milisegundos
-            console.log(tokenExpirationTime)
-            console.log(nowTime)
             if (tokenExpirationTime > nowTime) {
               // El token aún no ha expirado
               dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));

@@ -14,11 +14,11 @@ export interface authState {
 }
 
 const initialState: authState = {
-  status: 'not-authenticated',
+  status: 'checking',
   user: {
     uuid:"",
     name: "",
-    username: "GuilleMamon",
+    username: "",
     email: ""
   },
   errorMessage: undefined
@@ -34,7 +34,6 @@ export const authSlice = createSlice({
         state.errorMessage = undefined
     },
     onLogin: (state, {payload},) => {
-      console.log(payload)
         state.status = 'authenticated'
         state.user = {uuid:payload.uuid, name:payload.name, username:payload.username, email:payload.email}
         state.tokenExpiration = payload.tokenExpiration

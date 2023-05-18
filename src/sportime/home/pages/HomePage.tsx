@@ -174,7 +174,7 @@ export const HomePage = () => {
           <div className="relative pb-12">
              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}  style={{ maxHeight: '100%', overflowY: 'hidden' }}>
               {events.map((event:any) =>
-               <EventCard id={event.id} deporte={event.fk_sports_id.name} genero={event.fk_sex_id.gender} nivel={event.fk_difficulty_id.type} jugadores={event.number_players} total={event.missing_players} plazas={event.players_registered} hora={event.time} fecha={event.date} nombre={event.name} centroDeportivo={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+               <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
               )}
               </div>
               <button
@@ -296,7 +296,7 @@ export const HomePage = () => {
               </h1>
               <div className="mx-auto rounded-lg font-black mt-5 text-zinc-400 md:mt-12 md:max-w-lg text-center lg:text-lg">
               <a href="/registro" className="bg-tkb border text-sm text-white py-3 px-7 rounded-full hover:bg-primary hover:text-black hover:border-black">
-              Unete a la comunidad
+              Únete a la comunidad
               </a>
               </div>
               </div>

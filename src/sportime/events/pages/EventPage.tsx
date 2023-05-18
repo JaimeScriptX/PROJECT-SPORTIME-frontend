@@ -93,16 +93,16 @@ export const EventPage = () => {
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [showModalElegir, setShowModalElegir] = useState(false);
 
-  const eventPromise = async () => {
-    await getEventById(id).then((data) => {
-      setEventData(data);
-    })}
-
   useEffect(() => {
+
+    const eventPromise = async () => {
+      await getEventById(id).then((data) => {
+        setEventData(data);
+      })}
 
     eventPromise()
 
-  }, [id])
+  }, [id, showModalElegir])
     
 
   const handleDireccion = (event:any) => {
@@ -129,7 +129,7 @@ export const EventPage = () => {
       // Abrir el mapa en una nueva ventana cuando la aplicación se esté ejecutando en un dispositivo de escritorio
       window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destino)}&travelmode=driving`;
     }
-  }
+  }  
 
   const onNavigateBack = () => {
     navigate(-1)
@@ -147,7 +147,7 @@ export const EventPage = () => {
     }
   };
 
-  const closeModal = () => {
+  const closeModalInfo = () => {
     setShowModalInfo(false);
   };
 
@@ -192,7 +192,7 @@ export const EventPage = () => {
           <div className="flex items-center justify-between py-3">
               <div>
                 <h1 className="pt-5 text-white text-2xl font-n27">{eventData?.name} {eventData?.is_private === false ? <FontAwesomeIcon icon={faLockOpen} size="sm" style={{color: "#ffffff",}} /> :  <FontAwesomeIcon icon={faLock} size="sm" style={{color: "#ffffff",}} />}</h1>
-                <h6 className="text-white">{eventData?.fk_person_id.name_and_lastname}</h6>
+                <h6 className="text-white">{eventData?.fk_person_id.name_and_lastname || ""}</h6>
               </div>
               <img src={FutbolIcono} className="pt-6 pr-5"/>
           </div>
@@ -239,7 +239,7 @@ export const EventPage = () => {
         </h5>
         {/* Renderiza el componente Modal si showModal es verdadero */}
         {showModalInfo && (
-          <ModalInfo number_players={eventData?.number_players || 0}  onClose={closeModal}/>
+          <ModalInfo event_id={id || '0'} number_players={eventData?.number_players} event_players_team_a={eventData?.event_players?.event_players_A} event_players_team_b={eventData?.event_players.event_players_B}  onClose={closeModalInfo}/>
         )}
               </div>
           </div>

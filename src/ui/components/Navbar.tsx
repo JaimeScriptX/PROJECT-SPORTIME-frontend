@@ -18,6 +18,7 @@ export const Navbar = () => {
   const [menuOpenDesPer, setMenuOpenDesPer] = useState(false)
   const [menuOpenMobPer, setMenuOpenMobPer] = useState(false)
   const [openFilter, setOpenFilter] = useState(false)
+  const [filters, setFilters] = useState({});
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,10 +37,6 @@ export const Navbar = () => {
   const handleMenuToggleDesPer = () => {
     setMenuOpenDesPer(!menuOpenDesPer);
   };
-  
-  const handleMenuToggleFilter = () => {
-    setOpenFilter(!openFilter);
-  };
 
   const handleMenuToggleMobPer = () => {
     if (status === "not-authenticated") {
@@ -56,6 +53,11 @@ export const Navbar = () => {
       setMenuOpenMob(!menuOpenMob);
       }
     };
+
+    const handleMenuToggleFilter = () => {
+      setOpenFilter(!openFilter);
+    };
+  
 
   const handleLogout = () => {
     startLogout()
@@ -87,14 +89,10 @@ export const Navbar = () => {
     };
   }, [ref]);
 
-  const handleMenu = (): MouseEventHandler<HTMLElement> | undefined => {
-    if (status === "not-authenticated") {
-      navigate('/iniciar-sesion');
-      return undefined;
-    } else {
-      return undefined;
-    }
-  }
+
+  const handleUpdateFilters = (newFilters:any) => {
+    setFilters(newFilters);
+  };
 
   return (
     <>
@@ -118,7 +116,7 @@ export const Navbar = () => {
             <img src={Filter} width={'65'}/>
           </button>
 
-          {openFilter && <FilterModal closeModal={handleMenuToggleFilter} />}
+          {openFilter && <FilterModal updateFilters={handleUpdateFilters} closeModal={handleMenuToggleFilter} />}
 
           {
             !authenticated &&

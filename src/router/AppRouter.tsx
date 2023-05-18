@@ -1,5 +1,5 @@
 
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { FC, useEffect } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { HomePage } from "../sportime/home";
@@ -8,49 +8,9 @@ import { SportCenter } from "../sportime/sportsCenter";
 import { LoginPage, RegisterPage, ResetPasswordPage } from "../auth";
 import { ProfilePage } from "../auth/pages/ProfilePage";
 import { DashboardPage } from "../auth/pages/DashboardPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProfileByUsernamePage } from "../sportime/profile";
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomePage />
-  },
-  { 
-    path: "evento/:id", 
-    element: <EventPage />
-  },
-  { 
-    path: "centro-deportivo", 
-    element: <SportCenter />
-  },
-  { 
-    path: "crear-evento-sportime", 
-    element: <CreateEventSportimePage />
-  },
-  { 
-    path: "crear-evento-personalizado", 
-    element: <CreateEventCustomPage />
-  },
-  { 
-    path: 'iniciar-sesion', 
-    element: <LoginPage /> 
-  },
-  { 
-    path: 'registro', 
-    element: <RegisterPage /> 
-  },
-  { 
-    path: 'restablecer-contraseña', 
-    element: <ResetPasswordPage />
-  },
-  { 
-    path: 'perfil', 
-    element: <ProfilePage />
-  },
-  { 
-    path: 'dashboard', 
-    element: <DashboardPage />
-  },
-]);
 
 export const AppRouter:FC = () => {
   
@@ -62,15 +22,33 @@ export const AppRouter:FC = () => {
   
 
   if(status === 'checking'){
-
-    return(
-      <h3>Cargando...</h3>
-    )
+    return null
   }
+
 
   return (
     <>
-      <RouterProvider router={router} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='evento/:id' element={<EventPage />} />
+        <Route path='perfil/:id' element={<ProfileByUsernamePage />} />
+        <Route path='centro-deportivo' element={<SportCenter />} />
+        <Route element={<ProtectedRoute isAllowed={status == "authenticated"} redirectTo="iniciar-sesion"/>}>
+          <Route path='crear-evento-sportime' element={<CreateEventSportimePage />} />
+          <Route path='crear-evento-personalizado' element={<CreateEventCustomPage />} />
+          <Route path='perfil' element={<ProfilePage />} />
+          <Route path='dashboard' element={<DashboardPage />} />
+        </Route>
+        <Route element={<ProtectedRoute isAllowed={status === "not-authenticated"} redirectTo="/"/>}>
+          <Route path='iniciar-sesion' element={<LoginPage />} />
+          <Route path='registro' element={<RegisterPage />} />
+          <Route path='restablecer-contraseña' element={<ResetPasswordPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
     </>
   )
 }
+
+export default AppRouter

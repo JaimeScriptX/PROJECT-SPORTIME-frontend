@@ -6,8 +6,6 @@ export const Map = () => {
 
   const [isAnimating, setIsAnimating] = useState(true);
 
-  console.log(isAnimating)
-
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const API_KEY = 'sUKR19LMrbXi8mWAm7EP';

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer, Navbar } from "../../../ui";
 import ReactSelect  from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,11 @@ import Toggle from 'react-toggle'
 import "react-toggle/style.css" 
 import { useEventStore } from "../../../hooks/useEventStore";
 import CustomSelect from "../components/MultiSelect";
+import DatePicker from 'react-datepicker';
+import es from 'date-fns/locale/es';
+import 'react-datepicker/dist/react-datepicker.css';
+import "../../../assets/css/datepicker.css"
+import { useNavigate } from "react-router-dom";
 
 const sportOptions:Array<any> = [
   { value: 'Baloncesto', label: 'Baloncesto' },
@@ -44,13 +49,14 @@ interface Select {
 export const CreateEventCustomPage = () => {
     
     const {startCreateCustom, user} = useEventStore()
+    const navigate = useNavigate()
 
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
     const [sport, setSport] = useState<Select | null>(null);
     const [centroDeportivo, setCentroDeportivo] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+    const [date, setDate] = useState<Date | null>(null);
+    const [time, setTime] = useState<Select | null>(null);
     const [duration, setDuration] = useState('');
     const [hour, setHour] = useState('');
     const [minutes, setMinutes] = useState('');
@@ -62,6 +68,7 @@ export const CreateEventCustomPage = () => {
     const [price, setPrice] = useState('0');
     const [isPrivate, setIsPrivate] = useState(false)
     const [priceOpen, setPriceOpen] = useState(false)
+    const [hourOptions, setHourOptions] = useState([]);
 
     const calculateDuration = () => {
       const totalMinutes = parseInt(hour) * 60 + parseInt(minutes);
@@ -77,6 +84,38 @@ export const CreateEventCustomPage = () => {
       { value: 'black', label: 'Negro', color: '#343a40' },
     ];
 
+    const handleDateChange = (date:any) => {
+      setDate(date);
+      setTime(null);
+    };
+  
+    useEffect(() => {
+      const generateHourOptions = () => {
+        const currentDate = new Date();
+        const currentHour = currentDate.getHours();
+        const options:any = [];
+  
+        if (date && date.setHours(0, 0, 0, 0) === currentDate.setHours(0, 0, 0, 0)) {
+          for (let hour = currentHour + 1; hour < 24; hour++) {
+            options.push({
+              value: hour.toString(),
+              label: `${hour.toString().padStart(2, '0')}:00`,
+            });
+          }
+        } else {
+          for (let hour = 0; hour < 24; hour++) {
+            options.push({
+              value: hour.toString(),
+              label: `${hour.toString().padStart(2, '0')}:00`,
+            });
+          }
+        }
+  
+        return options;
+      };
+    const options = generateHourOptions();
+      setHourOptions(options);
+    }, [date]);
     const handleColorChange = (selectedOptions:any) => {
       if (selectedOptions.length <= 2) {
         setColorsM(selectedOptions);
@@ -85,14 +124,12 @@ export const CreateEventCustomPage = () => {
 
     const handleSubmit = (e:any) => {
         e.preventDefault();
-        const date = new Date();
-        date.setHours(parseInt(time.split(':')[0]));
-        date.setMinutes(parseInt(time.split(':')[1]));
-        date.setSeconds(0);
-        const formattedTime = date.toISOString().substr(11, 8);
-
-        console.log(formattedTime)
-
+        const selectedTime = new Date();
+        const selectedHour = time?.value || "";
+        selectedTime.setHours(parseInt(selectedHour.split(':')[0]));
+        selectedTime.setMinutes(parseInt(selectedHour.split(':')[1]));
+        selectedTime.setSeconds(0);
+        console.log(selectedTime.getHours)
         const newDuration = calculateDuration();
         setDuration(newDuration.toString());
 
@@ -131,7 +168,11 @@ export const CreateEventCustomPage = () => {
         };
         
         console.log(eventData);
-        startCreateCustom({name, details, price:parseInt(price), date, duration, is_private:isPrivate, number_players:parseInt(playerCount), time, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1  })
+        startCreateCustom({name, details, price:parseInt(price), date: date || "", duration, is_private:isPrivate, number_players:parseInt(playerCount), time: time?.value || "", fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1  }).then(
+          (data:any) => {
+          console.log(data)
+          navigate(`/evento/${data.id}`)
+        })
 
     };
     
@@ -148,12 +189,16 @@ export const CreateEventCustomPage = () => {
       }
     }
 
+    const onNavigateBack = () => {
+      navigate(-1)
+    }
+
     return (
     <>
     <Navbar />
         <div className='relative w-full h-60'>
             <img src={'https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg'} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
-            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full'>
+            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full cursor-pointer' onClick={onNavigateBack}>
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left'>
                 <path d='M19 12H5M12 19l-7-7 7-7' />
                 </svg>
@@ -272,13 +317,14 @@ export const CreateEventCustomPage = () => {
                                   >
                                       Fecha
                                   </label>
-                                  <input
-                                      placeholder="arthurmelo@example.app"
-                                      type="date"
-                                      required
-                                      name="fecha"
-                                      value={date} onChange={(e) => setDate((e.target.value))}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none "
+                                  <DatePicker
+                                    selected={date}
+                                    onChange={setDate}
+                                    dateFormat="dd/MM/yyyy"
+                                    className=" block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-white border-b-2 border-gray-200  focus:border-primary focus:outline-none "
+                                    placeholderText='Seleccione la fecha'
+                                    locale={es}
+                                    minDate={new Date()}
                                   />
                               </div>
                               <div className="mt-4">
@@ -288,14 +334,40 @@ export const CreateEventCustomPage = () => {
                                   >
                                       Hora
                                   </label>
-                                  <input
-                                      placeholder="arthurmelo@example.app"
-                                      type="time"
-                                      required
-                                      name="hora"
-                                      value={time}
-                                      onChange={(e) => setTime(e.target.value)}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
+                                  <ReactSelect
+                                    options={hourOptions}
+                                    value={time}
+                                    onChange={setTime}
+                                    placeholder="Seleccione la hora"
+                                    className="text-lg focus:outline-none"
+                                    styles={{
+                                      control: (provided) => ({
+                                        ...provided,
+                                        height: '43px',
+                                        backgroundColor: '#181818',
+                                        boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                        border: '0px',
+                                        borderColor:"#a5ff1b",
+                                        color: '#FFFFFF', // establecer el color del texto en blanco
+                                      }),
+                                      placeholder: (provided) => ({
+                                        ...provided,
+                                        color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                      }),
+                                      singleValue: (provided) => ({
+                                        ...provided,
+                                        color: '#FFFFFF',
+                                         // establecer el color del texto seleccionado en blanco
+                                      }),
+                                    }}
+                                    theme={(theme:any) => ({
+                                      ...theme,
+                                      colors: {
+                                        ...theme.colors,
+                                        primary25: '#a5ff1b',
+                                        primary: '#222222',
+                                      },
+                                    })}
                                   />
                               </div>
                               <div className="mt-4">
@@ -318,7 +390,9 @@ export const CreateEventCustomPage = () => {
                                     <input
                                         placeholder="30"
                                         type="number"
-                                        name="hora"
+                                        name="minutes"
+                                        required
+                                        min={0}
                                         value={minutes}
                                         onChange={(e) => setMinutes(e.target.value)}
                                         className="block w-20 mr-1 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"

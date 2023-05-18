@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import logo from '../../assets/images/logo.svg'
 import PadelLogin from '../../assets/images/PadelLogin.jpg'
 import Logo from '../../assets/images/logo.svg'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuthStore';
 import Swal from 'sweetalert2';
 
 export const LoginPage = () => {
 
-  const navigate = useNavigate()
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +22,6 @@ export const LoginPage = () => {
   const handleSubmit = async(event:any) => {
       event.preventDefault()
       await startLogin({ email:email, password:password})
-
   };
 
   return (
@@ -33,7 +31,7 @@ export const LoginPage = () => {
       <Link to={'/'}><img src={Logo} width={'175'} className='absolute top-40 transform translate-y-[-8em] max-sm:translate-x-5'/></Link>
         <div className="sm:mx-auto sm:w-full sm:max-w-md md:pt-52 pt-24">
           <h2 className="mt-6 text-center text-3xl text-white font-n27">
-            Bienvenido de nuevo!
+            Bienvenid@ de nuevo!
           </h2>
         </div>
 
