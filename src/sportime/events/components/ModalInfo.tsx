@@ -31,15 +31,15 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                         <div className="grid grid-cols-3 gap-5">
                         {event_players_team_a.map((player:any, index:any) => (
                                 <div key={index}>
-                                    <button>
-                                        <img src={player.image_profile} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                    <button className='cursor-default'>
+                                        <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
                                     </button>
                                 </div>
                             ))}
                             {Array.from({ length: number_players - event_players_team_a.length }).map((_, index) => (
                                 <div key={index}>
                                     <button className="rounded-full pointer-events-none">
-                                        <img src={iconofalta} width={'63'} />
+                                        <img src={iconofalta} width={'50'} />
                                     </button>
                                 </div>
                             ))}
@@ -50,8 +50,8 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                         <div className="grid grid-cols-3 gap-5 pb-2">
                         {event_players_team_b.map((player:any, index:any) => (
                                 <div key={index}>
-                                    <button>
-                                        <img src={player.image_profile} className='rounded-full' alt={`Profile ${index}`} />
+                                    <button className='cursor-default'>
+                                        <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
                                     </button>
                                 </div>
                             ))}
@@ -59,7 +59,7 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                             {Array.from({ length: number_players - event_players_team_b.length }).map((_, index) => (
                                 <div key={index}>
                                     <button className="rounded-full pointer-events-none">
-                                        <img src={iconofalta} width={'65'} />
+                                        <img src={iconofalta} width={'50'} />
                                     </button>
                                 </div>
                             ))}

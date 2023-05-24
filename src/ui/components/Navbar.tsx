@@ -17,8 +17,8 @@ export const Navbar = () => {
   const [menuOpenMob, setMenuOpenMob] = useState(false);
   const [menuOpenDesPer, setMenuOpenDesPer] = useState(false)
   const [menuOpenMobPer, setMenuOpenMobPer] = useState(false)
-  const [openFilter, setOpenFilter] = useState(false)
-  const [filters, setFilters] = useState({});
+  const [openFilter, setOpenFilter] = useState(false) 
+  const [search, setSearch] = useState("")
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -90,9 +90,9 @@ export const Navbar = () => {
   }, [ref]);
 
 
-  const handleUpdateFilters = (newFilters:any) => {
-    setFilters(newFilters);
-  };
+  const handleSearch = (search:any) => {
+    setSearch(search)
+};
 
   return (
     <>
@@ -109,14 +109,14 @@ export const Navbar = () => {
           </div>
 
           <div className="lg:hidden pl-2 w-full relative py-2">
-            <SearchMobile />
+            <SearchMobile searchN={handleSearch} />
           </div>
 
           <button className="lg:hidden pl-2 pr-2 relative" onClick={handleMenuToggleFilter}>
             <img src={Filter} width={'65'}/>
           </button>
 
-          {openFilter && <FilterModal updateFilters={handleUpdateFilters} closeModal={handleMenuToggleFilter} />}
+          {openFilter && <FilterModal searchN={search} closeModal={handleMenuToggleFilter} />}
 
           {
             !authenticated &&

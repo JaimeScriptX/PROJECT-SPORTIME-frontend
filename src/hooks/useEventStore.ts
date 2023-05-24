@@ -9,15 +9,15 @@ export const useEventStore = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
-    const startCreateCustom = async({name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor}:{
-        name:string,is_private:boolean,details:string,price:number,date:string,time:string,duration:string,number_players:number,fk_sport:object, fk_difficulty:object, fk_sex:object, 
-        fk_person:string, fk_teamcolor:number}) => {
-        console.log(name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor)
+    const startCreateCustom = async({name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor, sport_center_custom}:{
+        name:string,is_private:boolean,details:string,price:number,date:Date,time:string,duration:string,number_players:number,fk_sport:object, fk_difficulty:object, fk_sex:object, 
+        fk_person:string, fk_teamcolor:number, sport_center_custom:string}) => {
+        console.log(name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor, sport_center_custom)
 
         try {
-            const {data} = await sportimeApi.post('/eventsCustom',{name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor})
+            const {data} = await sportimeApi.post('/eventsCustom',{name,is_private,details,price,date,time,duration,number_players,fk_sport, fk_difficulty, fk_sex, fk_person, fk_teamcolor, sport_center_custom})
             console.log(data)
-            // window.location.href = `/evento/${data.id}`;
+            window.location.href = `/evento/${data.id}`;
         } catch (error) {
             console.log(error)
         }

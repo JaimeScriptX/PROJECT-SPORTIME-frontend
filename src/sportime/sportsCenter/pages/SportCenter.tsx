@@ -9,10 +9,10 @@ import ComollegarIcon from '../../../assets/images/iconComollegar.svg'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Map } from "../../events/components/Map"
-import { useState } from "react"
-import { CircularProgress } from "../components/CircularProgress"
 
 export const SportCenter = () => {
+
+    // {name, location, latitude, longitude, description, sports, photos}:{name:string, location:string, latitude:number, longitude:string, description:string, sports:any, photos:any }
 
     const handleDireccion = (event:any) => {
         event.preventDefault();

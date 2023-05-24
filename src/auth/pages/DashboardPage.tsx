@@ -116,7 +116,7 @@ export const DashboardPage = () => {
   return (
     <>
         <Navbar />
-        <div className="bg-fondo pb-96 lg:pb-10 h-screen" >
+        <div className="bg-fondo pb-96 lg:pb-10" >
             <div className="px-2 grid grid-flow-row  lg:grid-flow-col w-full ">
                 <h1 className="text-6xl ml-2 mt-3 max-sm:text-5xl text-white font-n27 ">Hola, {user.name}</h1>
                 <div className="mt-5 mb-5 lg:mr-7 mr-2 ml-2 bg-white rounded-2xl">

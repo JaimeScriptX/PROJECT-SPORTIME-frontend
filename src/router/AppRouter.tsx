@@ -10,6 +10,7 @@ import { ProfilePage } from "../auth/pages/ProfilePage";
 import { DashboardPage } from "../auth/pages/DashboardPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ProfileByUsernamePage } from "../sportime/profile";
+import { SearchPage } from "../sportime/search";
 
 
 export const AppRouter:FC = () => {
@@ -32,7 +33,8 @@ export const AppRouter:FC = () => {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='evento/:id' element={<EventPage />} />
-        <Route path='perfil/:id' element={<ProfileByUsernamePage />} />
+        <Route path='perfil/:username' element={<ProfileByUsernamePage />} />
+        <Route path='search' element={<SearchPage />} />
         <Route path='centro-deportivo' element={<SportCenter />} />
         <Route element={<ProtectedRoute isAllowed={status == "authenticated"} redirectTo="iniciar-sesion"/>}>
           <Route path='crear-evento-sportime' element={<CreateEventSportimePage />} />

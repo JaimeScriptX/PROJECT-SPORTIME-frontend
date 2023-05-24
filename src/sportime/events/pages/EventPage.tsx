@@ -28,7 +28,7 @@ interface initialState {
     duration:string,
     number_players: number,
     sport_center_custom: string,
-    fk_sportcenter_id:{
+    fk_sportcenter_id?: {
       id: number,
       fk_services_id: {
           id: number,
@@ -55,24 +55,17 @@ interface initialState {
         gender: string
     },
     fk_person_id: {
+      id: number,
+      image_profile: string,
+      name_and_lastname: string,
+      fk_user_id: {
+          username: string
+      }
+    },
+    fk_teamcolor_id: {
         id: number,
-        image_profile: null,
-        name_and_lastname: string
-        birthday: {
-            date: string,
-        },
-        weight: number,
-        geight: number,
-        nationality: string,
-        fk_sex_id: {
-            id: number,
-            gender: string
-        },
-        fk_teamcolor_id: {
-            id: number,
-            team_a: string,
-            team_b: string
-        }
+        team_a: string,
+        team_b: string
     },
     event_players: {
           event_players_A: [],
@@ -87,7 +80,7 @@ export const EventPage = () => {
   const { id } = useParams();
   const {getEventById} = useEventStore()
   const navigate = useNavigate()
-  const { status } = useAuthStore()
+  const { status, user } = useAuthStore()
   
   const [eventData, setEventData] = useState<initialState | null>(null);
   const [showModalInfo, setShowModalInfo] = useState(false);
@@ -101,6 +94,7 @@ export const EventPage = () => {
       })}
 
     eventPromise()
+
 
   }, [id, showModalElegir])
     
@@ -192,12 +186,15 @@ export const EventPage = () => {
           <div className="flex items-center justify-between py-3">
               <div>
                 <h1 className="pt-5 text-white text-2xl font-n27">{eventData?.name} {eventData?.is_private === false ? <FontAwesomeIcon icon={faLockOpen} size="sm" style={{color: "#ffffff",}} /> :  <FontAwesomeIcon icon={faLock} size="sm" style={{color: "#ffffff",}} />}</h1>
-                <h6 className="text-white">{eventData?.fk_person_id.name_and_lastname || ""}</h6>
+                <h6 className="text-white flex">
+                  <img src={eventData?.fk_person_id?.image_profile} className='w-7 h-7 rounded-full mr-1' />
+                  <a href={`/perfil/${eventData?.fk_person_id?.fk_user_id?.username}`} target='_blank'>{eventData?.fk_person_id?.fk_user_id?.username|| ""}</a>
+                </h6>
               </div>
               <img src={FutbolIcono} className="pt-6 pr-5"/>
           </div>
           <hr className='mr-5 mt-2 opacity-5 pb-3'/>
-          <div className='flex justify-center '>
+          <div className='flex justify-center'>
           <button className='bg-primary text-black font-n27 text-xl p-2 rounded-3xl w-64' onClick={openModalElegir}>
             Unirse - {eventData?.price === 0 ? "Gratis" : `${eventData?.price}€`}
           </button>
@@ -215,13 +212,13 @@ export const EventPage = () => {
                   </p>
                 </div>
                 <div className="text-center border-r pr-5 pl-2">
-                  <h6 className="text-lg font-bold text-white lg:text-xl xl:text-xl">{eventData?.fk_sex_id.gender}</h6>
+                  <h6 className="text-lg font-bold text-white lg:text-xl xl:text-xl">{eventData?.fk_sex_id?.gender}</h6>
                   <p className="text-sm font-medium tracking-widest text-white uppercase lg:text-base">
                       Género
                   </p>
                 </div>
                 <div className="text-center pl-2">
-                  <h6 className="text-lg font-bold lg:text-xl xl:text-xl text-white">{eventData?.fk_difficulty_id.type}</h6>
+                  <h6 className="text-lg font-bold lg:text-xl xl:text-xl text-white">{eventData?.fk_difficulty_id?.type}</h6>
                   <p className="text-sm font-medium tracking-widest text-white uppercase lg:text-base">
                       Dificultad 
                   </p>

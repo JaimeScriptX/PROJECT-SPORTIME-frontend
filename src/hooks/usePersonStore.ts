@@ -11,6 +11,12 @@ export const usePersonStore = () => {
         return data
     }   
     
+    const getPersonByUsername = async(username:any) => {
+        const {data} = await sportimeApi.get(`/personsByName/${username}`)
+        console.log(data)
+        return data
+    }  
+
     const getPersonById = async(id:any) => {
         const {data} = await sportimeApi.get(`/persons/${id}`)
         console.log(data)
@@ -28,6 +34,6 @@ export const usePersonStore = () => {
         status, user, errorMessage,
 
         // Metodos
-        getPersonById, getEvents, UpdatePersonById
+        getPersonById,getPersonByUsername, getEvents, UpdatePersonById
     }
 }

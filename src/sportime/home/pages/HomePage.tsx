@@ -11,12 +11,13 @@ import sportime from '../../../assets/images/logo.svg'
 
 
 import { SearchMobile } from "../../../ui/components/SearchMobile"
-import { CircularProgress } from "../../sportsCenter/components/CircularProgress"
 import { useEffect, useRef, useState } from "react"
 import { NavbarHome } from "../components/NavbarHome"
 import { EventCard } from "../../components"
 import { useEventStore } from "../../../hooks/useEventStore"
 import { NavbarBottom } from "../components/NavbarBottom"
+import { useNavigate } from "react-router-dom"
+import { useSearchStore } from "../../../hooks/useSearchStore"
 
 
 interface initialState {
@@ -46,7 +47,6 @@ interface initialState {
   fk_sports_id: {
       id: number,
       name: string,
-      need_team: boolean,
       image: null
   },
   fk_difficulty_id: {
@@ -81,29 +81,14 @@ interface initialState {
   players_registered: number,
   missing_players: number
 }
-
-const formatTime = (dateString:any) => {
-  const date = new Date(dateString);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
-
-const formatearFecha = (fecha:string) => {
-  const fechaObj = new Date(fecha);
-  const dia = fechaObj.getDate();
-  const mes = fechaObj.getMonth() + 1;
-  const anio = fechaObj.getFullYear();
-  return `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${anio}`;
-}
-
 export const HomePage = () => {
-
+  const { getSearch } = useSearchStore();
   const {getEvents} = useEventStore()
+  const history = useNavigate();
+
   const [events, setEvents] = useState<Array<initialState>>(Array)
   const eventListRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(8);
-  const total = 10;
+  const [search, setSearch] = useState("")
 
   const eventPromise = async () => {
     await getEvents().then((data) => {
@@ -127,6 +112,20 @@ export const HomePage = () => {
       eventListRef.current.scrollLeft += 150;
     }
   };
+
+  const handleSearch = (search:string) => {
+    setSearch(search)
+  };
+
+  const hanleSearchSport = async (name: string) => {
+    try {
+      const searchData = await getSearch({search: "", date:null, sport:name, time:""});
+      history("/search", { state: { searchData } });
+    } catch (error) {
+      console.error(error);
+      // Manejar el error de búsqueda
+    }
+  }
 
   return (
     <>
@@ -161,13 +160,13 @@ export const HomePage = () => {
             </p>
           </div>
         </div>
-        <div className="bg-fondo pattern">
+        <div className="bg-fondo pattern" style={{ position: 'relative', zIndex: 1 }}>
         <section id="my-section-desktop" className="relative left-2/4 transform -translate-x-1/2 -translate-y-1/2 hidden lg:inline-block">
           <SearchHome />
         </section>
         </div>
         <section id="my-section-mobile" className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:hidden w-full px-5">
-          <SearchMobile />
+          <SearchMobile searchN={handleSearch} />
         </section>
         <section className="bg-fondo pattern">
           <h1 className="lg:pt-0 pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
@@ -195,11 +194,11 @@ export const HomePage = () => {
           <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Buscar por deporte</h1>
             <div className="relative pb-20">
               <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-                <img src={Futbol} width={'375'}/>
-                <img src={Baloncesto} width={'375'}/>
-                <img src={Tenis} width={'375'}/>
-                <img src={FutbolSala} width={'375'}/>
-                <img src={Padel} width={'375'} />         
+                <img className="cursor-pointer" src={Futbol} width={'375'} onClick={() => hanleSearchSport("futbol")} />
+                <img className="cursor-pointer" src={Baloncesto} width={'375'} onClick={() => hanleSearchSport("baloncesto")} />
+                <img className="cursor-pointer" src={Tenis} width={'375'} onClick={() => hanleSearchSport("tenis")} />
+                <img className="cursor-pointer" src={FutbolSala} width={'375'} onClick={() => hanleSearchSport("futbol sala")} />
+                <img className="cursor-pointer" src={Padel} width={'375'} onClick={() => hanleSearchSport("padel")} />     
               </div>
             </div>
         </section>
@@ -208,20 +207,7 @@ export const HomePage = () => {
             <div className="relative pb-20">
                 <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
 
-                    <a className="relative" href="/centro-deportivo">
-                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                      <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                        <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                          <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
-                        </div>
-                        <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                          <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                        </div>
-                      </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
-                        <img src={flecha}/>
-                      </button>
-                    </a>
+
 
                     <a className="relative" href="/centro-deportivo">
                       <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />

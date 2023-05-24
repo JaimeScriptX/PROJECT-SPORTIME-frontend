@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer, Navbar } from "../../../ui";
 import ReactSelect  from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,8 @@ import "react-toggle/style.css"
 import { useEventStore } from "../../../hooks/useEventStore";
 import CustomSelect from "../components/MultiSelect";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import es from 'date-fns/locale/es';
 
 const sportOptions:Array<any> = [
   { value: 'Baloncesto', label: 'Baloncesto' },
@@ -50,10 +52,10 @@ export const CreateEventCustomPage = () => {
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
     const [sport, setSport] = useState<Select | null>(null);
-    const [centroDeportivo, setCentroDeportivo] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
-    const [duration, setDuration] = useState('');
+    const [sportCenter, setSportCenter] = useState('');
+    const [date, setDate] = useState<Date | null>(null);
+    const [time, setTime] = useState<Select | null>(null);
+    const [hourOptions, setHourOptions] = useState([]);
     const [hour, setHour] = useState('');
     const [minutes, setMinutes] = useState('');
     const [playerCount, setPlayerCount] = useState('');
@@ -64,6 +66,38 @@ export const CreateEventCustomPage = () => {
     const [price, setPrice] = useState('0');
     const [isPrivate, setIsPrivate] = useState(false)
     const [priceOpen, setPriceOpen] = useState(false)
+
+
+    useEffect(() => {
+      const generateHourOptions = () => {
+        const currentDate = new Date();
+        const currentHour = currentDate.getHours();
+        const options:any = [];
+      
+        if (date && date.setHours(0, 0, 0, 0) >= currentDate.setHours(0, 0, 0, 0)) {
+          for (let hour = currentHour + 1; hour < 24; hour++) {
+            options.push({
+              value: hour.toString(),
+              label: `${hour.toString().padStart(2, '0')}:00`,
+            });
+          }
+        } else {
+          for (let hour = 0; hour < 24; hour++) {
+            options.push({
+              value: hour.toString(),
+              label: `${hour.toString().padStart(2, '0')}:00`,
+            });
+          }
+        }
+      
+        return options;
+      };
+
+    const options = generateHourOptions();
+    setHourOptions(options);
+
+    }, [date]);
+
 
     const calculateDuration = () => {
       const duration = `${hour || "00"}:${minutes || "00"}:00`;
@@ -87,16 +121,19 @@ export const CreateEventCustomPage = () => {
 
     const handleSubmit = (e:any) => {
         e.preventDefault();
-        const dateS = new Date();
-        dateS.setHours(parseInt(time.split(':')[0]));
-        dateS.setMinutes(parseInt(time.split(':')[1]));
-        dateS.setSeconds(0);
-        const formattedTime = dateS.toISOString().substr(11, 8);
+        let timeString = ""
+        if (time && time.label) {
 
-        console.log(formattedTime)
-
+          const timeParts = time.label.split(':');
+          const hour = parseInt(timeParts[0]);
+          const minute = parseInt(timeParts[1]);
+          
+          const selectedDateTime = new Date();
+          selectedDateTime.setHours(hour);
+          selectedDateTime.setMinutes(minute);
+          timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        }
         const newDuration = calculateDuration();
-
         const sportS = sport ? sport.value : null;
         const genderS = gender ? gender.value : null;
         const difficultyS = difficulty ? difficulty.value : null;
@@ -113,26 +150,12 @@ export const CreateEventCustomPage = () => {
         const fk_sport = {
           name: sportS
         }
-
-        console.log(newDuration)
-        const eventData = {
-          name,
-          details,
-          sportS,
-          centroDeportivo,
-          date,
-          time,
-          duration,
-          playerCount,
-          genderS,
-          difficultyS,
-          coloryS,
-          price,
-          isPrivate
-        };
         
-        console.log(eventData);
-        startCreateCustom({name, details, price:parseInt(price), date, duration: newDuration, is_private:isPrivate, number_players:parseInt(playerCount), time, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1  })
+        const dateS = date ? new Date(date.getTime()) : null;
+        if (dateS) {
+          dateS.setUTCDate(dateS.getUTCDate() + 1);
+        }        
+        startCreateCustom({name, details, price:parseInt(price), date: dateS || new Date(), duration: newDuration, is_private:isPrivate, number_players:parseInt(playerCount), time: timeString, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1, sport_center_custom:sportCenter  })
     }
     
     const handlePrivate = () => {
@@ -215,8 +238,8 @@ export const CreateEventCustomPage = () => {
                                     placeholder="Busca el centro deportivo donde vas a jugar"
                                     type="text"
                                     name="centro-deportivo"
-                                    value={centroDeportivo}
-                                    onChange={(e) => setCentroDeportivo(e.target.value)}
+                                    value={sportCenter}
+                                    onChange={(e) => setSportCenter(e.target.value)}
                                     className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
                                   />
                               </div>
@@ -272,13 +295,14 @@ export const CreateEventCustomPage = () => {
                                   >
                                       Fecha
                                   </label>
-                                  <input
-                                      placeholder="arthurmelo@example.app"
-                                      type="date"
-                                      required
-                                      name="fecha"
-                                      value={date} onChange={(e) => setDate((e.target.value))}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none "
+                                  <DatePicker
+                                    selected={date}
+                                    onChange={setDate}
+                                    dateFormat="dd/MM/yyyy"
+                                    className=" block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-white border-b-2 border-gray-200  focus:border-primary focus:outline-none "
+                                    placeholderText='Seleccione la fecha'
+                                    locale={es}
+                                    minDate={new Date()}
                                   />
                               </div>
                               <div className="mt-4">
@@ -288,14 +312,40 @@ export const CreateEventCustomPage = () => {
                                   >
                                       Hora
                                   </label>
-                                  <input
-                                      placeholder="arthurmelo@example.app"
-                                      type="time"
-                                      required
-                                      name="hora"
-                                      value={time}
-                                      onChange={(e) => setTime(e.target.value)}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
+                                  <ReactSelect
+                                    options={hourOptions}
+                                    value={time}
+                                    onChange={setTime}
+                                    placeholder="Seleccione la hora"
+                                    className="text-lg focus:outline-none"
+                                    styles={{
+                                      control: (provided) => ({
+                                        ...provided,
+                                        height: '43px',
+                                        backgroundColor: '#181818',
+                                        boxShadow: '0px 3.2px 0px -1px #FFFFFF',
+                                        border: '0px',
+                                        borderColor:"#a5ff1b",
+                                        color: '#FFFFFF', // establecer el color del texto en blanco
+                                      }),
+                                      placeholder: (provided) => ({
+                                        ...provided,
+                                        color: '#FFFFFF', // establecer el color del placeholder en blanco
+                                      }),
+                                      singleValue: (provided) => ({
+                                        ...provided,
+                                        color: '#FFFFFF',
+                                         // establecer el color del texto seleccionado en blanco
+                                      }),
+                                    }}
+                                    theme={(theme:any) => ({
+                                      ...theme,
+                                      colors: {
+                                        ...theme.colors,
+                                        primary25: '#a5ff1b',
+                                        primary: '#222222',
+                                      },
+                                    })}
                                   />
                               </div>
                               <div className="mt-4">

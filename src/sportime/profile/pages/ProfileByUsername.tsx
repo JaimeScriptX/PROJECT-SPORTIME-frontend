@@ -8,6 +8,7 @@ import Edit from '../../assets/images/IconoEdit.svg'
 import { useEffect, useState } from "react"
 import { useAuthStore } from "../../../hooks/useAuthStore"
 import { usePersonStore } from "../../../hooks/usePersonStore"
+import { useParams } from "react-router-dom"
 
 interface initialState {
     id: number,
@@ -36,21 +37,22 @@ interface initialState {
 
 export const ProfileByUsernamePage = () => {
 
+  const { username } = useParams();
+
   const [PersonData, setPersonData] = useState<initialState | null>(null);
-  const {user} = useAuthStore()
-  const {getPersonById} = usePersonStore()
+  const {getPersonByUsername} = usePersonStore()
 
   const profilePromise = async () => {
-    await getPersonById(user.uuid).then((data) => {
+    await getPersonByUsername(username).then((data) => {
       setPersonData(data);
       console.log(data)
     })}
 
   useEffect(() => {
-
+    console.log(username)
     profilePromise()
 
-  }, [user.uuid])
+  }, [username])
     
 
   return (
@@ -66,7 +68,7 @@ export const ProfileByUsernamePage = () => {
                 <div className="relative">
                     <img
                     className="w-20 h-20 rounded-full mx-5 top-16 relative z-10 border-4 border-white"
-                    src="https://picsum.photos/200"
+                    src={PersonData?.image_profile || ""}
                     alt="Profile"
                     />
                 </div>
