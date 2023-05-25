@@ -72,7 +72,7 @@ export const ProfilePage = () => {
                 <div className="relative">
                     <img
                     className="w-20 h-20 rounded-full mx-5 top-16 relative z-10 border-4 border-white"
-                    src="https://picsum.photos/200"
+                    src={PersonData?.image_profile || ""}
                     alt="Profile"
                     />
                 </div>
@@ -84,7 +84,7 @@ export const ProfilePage = () => {
                 </button>
                 {isOpen && (
                   <ModalEditarPerfil name_lastname={PersonData?.name_and_lastname || ""} age={'25'} photo_profile={PersonData?.image_profile || ""} height={PersonData?.height || 0}
-                  weight={PersonData?.weight || 0} sex={PersonData?.fk_sex_id.gender || ""} nacionality={PersonData?.nationality || ""} location={'Molina de segura, Murcia'} onClose={closeModal}/>
+                  weight={PersonData?.weight || 0} sex={PersonData?.fk_sex_id.gender} nacionality={PersonData?.nationality || ""} location={'Molina de segura, Murcia'} onClose={closeModal}/>
                 )}
               </div>
               <h2 className="text-xl font-medium text-gray-800">{PersonData?.name_and_lastname}</h2> 

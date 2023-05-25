@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReactSelect  from 'react-select';
 import Select from "react-select/dist/declarations/src/Select";
 import { usePersonStore } from "../../hooks/usePersonStore";
+import ReactDatePicker from "react-datepicker";
 
 const genderOptions:Array<any> = [
   { value: 'Masculino', label: 'Masculino' },
@@ -12,9 +13,10 @@ const genderOptions:Array<any> = [
 export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacionality, location, age, height, weight, sex }:{onClose:any, photo_profile:string, name_lastname:string, nacionality:string, location:string, age:string, height:number, weight:number, sex:string}) => {
 
     const [nameLastname, setNameLastname] = useState(name_lastname)
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [nacionalityE, setNacionalityE] = useState(nacionality)
     const [locationE, setLocationE] = useState(location)
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<Date | null>(null);
     const [heightE, setHeightE] = useState<number>(height)
     const [weightE, setWeightE] = useState<number>(weight)
     const [sexE, setSexE] = useState<{ value: string; label: string } | null>(genderOptions.find(option => option.value === sex) || null)
@@ -29,7 +31,8 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
 
     const handleSubmit = (e:any) => {
       e.preventDefault()
-      UpdatePersonById({id: user.uuid, image_profile:null, image_banner:null, name_and_lastname: nameLastname, nationality:nacionalityE, city:locationE, birthday:date ,height:heightE, weight:weightE, fk_sex:sexE, fk_user:user.uuid})
+      console.log(selectedImage)
+      UpdatePersonById({id: user.uuid, image_profile:selectedImage, image_banner:null, name_and_lastname: nameLastname, nationality:nacionalityE, city:locationE, birthday:date ,height:heightE, weight:weightE, fk_sex:sexE, fk_user:user.uuid})
       onClose()
     }
   return (
@@ -88,7 +91,10 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                     id="profile-picture"
                     accept="image/*"
                     className="hidden"
+                    formEncType="multipart/form-data"
+                    onChange={(e) => setSelectedImage(e.target.files?.[0] || null)}
                   />
+
                   <label htmlFor="profile-picture" className="block cursor-pointer pt-2">
                     <div className="relative w-16 h-16 rounded-full border-2 border-gray-200 overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -97,7 +103,7 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                         </svg>
                       </div>
                       <img
-                        src="https://picsum.photos/800"
+                        src={photo_profile}
                         alt="Profile picture"
                         className="w-full h-full object-cover"
                       />
@@ -153,10 +159,9 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                       >
                           Fecha de nacimiento
                       </label>
-                      <input
-                          value={date}
-                          type="date"
-                          onChange={(e) => setDate(e.target.value)}
+                      <ReactDatePicker
+                          selected={date}
+                          onChange={setDate}
                           className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                       />
                   </div>

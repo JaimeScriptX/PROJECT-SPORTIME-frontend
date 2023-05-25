@@ -5,7 +5,7 @@ export const usePersonStore = () => {
 
     const {status, user, errorMessage} = useAppSelector(state => state.auth)
 
-    const UpdatePersonById = async({id, image_profile, image_banner, name_and_lastname, nationality, city, birthday, height, weight, fk_sex, fk_user}:{id:string, image_banner:null, image_profile: null, name_and_lastname:string, city:string, birthday:any, nationality:string, height:number, weight:number, fk_sex:any, fk_user:any }) => {
+    const UpdatePersonById = async({id, image_profile, image_banner, name_and_lastname, nationality, city, birthday, height, weight, fk_sex, fk_user}:{id:string, image_banner:null, image_profile: File | null , name_and_lastname:string, city:string, birthday: Date | null, nationality:string, height:number, weight:number, fk_sex:any, fk_user:any }) => {
         const {data} = await sportimeApi.put(`/persons/${id}`, {id, image_profile, image_banner,name_and_lastname, nationality, city, birthday, height, weight, fk_sex, fk_user} )
         console.log(data)
         return data

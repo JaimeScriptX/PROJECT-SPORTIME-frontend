@@ -26,7 +26,7 @@ export const SearchMobile = ({searchN} : {searchN:any }) => {
     e.preventDefault()
 
     try {
-      const searchData = await getSearch({search, date: null, sport:"", time:""});
+      const searchData = await getSearch({search, date: undefined, sport:"", time:""});
       history("/search", { state: { searchData, search } });
     } catch (error) {
       console.error(error);

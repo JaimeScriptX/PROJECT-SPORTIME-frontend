@@ -5,7 +5,7 @@ export const useSearchStore = () => {
   const { status, user, errorMessage } = useAppSelector(state => state.auth);
 
   const getSearch = async ({ search, date, time, sport}: 
-    { search: null | string, date: null | Date ,time: string, sport: string }) => {
+    { search: null | string, date: undefined | Date ,time: string, sport: string }) => {
  
     console.log(time)     
     const { data } = await sportimeApi.get(`/search`, {

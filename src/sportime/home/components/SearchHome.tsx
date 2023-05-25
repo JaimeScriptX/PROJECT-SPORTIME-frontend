@@ -68,7 +68,7 @@ export const SearchHome = () => {
   const handleSubmit = async(e:any) => {
     e.preventDefault();
     const sportS = sport ? sport.value : null;
-    const dateS = selectedDate ? new Date(selectedDate.getTime()) : null;
+    const dateS = selectedDate ? new Date(selectedDate.getTime()) : undefined;
     if (dateS) {
       dateS.setUTCDate(dateS.getUTCDate() + 1);
     }  

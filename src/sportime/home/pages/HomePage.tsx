@@ -119,7 +119,7 @@ export const HomePage = () => {
 
   const hanleSearchSport = async (name: string) => {
     try {
-      const searchData = await getSearch({search: "", date:null, sport:name, time:""});
+      const searchData = await getSearch({search: "", date:undefined, sport:name, time:""});
       history("/search", { state: { searchData } });
     } catch (error) {
       console.error(error);
