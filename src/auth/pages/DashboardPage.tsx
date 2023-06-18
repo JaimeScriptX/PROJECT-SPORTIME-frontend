@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Footer, Navbar } from "../../ui"
 import { EventCard } from "../../sportime/components";
 import { useEventStore } from "../../hooks/useEventStore";
-
+import { usePersonStore } from "../../hooks/usePersonStore";
+import sportCenterCustom from '../../assets/images/centro-deportvo-personalizado.jpg'
 
 interface initialState {
     created_events: {
@@ -68,12 +69,20 @@ interface initialState {
     participating_events: any[]; // Puedes ajustar el tipo según corresponda
   }
 
+  interface personInitial {
+    games_played: null,
+    victories: null,
+    defeat: null,
+    ratio: null,
+  }
 
 export const DashboardPage = () => {
 
     const [eventsCreated, setEventsCreated] = useState([])
     const [eventsJoin, setEventsJoin] = useState([])
     const {getEventsPersona, user} = useEventStore()
+    const {getPersonById} = usePersonStore()
+    const [PersonData, setPersonData] = useState<personInitial | null>(null);
     const eventListRefCreated = useRef<HTMLDivElement>(null);
     const eventListRefJoin = useRef<HTMLDivElement>(null);
       
@@ -84,6 +93,10 @@ export const DashboardPage = () => {
           setEventsCreated(created_events);
           setEventsJoin(participating_events);
           console.log(eventsJoin)
+          await getPersonById(user.uuid).then((data) => {
+            setPersonData(data);
+            console.log(data)
+          })
         };
     
         eventPromise();
@@ -122,25 +135,25 @@ export const DashboardPage = () => {
                 <div className="mt-5 mb-5 lg:mr-7 mr-2 ml-2 bg-white rounded-2xl">
                     <div className="grid grid-cols-2 md:grid-cols-4 p-2">
                         <div className="text-center md:border-r">
-                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">14</h6>
+                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.games_played}</h6>
                             <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                             Partidos
                             </p>
                         </div>
                         <div className="text-center md:border-r">
-                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">7</h6>
+                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.victories}</h6>
                             <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                             Victorias
                             </p>
                         </div>
                         <div className="text-center md:border-r">
-                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">7</h6>
+                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.defeat}</h6>
                             <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                             Derrotas
                             </p>
                         </div>
                         <div className="text-center">
-                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">50%</h6>
+                            <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.ratio}%</h6>
                             <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                             Ratio
                             </p>
@@ -154,8 +167,10 @@ export const DashboardPage = () => {
                 {eventsCreated.length > 0 &&
                 <div className="relative pt-5">
                     <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRefCreated} style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-                    {eventsCreated.map((event:any) =>
-                   <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    {eventsCreated.map((event:any, index:any) =>
+                    <div key={index}>
+                      <EventCard id={event.id} image={event.fk_sportcenter_id?.image || `${sportCenterCustom}`} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    </div>
                     )}
                     </div>
                     <button
@@ -173,7 +188,7 @@ export const DashboardPage = () => {
                 </div>
                 }
                 {eventsCreated.length === 0 && 
-                  <div className="flex justify-center py-12">
+                  <div className="flex justify-center lg:py-20 py-12">
                       <h1 className="lg:text-4xl text-2xl text-center font-n27">No has creado aún ningún evento</h1>
                   </div>
                 }
@@ -183,8 +198,10 @@ export const DashboardPage = () => {
                 {eventsJoin.length > 0 &&
                 <div className="relative pb-1">
                     <div className="scrollbar-hide flex w-full md:pl-28 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRefJoin} style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-                    {eventsJoin.map((event:any) =>
-                    <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    {eventsJoin.map((event:any, index:any) =>
+                    <div key={index}>
+                      <EventCard id={event.id} image={event.fk_sportcenter_id?.image || "https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg"} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    </div>
                     )}
                     </div>
                     <button
@@ -202,7 +219,7 @@ export const DashboardPage = () => {
                 </div>
                 }
                 {eventsJoin.length === 0 && 
-                <div className="flex justify-center py-12">
+                <div className="flex justify-center lg:py-20 py-12">
                   <h1 className="lg:text-4xl text-2xl text-center font-n27">Todavía no te has unido a ningún evento</h1>
                 </div>
                 }

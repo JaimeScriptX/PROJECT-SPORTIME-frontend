@@ -3,9 +3,7 @@ import CamisetaNegra from '../../../assets/images/CamisetaNegra.svg'
 import CamisetaBlanca from '../../../assets/images/CamisetaBlanca.svg'
 import { useEventStore } from '../../../hooks/useEventStore'
 
-export const ModalElegir = ({onClose, number_players, event_players_team_a, event_players_team_b, event_id}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, event_id:string}) => {
-
-    const {startJoinEvent, user} = useEventStore()
+export const ModalElegir = ({onClose, number_players, event_players_team_a, event_players_team_b, team_a_shirt, team_b_shirt, handleJoinEvent}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, team_a_shirt:string | null, team_b_shirt:string | null, handleJoinEvent:any}) => {
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
@@ -13,8 +11,8 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
         }
       };
 
-    const handleJoinEvent = (team:any) => {
-        startJoinEvent({fk_event_id: Number(event_id), fk_person_id: user.uuid, team})
+    const handleJoinEventTeam = (team:any) => {
+        handleJoinEvent({team})
         onClose();
     }
 
@@ -34,13 +32,13 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
                     {event_players_team_a.map((player:any, index:any) => (
                             <div key={index}>
                                 <button className='cursor-default'>
-                                    <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                    <img src={player.image_profile} className='w-12 h-12 rounded-full' alt={`Profile ${index}`} />
                                 </button>
                             </div>
                         ))}
                         {Array.from({ length: number_players - event_players_team_a.length }).map((_, index) => (
                             <div key={index}>
-                                <button className="rounded-full" onClick={()=> handleJoinEvent(1)}>
+                                <button className="rounded-full" onClick={()=> handleJoinEventTeam(1)}>
                                     <img src={iconofalta} width={'50'} />
                                 </button>
                             </div>
@@ -53,14 +51,14 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
                     {event_players_team_b.map((player:any, index:any) => (
                             <div key={index}>
                                 <button className='cursor-default'>
-                                    <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                    <img src={player.image_profile} className='w-12 h-12 rounded-full' alt={`Profile ${index}`} />
                                 </button>
                             </div>
                         ))}
                         {/* Añade botones adicionales si hay menos participantes que el total */}
                         {Array.from({ length: number_players - event_players_team_b.length }).map((_, index) => (
                             <div key={index}>
-                                <button className="rounded-full" onClick={()=> handleJoinEvent(2)}>
+                                <button className="rounded-full" onClick={()=> handleJoinEventTeam(2)}>
                                     <img src={iconofalta} width={'50'} />
                                 </button>
                             </div>
@@ -70,12 +68,12 @@ export const ModalElegir = ({onClose, number_players, event_players_team_a, even
             </div>
             <div className='relative'>
                 <div className='bg-primary absolute p-2 px-5 rounded-xl sm:top-[-1rem] sm:left-[5.5rem] max-sm:top-[-1rem] max-sm:left-[4.5rem]'>
-                    <img src={CamisetaBlanca}/>
+                    <img src={team_a_shirt || ""}/>
                 </div>
             </div>
             <div className='relative'>
                 <div className='bg-primary absolute p-2 px-5 rounded-xl sm:top-[-1rem] sm:right-[6rem] max-sm:top-[-1rem] max-sm:right-[5rem]'>
-                    <img src={CamisetaNegra}/>
+                    <img src={team_b_shirt || ""}/>
                 </div>
             </div>
             <div className='px-6 py-4 pt-8 bg-fondo text-center'>

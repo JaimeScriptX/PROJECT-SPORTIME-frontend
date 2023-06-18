@@ -8,12 +8,15 @@ import { useSearchStore } from '../../hooks/useSearchStore';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const sportOptions:Array<any> = [
+  { value: '', label: 'Deporte' },
   { value: 'baloncesto', label: 'Baloncesto' },
   { value: 'futbol', label: 'Fútbol' },
   { value: 'futbol sala', label: 'Fútbol sala' },
   { value: 'padel', label: 'Pádel' },
   { value: 'tenis', label: 'Tenis' }
 ];
+
+const hourPlaceholderOption = { value: '', label: 'Hora' };
 
 interface Select {
   value: string;
@@ -35,7 +38,7 @@ export const Search = () => {
   const [sport, setSport] = useState<Select | null>(null || sportData);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null || selectedDateData);
   const [selectedHour, setSelectedHour] = useState<Select | null>(null || selectedHourData);
-  const [hourOptions, setHourOptions] = useState([] || hourOptionsData);
+  const [hourOptions, setHourOptions] = useState<Array<Select>>([] || hourOptionsData);
 
   const handleDateChange = (date:any) => {
     setSelectedDate(date);
@@ -68,7 +71,7 @@ export const Search = () => {
     };
 
     const options = generateHourOptions();
-    setHourOptions(options);
+    setHourOptions([hourPlaceholderOption, ...options]);
   }, [selectedDate]);
 
   const handleSubmit = async(e:any) => {
@@ -79,22 +82,23 @@ export const Search = () => {
       dateS.setUTCDate(dateS.getUTCDate() + 1);
     }  
 
-    let timeString = ""
-    if (selectedHour && selectedHour.label) {
+    let timeString = "";
+    if (selectedHour && selectedHour.label && selectedHour.value.length !== 0) {
       const timeParts = selectedHour.label.split(':');
       const hour = parseInt(timeParts[0]);
       const minute = parseInt(timeParts[1]);
-      
+    
       const selectedDateTime = new Date();
       selectedDateTime.setHours(hour);
       selectedDateTime.setMinutes(minute);
       timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
-      console.log(timeString)
+      console.log(timeString);
     }
 
-
+    const time = timeString.length === 0 ? undefined : timeString
+    console.log(time)
     try {
-      const searchData = await getSearch({search, date:dateS, sport: sportS || "", time: timeString});
+      const searchData = await getSearch({search, date:dateS, sport: sportS || "", time: time });
       history("/search", { state: { searchData , search, sport, selectedDate, selectedHour, hourOptions } });
     } catch (error) {
       console.error(error);
@@ -121,7 +125,7 @@ export const Search = () => {
       id="sport"
       value={sport}
       onChange={setSport}
-      placeholder="Deporte"
+      placeholder={sportOptions[0].label}
       className="text-lg border-x-2 focus:outline-none"
       styles={{
         control: (provided) => ({
@@ -154,7 +158,7 @@ export const Search = () => {
           options={hourOptions}
           value={selectedHour}
           onChange={setSelectedHour}
-          placeholder="Hora"
+          placeholder={hourPlaceholderOption.label}
           className=" ml-2 text-lg border-l-2 focus:outline-none"
           styles={{
             control: (provided) => ({
@@ -174,7 +178,7 @@ export const Search = () => {
             },
           })}
         />
-    <button type="submit" className="text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
+    <button type="submit" className="text-black bg-lime-500 hover:bg-lime-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
   </div>
 </form>
 

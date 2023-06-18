@@ -1,7 +1,7 @@
 import { CircularProgress } from "../sportsCenter/components/CircularProgress"
 
-export const EventCard = ({id, sport, time, date, level, gender, players, name, sportCenter, full, missing_players, players_registered }:
-    {id: number, sport:string, time:string, date:string, level:string, gender:string, players:number, name:string, sportCenter:string, full:number, missing_players:number, players_registered:number}) => {
+export const EventCard = ({id, image, sport, time, date, level, gender, players, name, sportCenter, full, missing_players, players_registered }:
+    {id: number, image:string, sport:string, time:string, date:string, level:string, gender:string, players:number, name:string, sportCenter:string, full:number, missing_players:number, players_registered:number}) => {
 
     const nombreClase = name.length >= 35 ? "h-14" : "h-8";
   return (
@@ -11,9 +11,9 @@ export const EventCard = ({id, sport, time, date, level, gender, players, name, 
       <p className="font-n27">{time}</p>
       <p className="font-n27">{date}</p>
     </div>
-    <img className="md:w-96 w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
+    <img className="md:w-full w-80 md:h-56 h-52 mb-10 absolute rounded-bl-3xl rounded-br-3xl object-cover" src={image} />
     <div className="relative md:mt-28 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
-      <div className="hidden md:flex md:w-60 w-56 h-10  items-center absolute left-0 bg-opacity-80 rounded-br-3xl bg-gray-200" style={{bottom:'4.5rem'}} >
+      <div className="hidden md:flex md:w-60 w-56 h-10  items-center absolute left-0 bg-opacity-80 rounded-br-3xl bg-gray-200" style={{bottom:'9.5rem'}} >
         <p className="absolute text-left pl-2 text-black font-n27" style={{fontSize:'12px'}}>{sportCenter}</p>
       </div>
       <div className="md:hidden md:w-60 w-56 h-10 flex items-center absolute left-0 bg-opacity-80 rounded-br-3xl bg-gray-200" style={{bottom:'8.5rem'}} >
@@ -23,7 +23,7 @@ export const EventCard = ({id, sport, time, date, level, gender, players, name, 
     <div className="relative md:mt-48 mt-44 mb-12 md:w-96 w-80 rounded-tr-3xl">
       <div className="md:w-64 w-52 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
         <p className="pl-6 max-md:pt-1 w-full text-sm md:text-base font-n27 text-gray-300" style={{fontSize:''}}>Nivel: {level}</p>
-        <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300">Género: {gender}</p>
+        <p className="md:pr-20 pr-16 text-sm md:text-base font-n27 text-gray-300 ">Género: {gender}</p>
         <p className="absolute max-md:pt-1 text-xl translate-x-16 md:translate-x-20 md:text-2xl text-gray-300 top-11">{full} VS {full}</p>
       </div>
       <div className={`md:w-64 w-52 ${nombreClase} flex items-center absolute left-0 bottom-16 rounded-tr-3xl bg-white`}>

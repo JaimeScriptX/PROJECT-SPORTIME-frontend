@@ -8,16 +8,18 @@ import FutbolSala from '../../../assets/images/FutbolSala.svg'
 import Padel from '../../../assets/images/Padel.svg'
 import flecha from '../../../assets/images/Arrow.svg'
 import sportime from '../../../assets/images/logo.svg'
-
+import portada from '../../../assets/images/Sportime.jpg'
+import sportCenterCustom from '../../../assets/images/centro-deportvo-personalizado.jpg'
 
 import { SearchMobile } from "../../../ui/components/SearchMobile"
 import { useEffect, useRef, useState } from "react"
 import { NavbarHome } from "../components/NavbarHome"
-import { EventCard } from "../../components"
+import { EventCard, SportCenterCard } from "../../components"
 import { useEventStore } from "../../../hooks/useEventStore"
 import { NavbarBottom } from "../components/NavbarBottom"
 import { useNavigate } from "react-router-dom"
 import { useSearchStore } from "../../../hooks/useSearchStore"
+import { useSportCenter } from "../../../hooks/useSportCenter"
 
 
 interface initialState {
@@ -81,24 +83,55 @@ interface initialState {
   players_registered: number,
   missing_players: number
 }
+
+interface initialStateSportCenter {
+  id: number,
+  name: string,
+  municipality: string,
+  address: string,
+  image: string,
+  phone: string,
+  image_gallery1: string,
+  image_gallery2: string,
+  image_gallery3: string,
+  image_gallery4: string,
+  latitude: null,
+  longitude: null,
+  destination: null,
+  services: [],
+  sport: [
+      {
+          id: number,
+          name: string,
+          image: string,
+          logo_sportcenter: string
+      }
+  ]
+}
 export const HomePage = () => {
   const { getSearch } = useSearchStore();
-  const {getEvents} = useEventStore()
+  const {getEventsHome} = useEventStore()
+  const {getSportCenters} = useSportCenter()
   const history = useNavigate();
 
   const [events, setEvents] = useState<Array<initialState>>(Array)
+  const [sportCenters, setSportCenters] = useState<Array<initialStateSportCenter>>(Array)
   const eventListRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("")
 
   const eventPromise = async () => {
-    await getEvents().then((data) => {
+    await getEventsHome().then((data) => {
       setEvents(data);
     })}
 
+  const sportCenterPromise = async () => {
+    await getSportCenters().then((data) => {
+      setSportCenters(data);
+    })}
+
   useEffect(() => {
-
     eventPromise()
-
+    sportCenterPromise()
   }, [])
   
   const scrollToLeft = () => {
@@ -118,9 +151,10 @@ export const HomePage = () => {
   };
 
   const hanleSearchSport = async (name: string) => {
+    const sport = name
     try {
-      const searchData = await getSearch({search: "", date:undefined, sport:name, time:""});
-      history("/search", { state: { searchData } });
+      const searchData = await getSearch({search: undefined, date:undefined, sport, time:undefined});
+      history("/search", { state: { searchData, sport } });
     } catch (error) {
       console.error(error);
       // Manejar el error de búsqueda
@@ -141,7 +175,7 @@ export const HomePage = () => {
             </div>
           </div>
           <div className="w-full lg:w-1/4 relative flex justify-center items-center sm:ml-0">
-            <p className="text-9xl lg:text-10xl leading-none font-gries bg-clip-text text-transparent" style={{backgroundImage: `url('https://murciaplaza.com/public/Image/2023/4/RealMurcia-Cornell%C3%A0-F%C3%BAtbol27_forCrop.jpg')`}}>
+            <p className="text-9xl lg:text-10xl leading-none font-gries bg-clip-text text-transparent" style={{backgroundImage: `url(${portada})`, backgroundPosition: 'center', backgroundSize: '900px'}}>
               <span>
                 <span>SP</span>
               </span>
@@ -159,6 +193,7 @@ export const HomePage = () => {
               </span>
             </p>
           </div>
+
         </div>
         <div className="bg-fondo pattern" style={{ position: 'relative', zIndex: 1 }}>
         <section id="my-section-desktop" className="relative left-2/4 transform -translate-x-1/2 -translate-y-1/2 hidden lg:inline-block">
@@ -166,15 +201,17 @@ export const HomePage = () => {
         </section>
         </div>
         <section id="my-section-mobile" className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:hidden w-full px-5">
-          <SearchMobile searchN={handleSearch} />
+          <SearchMobile filter={false} searchN={handleSearch} />
         </section>
         <section className="bg-fondo pattern">
-          <h1 className="lg:pt-0 pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Últimos eventos</h1>
+          <h1 className="lg:pt-0 pt-20 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Próximos eventos</h1>
           <div className="relative pb-12">
              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRef}  style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-              {events.map((event:any) =>
-               <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
-              )}
+                {events.map((event:any, index:any) =>
+                  <div key={index}>
+                    <EventCard id={event.id} image={event.fk_sportcenter_id?.image || `${sportCenterCustom}`} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                  </div>
+                )}
               </div>
               <button
                 className="absolute top-4/4 top-44  transform -translate-y-1/2  left-10 text-white text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center shadow-md transition duration-300 font-n27"
@@ -193,12 +230,12 @@ export const HomePage = () => {
         <section className="bg-fondo pattern2">
           <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Buscar por deporte</h1>
             <div className="relative pb-20">
-              <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-                <img className="cursor-pointer" src={Futbol} width={'375'} onClick={() => hanleSearchSport("futbol")} />
-                <img className="cursor-pointer" src={Baloncesto} width={'375'} onClick={() => hanleSearchSport("baloncesto")} />
-                <img className="cursor-pointer" src={Tenis} width={'375'} onClick={() => hanleSearchSport("tenis")} />
-                <img className="cursor-pointer" src={FutbolSala} width={'375'} onClick={() => hanleSearchSport("futbol sala")} />
-                <img className="cursor-pointer" src={Padel} width={'375'} onClick={() => hanleSearchSport("padel")} />     
+              <div className="scrollbar-hide flex md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
+                <img className="cursor-pointer" src={Futbol} width={'355'} onClick={() => hanleSearchSport("futbol")} />
+                <img className="cursor-pointer" src={Baloncesto} width={'355'} onClick={() => hanleSearchSport("baloncesto")} />
+                <img className="cursor-pointer" src={Tenis} width={'355'} onClick={() => hanleSearchSport("tenis")} />
+                <img className="cursor-pointer" src={FutbolSala} width={'355'} onClick={() => hanleSearchSport("futbol sala")} />
+                <img className="cursor-pointer" src={Padel} width={'355'} onClick={() => hanleSearchSport("padel")} />     
               </div>
             </div>
         </section>
@@ -206,68 +243,11 @@ export const HomePage = () => {
           <h1 className="pt-14 md:pl-28 pl-10 text-4xl font-n27 text-white lg:text-5xl">Los centros deportivos asociados a SPORTIME</h1>
             <div className="relative pb-20">
                 <div className="scrollbar-hide flex w-full md:pl-32 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-
-
-
-                    <a className="relative" href="/centro-deportivo">
-                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                      <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                        <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                          <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
-                        </div>
-                        <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                          <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                        </div>
+                    {sportCenters.map((sportCenter:any, index:any) => (
+                      <div key={index}>
+                        <SportCenterCard id={sportCenter.id} image={sportCenter.image} address={sportCenter.address} municipality={sportCenter.municipality} name={sportCenter.name}  />
                       </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
-                        <img src={flecha}/>
-                      </button>
-                    </a>
-
-                    <a className="relative" href="/centro-deportivo">
-                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                      <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                        <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                          <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
-                        </div>
-                        <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                          <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                        </div>
-                      </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
-                        <img src={flecha}/>
-                      </button>
-                    </a>
-
-                    <div className="relative">
-                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                      <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                        <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                          <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
-                        </div>
-                        <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                          <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                        </div>
-                      </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
-                        <img src={flecha}/>
-                      </button>
-                    </div>
-
-                    <div className="relative">
-                      <img className="h-56 mb-10 absolute rounded-bl-3xl rounded-br-3xl rounded-r-3xl object-cover" style={{width: '23rem'}} src="https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg" />
-                      <div className="relative mt-48 mb-12 w-96 rounded-tr-3xl">
-                        <div className="w-64 h-24 bg-card-secondary rounded-tr-3xl rounded-bl-3xl flex items-center justify-between flex-col py-10">
-                          <p className="pl-5 w-full font-n27 text-gray-300">Av. del Río Segura, <br/>30600 Archena, Murcia</p>
-                        </div>
-                        <div className="w-64 h-8 flex items-center absolute left-0 top-0 rounded-tr-3xl bg-white">
-                          <p className="absolute text-center pl-2 text-black font-n27">Ciudad deportiva “El Romeral”</p>
-                        </div>
-                      </div>
-                      <button className="w-20 h-20 absolute rounded-3xl bg-primary flex items-center justify-center" style={{ right: '27px', top:'12.5rem' }}>
-                        <img src={flecha}/>
-                      </button>
-                    </div>
+                    ))}
                 </div>
             </div>
 
@@ -297,8 +277,11 @@ export const HomePage = () => {
                     <img className="" src={sportime} width="150" height="80" />
                   </div>
 
-                  <p className="mt-4 text-sm text-center text-gray-400 lg:text-right lg:mt-0">
-                    Derechos reservados por IES JOSE PLANES
+                  <p className="mt-4 text-sm lg:mt-0">
+                  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target='blank'>
+                        <img alt="Licencia de Creative Commons" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+                        <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" />
+                    </a>
                   </p>
                 </div>
               </div>

@@ -24,11 +24,17 @@ export default {
         n27: ['n27regular','Arial', 'sans-serif']
       },
       colors: {
+        'curso' : '#38bdf8',
+        'completado' : '#eab308',
+        'creado' : '#84cc16',
+        'finalizado' : '#6b7280',
+        'cancelado' : '#ef4444',
         'primary':'#9cf21a',
         'portada':'#111111',
         'fondo': '#181818',
         'card-secondary': '#262626',
         'footer': '#222222',
+        'error': '#FF7575'
       },
       borderRadius: {
         'full': '9999px',

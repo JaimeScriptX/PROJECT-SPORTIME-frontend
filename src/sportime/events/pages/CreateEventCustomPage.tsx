@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Footer, Navbar } from "../../../ui";
 import ReactSelect  from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,9 @@ import { useEventStore } from "../../../hooks/useEventStore";
 import CustomSelect from "../components/MultiSelect";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
+import wallpaper from '../../../assets/images/wallpaper.jpg'
 import es from 'date-fns/locale/es';
+import { useForm } from "react-hook-form";
 
 const sportOptions:Array<any> = [
   { value: 'Baloncesto', label: 'Baloncesto' },
@@ -31,12 +33,13 @@ const difficultyOptions:Array<any> = [
   { value: 'Dificil', label: 'Difícil' }
 ];
 
-const colorOptions:Array<any> = [
-  { value: 'blanco', label: 'Blanco' },
-  { value: 'negro', label: 'Negro' },
-  { value: 'rojo', label: 'Rojo' },
-  { value: 'azul', label: 'Azul' },
-  { value: 'verde', label: 'Verde' }
+const colorOptions = [
+  { value: 'Blanco', label: 'Blanco', color: '#dee2e6' },
+  { value: 'Negro', label: 'Negro', color: '#343a40' },
+  { value: 'Rojo', label: 'Rojo', color: '#ef233c' },
+  { value: 'Verde', label: 'Verde', color: '#9cf21a' },
+  { value: 'Azul', label: 'Azul', color: '#3a86ff' },
+  { value: 'Amarillo', label: 'Amarillo', color: '#FFFF00' },
 ];
 
 interface Select {
@@ -44,10 +47,21 @@ interface Select {
   label: string;
 }
 
+type Inputs = {
+  name: string,
+  details: string,
+  players: number,
+  sportCenter: string,
+  hour: number,
+  minutes:number,
+};
+
 export const CreateEventCustomPage = () => {
     
     const {startCreateCustom, user} = useEventStore()
     const navigate = useNavigate()
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+
 
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
@@ -59,22 +73,28 @@ export const CreateEventCustomPage = () => {
     const [hour, setHour] = useState('');
     const [minutes, setMinutes] = useState('');
     const [playerCount, setPlayerCount] = useState('');
+    const [playerCountError, setPlayerCountError] = useState("");
     const [gender, setGender] = useState<Select | null>(null);
     const [difficulty, setDifficulty] = useState<Select | null>(null);
-    const [color, setColor] = useState<Select | null>(null);
-    const [colorsM, setColorsM] = useState([]);
+    const [colorsM, setColorsM] = useState<Array<Select>>([]);
     const [price, setPrice] = useState('0');
     const [isPrivate, setIsPrivate] = useState(false)
     const [priceOpen, setPriceOpen] = useState(false)
-
+    const [error, setError] = useState("");
+    const submitButtonRef = useRef(null);
 
     useEffect(() => {
       const generateHourOptions = () => {
         const currentDate = new Date();
         const currentHour = currentDate.getHours();
-        const options:any = [];
-      
-        if (date && date.setHours(0, 0, 0, 0) >= currentDate.setHours(0, 0, 0, 0)) {
+        const options = [];
+    
+        const selectedDate = date || new Date(); // Si no hay fecha seleccionada, se usa la fecha actual
+    
+        if (
+          selectedDate.setHours(0, 0, 0, 0) === currentDate.setHours(0, 0, 0, 0)
+        ) {
+          // Es la fecha actual, generar opciones a partir de la próxima hora
           for (let hour = currentHour + 1; hour < 24; hour++) {
             options.push({
               value: hour.toString(),
@@ -82,6 +102,7 @@ export const CreateEventCustomPage = () => {
             });
           }
         } else {
+          // No es la fecha actual, generar opciones para todas las horas
           for (let hour = 0; hour < 24; hour++) {
             options.push({
               value: hour.toString(),
@@ -89,29 +110,21 @@ export const CreateEventCustomPage = () => {
             });
           }
         }
-      
+    
         return options;
       };
-
-    const options = generateHourOptions();
-    setHourOptions(options);
-
+    
+      const options:any = generateHourOptions();
+      setHourOptions(options);
     }, [date]);
+    
 
 
-    const calculateDuration = () => {
+    const calculateDuration = ({hour, minutes}:{hour:any, minutes:any}) => {
       const duration = `${hour || "00"}:${minutes || "00"}:00`;
       return duration;
     };
 
-    const colorOptions = [
-      { value: 'red', label: 'Rojo', color: '#ef233c' },
-      { value: 'green', label: 'Verde', color: '#9cf21a' },
-      { value: 'blue', label: 'Azul', color: '#3a86ff' },
-      { value: 'yellow', label: 'Amarillo', color: '#FFFF00' },
-      { value: 'white', label: 'Blanco', color: '#dee2e6' },
-      { value: 'black', label: 'Negro', color: '#343a40' },
-    ];
 
     const handleColorChange = (selectedOptions:any) => {
       if (selectedOptions.length <= 2) {
@@ -119,8 +132,14 @@ export const CreateEventCustomPage = () => {
       }
     };
 
-    const handleSubmit = (e:any) => {
-        e.preventDefault();
+
+
+    const onSubmit = (data:Inputs) => {
+
+        if(!playerCountError && data.name && data.sportCenter && data.hour && data.minutes){
+          setHour(data.hour.toString())
+          setMinutes(data.minutes.toString())
+
         let timeString = ""
         if (time && time.label) {
 
@@ -133,11 +152,11 @@ export const CreateEventCustomPage = () => {
           selectedDateTime.setMinutes(minute);
           timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
         }
-        const newDuration = calculateDuration();
+        const newDuration = calculateDuration({hour:data.hour, minutes:data.minutes});
+        console.log(newDuration)
         const sportS = sport ? sport.value : null;
         const genderS = gender ? gender.value : null;
         const difficultyS = difficulty ? difficulty.value : null;
-        const coloryS = color ? color.value : null;
 
         const fk_difficulty = {
           type: difficultyS
@@ -154,8 +173,10 @@ export const CreateEventCustomPage = () => {
         const dateS = date ? new Date(date.getTime()) : null;
         if (dateS) {
           dateS.setUTCDate(dateS.getUTCDate() + 1);
+          console.log(dateS)
         }        
-        startCreateCustom({name, details, price:parseInt(price), date: dateS || new Date(), duration: newDuration, is_private:isPrivate, number_players:parseInt(playerCount), time: timeString, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:1, sport_center_custom:sportCenter  })
+        startCreateCustom({name:data.name, details:data.details, price:parseInt(price), date: dateS || new Date(), duration: newDuration, is_private:isPrivate, number_players:parseInt(playerCount), time: timeString, fk_difficulty, fk_person:user.uuid, fk_sex, fk_sport, fk_teamcolor:colorsM[0].label, fk_teamcolor_two:colorsM[1].label, sport_center_custom:data.sportCenter  })
+      }
     }
     
     const handlePrivate = () => {
@@ -171,12 +192,52 @@ export const CreateEventCustomPage = () => {
       }
     }
 
+    const handlePriceChange = (e:any) => {
+      const inputValue = e.target.value;
+      setPrice(inputValue);
+  
+      if (priceOpen) {
+        if (inputValue.includes("-")) {
+          setError("El valor no puede ser negativo");
+        } else {
+          const parsedPrice = parseFloat(inputValue);
+          if (isNaN(parsedPrice) || parsedPrice < 0) {
+            setError("El valor debe ser un número mayor o igual a 0");
+          } else {
+            setError("");
+          }
+        }
+      }
+    };
+
+    const handlePlayerCountChange = (e:any) => {
+      const value = e.target.value;
+      
+      setPlayerCount(value);
+    
+      // Validar el campo playerCount
+      if (value.trim() === "") {
+        setPlayerCountError("Este campo es obligatorio");
+      } else if (parseInt(value) < 1) {
+        setPlayerCountError("El número de jugadores por equipo debe ser mayor o igual a 1");
+      } else if (parseInt(value) > 20) {
+        setPlayerCountError("El número de jugadores por equipo no puede ser mayor a 20");
+      } else {
+        setPlayerCountError("");
+      }
+    };
+    
+
+    const onNavigateBack = () => {
+      navigate(-1)
+    }
+
     return (
     <>
     <Navbar />
         <div className='relative w-full h-60'>
-            <img src={'https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg'} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
-            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full'>
+            <img src={wallpaper} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
+            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80 cursor-pointer rounded-full'  onClick={onNavigateBack}>
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left'>
                 <path d='M19 12H5M12 19l-7-7 7-7' />
                 </svg>
@@ -194,22 +255,23 @@ export const CreateEventCustomPage = () => {
                               ¡Crea un evento y conoce a gente nueva con la que compartir tu deporte preferido!
                             </p>
 
-                            <form className="mt-5" onSubmit={handleSubmit}>
+                            <form className="mt-5" onSubmit={handleSubmit(onSubmit)}>
                             <div>
                               <label htmlFor="user name" className="block text-md text-primary font-bold">
                                 Nombre del evento
                               </label>
                                 <div className="relative">
-                                  <input
-                                    placeholder="¡Unete a pasartlo bien jugando con unos amigos!"
-                                    type="text"
-                                    maxLength={69}
-                                    name="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                    className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none "
+                                <input
+                                    placeholder="¡Únete a pasarlo bien jugando con unos amigos!"
+                                    {...register("name", { required: true, minLength: 5, maxLength: 69 })}
+                                    className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none"
                                   />
+                                  {errors.name && errors.name.type === "required" && (
+                                    <span className="text-error">Este campo es obligatorio</span>
+                                  )}
+                                  {errors.name && errors.name.type === "minLength" && (
+                                    <span className="text-error">El nombre debe tener al menos 5 caracteres</span>
+                                  )}
                                 </div>
                               </div>
                               <div className="mt-4" id="detalles">
@@ -220,28 +282,24 @@ export const CreateEventCustomPage = () => {
                                       Detalles
                                   </label>
                                   <textarea
-                                      placeholder="Traeros balón (opcional)"
-                                      name="detalles"
-                                      value={details}
-                                      onChange={(e) => setDetails(e.target.value)}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
-                                  />
+                                    placeholder="Traed balón (opcional)"
+                                    {...register("details")}
+                                    className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none"
+                                    />
                               </div>
                               <div className="mt-4">
-                                  <label
-                                      htmlFor="centro-deportivo"
-                                      className="block text-md text-primary font-bold"
-                                  >
-                                      Centro deportivo
-                                  </label>
-                                  <input
-                                    placeholder="Busca el centro deportivo donde vas a jugar"
-                                    type="text"
-                                    name="centro-deportivo"
-                                    value={sportCenter}
-                                    onChange={(e) => setSportCenter(e.target.value)}
-                                    className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
-                                  />
+                                <label htmlFor="centro-deportivo" className="block text-md text-primary font-bold">
+                                  Centro deportivo
+                                </label>
+                                <input
+                                  placeholder="Centro deportivo donde se va a jugar"
+                                  required
+                                  {...register("sportCenter", { required: "Este campo es obligatorio" })}
+                                  className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
+                                />
+                                {errors.sportCenter && (
+                                  <span className="text-error">{errors.sportCenter.message}</span>
+                                )}
                               </div>
                               <div className="mt-4">
                                   <label
@@ -302,6 +360,7 @@ export const CreateEventCustomPage = () => {
                                     className=" block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-white border-b-2 border-gray-200  focus:border-primary focus:outline-none "
                                     placeholderText='Seleccione la fecha'
                                     locale={es}
+                                    required
                                     minDate={new Date()}
                                   />
                               </div>
@@ -318,6 +377,7 @@ export const CreateEventCustomPage = () => {
                                     onChange={setTime}
                                     placeholder="Seleccione la hora"
                                     className="text-lg focus:outline-none"
+                                    required
                                     styles={{
                                       control: (provided) => ({
                                         ...provided,
@@ -349,50 +409,58 @@ export const CreateEventCustomPage = () => {
                                   />
                               </div>
                               <div className="mt-4">
-                                  <label
-                                      htmlFor="duracion"
-                                      className="block text-md text-primary font-bold"
-                                  >
-                                      Duración
-                                  </label>
-                                  <div className="flex items-baseline">
-                                    <input
-                                        placeholder="1"
-                                        type="number"
-                                        name="hora"
-                                        value={hour}
-                                        onChange={(e) => setHour(e.target.value)}
-                                        className="block w-20 mr-1 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
-                                    />
-                                    <h1 className="text-white text-xl pr-2">H</h1>
-                                    <input
-                                        placeholder="30"
-                                        type="number"
-                                        name="hora"
-                                        value={minutes}
-                                        onChange={(e) => setMinutes(e.target.value)}
-                                        className="block w-20 mr-1 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
-                                    />
-                                    <h1 className="text-white text-xl">M</h1>
-                                  </div>
+                              <label htmlFor="hour" className="block text-md text-primary font-bold">
+                                Duración
+                              </label>
+                              <div className="flex items-baseline">
+                                <input
+                                  placeholder="1"
+                                  type="number"
+                                  min={0}
+                                  max={10}
+                                  {...register("hour", {
+                                    required: "Campo obligatorio",
+                                    pattern: {
+                                      value: /^(?=.*[0-9])\d*$/,
+                                      message: "Ingresa un valor válido para la hora",
+                                    },
+                                  })}
+                                  className="block w-20 mr-1 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none"
+                                />
+                                <h1 className="text-white text-xl pr-2">H</h1>
+                                {errors.hour && <span className="text-error">{errors.hour.message}</span>}
+                                <input
+                                  placeholder="30"
+                                  type="number"
+                                  min={0}
+                                  max={60}
+                                  {...register("minutes", {
+                                    required: "Campo obligatorio",
+                                    pattern: {
+                                      value: /^(?=.*[0-9])\d*$/,
+                                      message: "Ingresa un valor válido para los minutos",
+                                    },
+                                  })}
+                                  className="block w-20 mr-1 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none"
+                                />
+                                <h1 className="text-white text-xl">M</h1>
+                                {errors.minutes && <span className="text-error pl-2">{errors.minutes.message}</span>}
                               </div>
+                            </div>
                               <div className="mt-4">
-                                  <label
-                                      htmlFor="jugadores"
-                                      className="block text-md text-primary font-bold"
-                                  >
-                                      Nº de jugadores por equipo
-                                  </label>
-                                  <input
-                                      placeholder="5"
-                                      type="number"
-                                      min={1}
-                                      required
-                                      name="jugadores"
-                                      value={playerCount}
-                                      onChange={(e) => setPlayerCount(e.target.value)}
-                                      className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200  focus:border-primary focus:outline-none"
-                                  />
+                                <label htmlFor="jugadores" className="block text-md text-primary font-bold">
+                                  Nº de jugadores por equipo
+                                </label>
+                                <input
+                                  placeholder="5"
+                                  type="number"
+                                  required
+                                  min={1}
+                                  value={playerCount}
+                                  onChange={handlePlayerCountChange}
+                                  className="block w-full px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none"
+                                />
+                                {playerCountError && <span className="text-error">{playerCountError}</span>}
                               </div>
                               <div className="mt-4">
                                   <label
@@ -446,43 +514,7 @@ export const CreateEventCustomPage = () => {
                                   >
                                       Colores de las camisetas
                                   </label>
-                                  <ReactSelect
-                                      options={colorOptions}
-                                      id="sport"
-                                      value={color}
-                                      onChange={setColor}
-                                      placeholder="Selecciona colores de las camisetas"
-                                      className=" text-lg mt-2"
-                                      styles={{
-                                        control: (provided) => ({
-                                          ...provided,
-                                          height: '43px',
-                                          backgroundColor: '#181818',
-                                          boxShadow: '0px 3.2px 0px -1px #FFFFFF',
-                                          border: '0px',
-                                          borderColor:"#a5ff1b",
-                                          color: '#FFFFFF', // establecer el color del texto en blanco
-                                        }),
-                                        placeholder: (provided) => ({
-                                          ...provided,
-                                          color: '#FFFFFF', // establecer el color del placeholder en blanco
-                                        }),
-                                        singleValue: (provided) => ({
-                                          ...provided,
-                                          color: '#FFFFFF',
-                                           // establecer el color del texto seleccionado en blanco
-                                        }),
-                                      }} 
-                                      theme={(theme:any) => ({
-                                        ...theme,
-                                        colors: {
-                                          ...theme.colors,
-                                          primary25: '#a5ff1b',
-                                          primary: '#222222',
-                                        },
-                                      })}
-                                  />
-                                   <CustomSelect colorOptions={colorOptions} color={colorsM} setColor={handleColorChange} />
+                                   <CustomSelect  colorOptions={colorOptions} color={colorsM} setColor={handleColorChange} />
                               </div>
                               <div className="mt-4">
                               <label
@@ -544,12 +576,13 @@ export const CreateEventCustomPage = () => {
                                       name="precio"
                                       value={price}
                                       min={0}
-                                      onChange={(e) => setPrice(e.target.value)}
+                                      onChange={handlePriceChange}
                                       className={`w-12 px-3 py-2 mt-2 text-white bg-fondo placeholder-gray-400 border-b-2 border-gray-200 focus:border-primary focus:outline-none ${priceOpen ? '' : 'opacity-50'}`}
                                       required={priceOpen}
                                       disabled={!priceOpen}
                                     />€
                                   </h1>
+                                  {error && <span className="text-error">{error}</span>}
                               <div className="flex items-center pt-8">
                                 <label
                                     htmlFor="privado"
@@ -566,7 +599,7 @@ export const CreateEventCustomPage = () => {
                               <button className="bg-white px-4 py-2 mt-5 mb-6  rounded-md hover:bg-red-400 mr-2" >
                                   Reiniciar
                               </button>
-                              <button className="bg-primary px-4 py-2 mt-4 rounded-md hover:bg-lime-500">
+                              <button type="submit" ref={submitButtonRef} className="bg-primary px-4 py-2 mt-4 rounded-md hover:bg-lime-500">
                                   Crear evento
                               </button>
                               </form>

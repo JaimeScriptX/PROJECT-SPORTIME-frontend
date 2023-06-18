@@ -1,7 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { Footer, Navbar } from "../../../ui";
-import { EventCard } from "../../components";
+import { EventCard, SportCenterCard } from "../../components";
 import { useEffect, useState } from "react";
+import sportCenterCustom from '../../../assets/images/centro-deportvo-personalizado.jpg'
 
 export const SearchPage = () => {
     const [events, setEvents] = useState([])
@@ -10,9 +11,10 @@ export const SearchPage = () => {
     const searchData = location.state?.searchData;
 
     useEffect(() => {
+        setEvents([])
         setEvents(searchData.events)
         setSportCenters(searchData.sport_centers)
-        console.log(events, sportCenters)
+        console.log(searchData)
     }, [searchData])
     
 
@@ -27,8 +29,10 @@ export const SearchPage = () => {
           <h2 className="text-white font-n27 max-md:pl-5 text-2xl">Eventos:</h2>
           {events.length > 0 &&
             <div className="scrollbar-hide flex w-full md:pl-22 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}> 
-                {events.map((event:any) =>
-                    <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                {events.map((event:any, index:any) =>
+                  <div key={index}>
+                    <EventCard id={event.id} image={event.fk_sportcenter_id?.image || `${sportCenterCustom}`} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                  </div>
                 )}
             </div>
           }
@@ -40,8 +44,10 @@ export const SearchPage = () => {
           <h2 className="text-white font-n27 max-md:pl-5 text-2xl ">Centros deportivos:</h2>
           {sportCenters.length > 0 &&
              <div className="scrollbar-hide flex w-full md:pl-22 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}> 
-                {events.map((event:any) =>
-                <EventCard id={event.id} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                {sportCenters.map((sportCenter:any, index:any) =>
+                <div key={index}>
+                  <SportCenterCard id={sportCenter.id} image={sportCenter.image} address={sportCenter.address} municipality={sportCenter.municipality} name={sportCenter.name}  />
+                </div>
                 )}
             </div>
           }

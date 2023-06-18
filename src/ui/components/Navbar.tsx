@@ -63,17 +63,6 @@ export const Navbar = () => {
     startLogout()
   }
 
-
-  const handleClickOutside = (event:any) => {
-    // Si el menú está abierto y el usuario hizo clic fuera de él, cierra el menú
-    if (ref.current && !ref.current.contains(event.target as Node)) {
-      setMenuOpenDesPer(false);
-      setMenuOpenDes(false);
-      setMenuOpenMobPer(false);
-      setMenuOpenMob(false);
-    }
-  };
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -109,7 +98,7 @@ export const Navbar = () => {
           </div>
 
           <div className="lg:hidden pl-2 w-full relative py-2">
-            <SearchMobile searchN={handleSearch} />
+            <SearchMobile filter={openFilter} searchN={handleSearch} />
           </div>
 
           <button className="lg:hidden pl-2 pr-2 relative" onClick={handleMenuToggleFilter}>
@@ -167,12 +156,12 @@ export const Navbar = () => {
                 )}
                 </div>
               <button className='hidden lg:inline-block' onClick={handleMenuToggleDesPer}>
-                  <img src="https://picsum.photos/40" className="rounded-full" alt="Profile 03" />
+                  <img src={user.image_profile} className="w-10 h-10 rounded-full" alt="Profile 03" />
               </button>
               {menuOpenDesPer && (
-                  <div className="absolute top-0 right-0 pt-1 w-52 mr-2 bg-white rounded-md shadow-xl z-10" style={{marginTop:'5.3rem'}} ref={ref}>
+                  <div className="absolute top-0 right-0 pt-1 w-52 mr-2 bg-white rounded-xl shadow-xl z-10" style={{marginTop:'5.3rem'}} ref={ref}>
                     <div className='flex items-center py-2'>
-                      <img src="https://picsum.photos/40" className="ml-2 rounded-full" alt="Profile 03" />
+                      <img src={user.image_profile} className="ml-2 w-10 h-10 rounded-full" alt="Profile 03" />
                       <div className='pl-2'>
                         <h2 className="text-base font-bold">{user.name}</h2>
                         <p className="text-gray-500">@{user.username}</p>
@@ -195,7 +184,7 @@ export const Navbar = () => {
                     <hr className=''/>
                     <a
                       onClick={handleLogout}
-                      className="block py-2 pb-2.5 text-center text-gray-800 hover:bg-black hover:text-white hover:rounded-b-lg"
+                      className="cursor-pointer block py-2 pb-2.5 text-center text-gray-800 hover:bg-black hover:text-white hover:rounded-b-lg"
                     >
                       Cerrar sesión
                     </a>
@@ -255,17 +244,21 @@ export const Navbar = () => {
             <a onClick={handleMenuToggleMobPer}
         className="w-full focus:text-royal hover:text-royal justify-center inline-block text-center pt-2 pb-1 hover:bg-primary hover:text-black"
   >
+      {user.image_profile ? (
+        <img src={user.image_profile} alt="Profile Image" className="h-6 w-6 inline-block mb-1  rounded-full" />
+      ) : (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
+      )}
         <span className="tab block text-xs">Perfil</span>
       </a>
      {menuOpenMobPer && (
-        <div className="absolute bottom-20 sm:right-12 right-2  w-56 bg-white rounded-lg shadow-xl z-10" style={{marginTop:'5.3rem'}} ref={ref}>
+        <div className="absolute bottom-20 sm:right-12 right-2 w-56 bg-white rounded-lg shadow-xl z-10" style={{marginTop:'5.3rem'}} ref={ref}>
           <div className='flex items-center py-2'>
-            <img src="https://picsum.photos/40" className="ml-2 rounded-full" alt="Profile 03" />
+            <img src={user.image_profile} className="ml-2 w-10 h-10 rounded-full" alt="Profile 03" />
             <div className='pl-2'>
-              <h2 className="text-base text-black font-bold">Jaime García</h2>
+              <h2 className="text-base text-black font-bold">{user.name}</h2>
               <p className="text-gray-500">@{user.username}</p>
             </div>
           </div>

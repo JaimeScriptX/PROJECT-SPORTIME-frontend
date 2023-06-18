@@ -1,6 +1,6 @@
-import React from 'react';
 import chroma from 'chroma-js';
 import Select, { components } from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 const colourStyles = {
   control: (provided:any) => ({
@@ -27,25 +27,19 @@ const colourStyles = {
       backgroundColor: isDisabled
         ? undefined
         : isSelected
-        ? data.color
+        ? '#a5ff1b' // Cambio a color #a5ff1b cuando está seleccionado
         : isFocused
-        ? color.alpha(0.1).css()
+        ? '#a5ff1b'
         : undefined,
-      color: isDisabled
-        ? '#ccc'
-        : isSelected
-        ? chroma.contrast(color, 'white') > 2
-          ? 'white'
-          : 'black'
-        : data.color,
+      color: '#000000', // Cambio a color negro
       cursor: isDisabled ? 'not-allowed' : 'default',
 
       ':active': {
         ...provided[':active'],
         backgroundColor: !isDisabled
           ? isSelected
-            ? data.color
-            : color.alpha(0.3).css()
+            ? '#a5ff1b' // Cambio a color #a5ff1b cuando está seleccionado y se hace clic
+            : '#a5ff1b'
           : undefined,
       },
     };
@@ -59,19 +53,21 @@ const colourStyles = {
   },
   multiValueLabel: (provided:any, { data }:{data:any}) => ({
     ...provided,
-    color: data.color,
+    color: '#fff',
   }),
   multiValueRemove: (provided:any, { data }:{data:any}) => ({
     ...provided,
-    color: data.color,
     ':hover': {
-      backgroundColor: data.color,
-      color: 'white',
+      backgroundColor: '#a5ff1b',
+      color: 'black',
     },
   }),
 };
 
 const CustomSelect = ({ colorOptions, color, setColor }:{ colorOptions:any, color:any, setColor:any }) => {
+
+  const animatedComponents = makeAnimated();
+
   const handleChange = (selectedOption:any) => {
     setColor(selectedOption);
   };
@@ -82,18 +78,21 @@ const CustomSelect = ({ colorOptions, color, setColor }:{ colorOptions:any, colo
       id="sport"
       value={color}
       isMulti
+      required
       onChange={handleChange}
       placeholder="Selecciona colores de las camisetas"
       className="text-lg mt-2"
       styles={colourStyles}
       components={{
         ...components,
+        ...animatedComponents,
         IndicatorSeparator: null,
       }}
       theme={(theme) => ({
         ...theme,
         colors: {
           ...theme.colors,
+          primary25: '#a5ff1b', // Agregado primary25 con el color '#a5ff1b'
         },
       })}
     />

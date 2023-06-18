@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import '../../../assets/css/map.css'
 
-export const Map = () => {
+export const Map = ({latitude, longitude}:{latitude:number, longitude:number}) => {
 
   const [isAnimating, setIsAnimating] = useState(true);
 
@@ -17,7 +17,7 @@ export const Map = () => {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${API_KEY}`,
-      center: [-1.295056, 38.123522],
+      center: [longitude, latitude],
       zoom: 16.5,
       pitch: 45,
       interactive: false
@@ -83,7 +83,7 @@ export const Map = () => {
       map.current?.remove();
       map.current = null;
     };
-  }, [isAnimating]);
+  }, [isAnimating, latitude, longitude]);
 
   return (
     <div className="map-wrap ">

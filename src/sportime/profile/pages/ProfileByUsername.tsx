@@ -5,15 +5,17 @@ import Tenis from '../../../assets/images/Tenis.svg'
 import FutbolSala from '../../../assets/images/FutbolSala.svg'
 import Padel from '../../../assets/images/Padel.svg'
 import Edit from '../../assets/images/IconoEdit.svg'
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useAuthStore } from "../../../hooks/useAuthStore"
 import { usePersonStore } from "../../../hooks/usePersonStore"
 import { useParams } from "react-router-dom"
+import { EventCard } from "../../components"
 
 interface initialState {
     id: number,
     image_profile: null,
     name_and_lastname: string,
+    age: number,
     birthday: null
     weight: null,
     height: null,
@@ -38,15 +40,19 @@ interface initialState {
 export const ProfileByUsernamePage = () => {
 
   const { username } = useParams();
-
+  const [favorites, setFavorites] = useState([]);
+  const [events, setEvents] = useState([]);
   const [PersonData, setPersonData] = useState<initialState | null>(null);
-  const {getPersonByUsername} = usePersonStore()
-
+  const {getPersonByUsername, getLastEvents, getFavoritesSports} = usePersonStore()
+  const eventListRefCreated = useRef<HTMLDivElement>(null);
   const profilePromise = async () => {
     await getPersonByUsername(username).then((data) => {
       setPersonData(data);
+      setFavorites(data.favorites.fav);
+      setEvents(data.events);
       console.log(data)
-    })}
+    })
+  }
 
   useEffect(() => {
     console.log(username)
@@ -54,6 +60,17 @@ export const ProfileByUsernamePage = () => {
 
   }, [username])
     
+  const scrollToLeftCreated = () => {
+    if (eventListRefCreated.current) {
+      eventListRefCreated.current.scrollLeft -= 150;
+    }
+};
+
+const scrollToRightCreated = () => {
+  if (eventListRefCreated.current) {
+    eventListRefCreated.current.scrollLeft += 150;
+  }
+};
 
   return (
     <>
@@ -74,38 +91,52 @@ export const ProfileByUsernamePage = () => {
                 </div>
             </div>
             <div className="mt-12 pl-6">
-              <h2 className="text-xl font-medium text-gray-800">{PersonData?.name_and_lastname}</h2> 
+            <h2 className="text-xl font-medium text-gray-800">{PersonData?.name_and_lastname}</h2> 
               <h2 className="text-sm text-gray-700">@{PersonData?.fk_user_id.username}</h2> 
-              <p className="text-gray-500 text-sm">Nacionalidad: {PersonData?.nationality}</p>
-              <p className="text-gray-500 text-sm">Ciudad: {PersonData?.city}</p>
-              <p className="text-gray-500 text-sm pt-2">Edad: 25 años</p>
-              <p className="text-gray-500 text-sm">Estatura: {PersonData?.height} cm</p>
-              <p className="text-gray-500 text-sm">Peso: {PersonData?.weight}kg</p>
-              <p className="text-gray-500 text-sm">Sexo: {PersonData?.fk_sex_id?.gender || ""}</p>
+              { PersonData?.nationality &&
+                <p className="text-gray-500 text-sm">Nacionalidad: {PersonData?.nationality}</p>
+              }
+              { PersonData?.city &&
+                <p className="text-gray-500 text-sm">Ciudad: {PersonData?.city}</p>
+              }
+              { PersonData?.age != null && PersonData.age > 0 && (
+                <p className="text-gray-500 text-sm pt-2">Edad: {PersonData?.age} años</p>
+              )}
+              {PersonData?.height != null && PersonData.height > 0 && (
+                <p className="text-gray-500 text-sm">
+                  Estatura: {PersonData.height} cm
+                </p>
+              )}
+              {PersonData?.weight != null && PersonData.weight > 0 && (
+                <p className="text-gray-500 text-sm">Peso: {PersonData?.weight}kg</p>
+              )}
+              { PersonData?.fk_sex_id?.gender &&
+                <p className="text-gray-500 text-sm">Sexo: {PersonData?.fk_sex_id?.gender || ""}</p>
+              }
             </div>
             <div className="border-t border-gray-200 mt-6 pt-6">
                 <h3 className="text-lg font-n27 text-gray-800 pl-6">Estadisticas generales</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 pt-5">
                     <div className="text-center md:border-r">
-                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">14</h6>
+                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.games_played}</h6>
                     <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                         Partidos
                     </p>
                     </div>
                     <div className="text-center md:border-r ">
-                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">7</h6>
+                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.victories}</h6>
                     <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                         Victorias
                     </p>
                     </div>
                     <div className="text-center md:border-r">
-                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">7</h6>
+                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.defeat}</h6>
                     <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                         Derrotas
                     </p>
                     </div>
                     <div className="text-center">
-                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">50%</h6>
+                    <h6 className="text-xl font-bold lg:text-xl xl:text-xl">{PersonData?.ratio}%</h6>
                     <p className="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
                         Ratio
                     </p>
@@ -137,20 +168,42 @@ export const ProfileByUsernamePage = () => {
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Mis deportes favoritos</h3>
             <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-                <img src={Futbol} width={'225'}/>
-                <img src={Baloncesto} width={'225'}/>
-                <img src={Tenis} width={'225'}/>
-                <img src={FutbolSala} width={'225'}/>
-                <img src={Padel} width={'225'} />   
-            </div>
+              {favorites.map((sport: any, index: number) => (
+                <div key={index} className="image-container" style={{ position: 'relative' }}>
+                  <img src={sport.fk_sport.image} width={'175'} alt={sport.fk_sport.name} />
+                </div>
+              ))}
+          </div>
         </div>
         <div className="bg-white shadow-md rounded-lg p-6 mt-5 mx-5">
             <h3 className="text-xl text-gray-800 font-n27">Mis ultimos eventos</h3>
             <div className="scrollbar-hide flex w-full pt-5 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-scroll scroll-smooth" style={{ maxHeight: '100%', overflowY: 'hidden' }}>
-            
+            {events.length > 0 &&
+                <div className="relative pt-5">
+                    <div className="scrollbar-hide flex w-full md:pl-28 pl-5 pt-5 snap-x snap-mandatory scroll-px-10 lg:gap-14 gap-5 overflow-x-scroll scroll-smooth" ref={eventListRefCreated} style={{ maxHeight: '100%', overflowY: 'hidden' }}>
+                    {events.map((event:any, index:any) =>
+                    <div key={index}>
+                      <EventCard id={event.id} image={event.fk_sportcenter_id?.image || "https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg"} sport={event.fk_sports_id.name} gender={event.fk_sex_id.gender} level={event.fk_difficulty_id.type} players={event.number_players} full={event.number_players} missing_players={event.missing_players} players_registered={event.players_registered} time={event.time} date={event.date} name={event.name} sportCenter={event.fk_sportcenter_id?.name === undefined ? event.sport_center_custom : event.fk_sportcenter_id?.name}/>
+                    </div>
+                    )}
+                    </div>
+                    <button
+                        className="absolute top-2/4 top-33  transform -translate-y-1/2 left-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27 "
+                        onClick={scrollToLeftCreated}
+                    >
+                        &lt;
+                    </button>
+                    <button
+                        className="absolute top-2/4 top-33 transform -translate-y-1/2 right-2 text-black text-6xl hover:opacity-75 rounded-full h-12 w-12 flex items-center justify-center  transition duration-300 font-n27"
+                        onClick={scrollToRightCreated}
+                    >
+                        &gt;
+                    </button>
+                </div>
+                }
+                </div>
             </div>
         </div>
-    </div>
     
 
     <Footer />

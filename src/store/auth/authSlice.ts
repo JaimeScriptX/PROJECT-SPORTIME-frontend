@@ -7,7 +7,8 @@ export interface authState {
     uuid:string,
     name: string,
     username: string,
-    email: string
+    email: string,
+    image_profile: string
   },
   tokenExpiration?: number
   errorMessage: undefined
@@ -19,7 +20,8 @@ const initialState: authState = {
     uuid:"",
     name: "",
     username: "",
-    email: ""
+    email: "",
+    image_profile: ""
   },
   errorMessage: undefined
 }
@@ -35,7 +37,7 @@ export const authSlice = createSlice({
     },
     onLogin: (state, {payload},) => {
         state.status = 'authenticated'
-        state.user = {uuid:payload.uuid, name:payload.name, username:payload.username, email:payload.email}
+        state.user = {uuid:payload.uuid, name:payload.name, username:payload.username, email:payload.email, image_profile:payload.image_profile}
         state.tokenExpiration = payload.tokenExpiration
         state.errorMessage = undefined
     },

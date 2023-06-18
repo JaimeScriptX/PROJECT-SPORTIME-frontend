@@ -1,25 +1,74 @@
 import { Footer, Navbar } from "../../../ui"
-import PadelIcon from '../../../assets/images/PadelIcon.png'
-import FutbolIcon from '../../../assets/images/iconFutbol.svg'
-import BaloncestoIcon from '../../../assets/images/iconBaloncesto.svg'
-import TenisIcon from '../../../assets/images/iconTenis.svg'
-import FutbolSalaIcon from '../../../assets/images/iconFutbolSala.svg'
 import ComollegarIcon from '../../../assets/images/iconComollegar.svg'
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Map } from "../../events/components/Map"
+import { useNavigate, useParams } from "react-router-dom"
+import { useSportCenter } from "../../../hooks/useSportCenter"
+import { useEffect, useState } from "react"
+
+interface initialState {
+    id: number,
+    name: string,
+    municipality: string,
+    address: string,
+    description:string,
+    image: string,
+    phone: string,
+    image_gallery1: string,
+    image_gallery2: string,
+    image_gallery3: string,
+    image_gallery4: string,
+    latitude: null,
+    longitude: null,
+    destination: null,
+    services: [],
+    sport: [
+        {
+            id: number,
+            name: string,
+            image: string,
+            logo_sportcenter: string
+        }
+    ]
+}
 
 export const SportCenter = () => {
-
-    // {name, location, latitude, longitude, description, sports, photos}:{name:string, location:string, latitude:number, longitude:string, description:string, sports:any, photos:any }
+    const { id } = useParams();
+    const {getSportCenterById} = useSportCenter()
+    const navigate = useNavigate()
+    const [sportCenterData, setSportCenterData] = useState<initialState | null>(null);
+    const [imageGallery, setImageGallery] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getSportCenterById(id?.toString());
+            console.log(data)
+            setImageGallery(data.gallery);
+            setSportCenterData(data);
+          } catch (error) {
+            console.error('Error fetching image gallery:', error);
+          }
+        };
+      
+        fetchData();
+      }, [id]);
+      
+      useEffect(() => {
+        console.log(imageGallery);
+      }, [imageGallery]);
+      
+      const onNavigateBack = () => {
+        navigate(-1)
+      }
 
     const handleDireccion = (event:any) => {
         event.preventDefault();
       // Cambiar estos valores para cambiar el destino
-        const latitud =  38.12307365189082;
-        const longitud = -1.2958321246706506;
-        const destino = 'Pabellón municipal de deportes, Archena, Murcia';
+        const latitud =  sportCenterData?.latitude;
+        const longitud = sportCenterData?.longitude;
+        const destino = sportCenterData?.destination || "";
         // Construir la cadena de texto utilizando el protocolo "geo:" y la latitud y longitud del destino, junto con el parámetro "q" para especificar la dirección, y "saddr" para la ubicación actual del usuario
         const geoLink = `geo:0,0?q=${encodeURIComponent(destino)}&saddr=${latitud},${longitud}`;
         const geoLinkApple =`https://maps.apple.com/place?ll=${latitud}%2C${longitud}`;
@@ -43,8 +92,8 @@ export const SportCenter = () => {
     <>
         <Navbar />
         <div className='relative w-full h-80'>
-            <img src={'https://laguiaw.com/contenido/logotipos/91625_polideportivo_municipal_de_archena.jpg'} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
-            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80  rounded-full'>
+            <img src={sportCenterData?.image} className='absolute top-0 left-0 w-full h-full object-cover object-center' style={{ objectPosition: '20% 50%' }} />
+            <div className='absolute top-4 left-3 w-10 h-10 flex items-center justify-center bg-white opacity-80 rounded-full cursor-pointer' onClick={onNavigateBack} >
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='-5 -3 35 30' fill='none' stroke='black' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='feather feather-arrow-left'>
                 <path d='M19 12H5M12 19l-7-7 7-7' />
                 </svg>
@@ -60,35 +109,25 @@ export const SportCenter = () => {
             <div className='pl-5'>
                 <div className="flex items-center justify-between py-3">
                     <div>
-                        <h1 className="pt-5 text-white text-2xl font-n27">Polideportivo municipal de Archena</h1>
-                        <h6 className="text-white">Av. del Río Segura, 30600 Archena, Murcia</h6>
+                        <h1 className="pt-5 text-white text-2xl font-n27">{sportCenterData?.name}</h1>
+                        <h6 className="text-white">{sportCenterData?.address}, {sportCenterData?.municipality}</h6>
                     </div>
-                    <button className="px-3 py-3 mr-6 max-md:mr-2 bg-primary rounded-3xl text-lg font-n27">Reservar</button>
+                    <a href="/crear-evento-sportime" className="px-3 py-3 mr-6 max-md:mr-2 bg-primary rounded-3xl text-lg font-n27" >Reservar</a>
                 </div>
                 <hr className='mr-5 mt-3 opacity-5'/>
                 <h1 className="text-primary text-lg font-n27 pt-2">Información</h1>
 
-                <p className="text-white pt-2 mr-2 xl:mr-96">El Polideportivo Municipal de Archena es un complejo deportivo situado en la ciudad de Archena, en la Región de Murcia, España. 
-                Cuenta con una amplia variedad de instalaciones deportivas, incluyendo pistas de tenis, pádel, baloncesto, fútbol sala, voleibol, atletismo, piscinas cubiertas y descubiertas, y un gimnasio. Además, el polideportivo ofrece servicios de entrenamiento personalizado, clases colectivas y actividades para niños. 
-                Es un espacio muy utilizado por los residentes de Archena y sus alrededores para la práctica de deportes y actividades físicas.</p>
+                <p className="text-white pt-2 mr-2 xl:mr-96">{sportCenterData?.description}</p>
                 <hr className='mr-5 mt-3 opacity-5'/>
                 <h1 className="text-lg text-primary text-lg font-n27 pt-2">Deportes disponibles</h1>
                 <div className="flex flex-wrap mt-2 gap-2">
-                    <span className="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={FutbolIcon}width={'25px'} className="mr-2"/><h1>Fútbol</h1>
-                    </span>
-                    <span className="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={TenisIcon} width={'25px'} className="mr-2"/><h1>Tenis</h1>
-                    </span>
-                    <span className="bg-primary text-black font-medium rounded-full py-1 px-5 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={PadelIcon} width={'25px'} className="mr-2"/><h1>Padel</h1>
-                    </span>
-                    <span className="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={FutbolSalaIcon} width={'25px'} className="mr-2"/><h1>Fútbol Sala</h1>
-                    </span>
-                    <span className="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={BaloncestoIcon} width={'25px'} className="mr-2"/><h1>Baloncesto</h1>
-                    </span>
+                    {sportCenterData?.sport.map((sport:any, index:any) => (
+                        <div key={index}>
+                            <span className="bg-primary text-black font-medium rounded-full py-1 px-3 mr-2 mb-2" style={{ display: 'flex', alignItems: 'center' }}>
+                                <img src={sport.logo_sportcenter} width={'25px'} className="mr-2"/><h1>{sport.name}</h1>
+                            </span>
+                        </div>
+                        ))}
                 </div>
                 <hr className='mr-5 mt-3 opacity-5'/>
                 <h1 className="text-primary text-lg font-n27 pt-2 pb-2">Galería</h1>
@@ -142,43 +181,25 @@ export const SportCenter = () => {
                     slidesToSlide={1}
                     swipeable 
                     >
-                    <img
-                        src="https://laguiaw.com/upload/servicios_91625_1260375474.jpg"
-                        style={{
-                        display: 'block',
-                        height: '100%',
-                        margin: 'auto',
-                        width: '100%',
-                        objectFit: 'cover',
-                        maxHeight: '500px'
-                        }}
-                    />
-                    <img
-                        src="https://laguiaw.com/upload/servicios_91625_1260375469.jpg"
-                        style={{
-                        display: 'block',
-                        height: '100%',
-                        margin: 'auto',
-                        width: '100%',
-                        objectFit: 'cover',
-                        maxHeight: '500px'
-                        }}
-                    />
-                    <img
-                        src="https://www.archena.es/images/2018/08/10/38790767_1037417243094471_4226241303798611968_n.jpg"
-                        style={{
-                        display: 'block',
-                        height: '100%',
-                        margin: 'auto',
-                        width: '100%',
-                        objectFit: 'cover',
-                        maxHeight: '500px'
-                        }}
-                    />
+                    {imageGallery.map((image:any, index:any) => (
+                        <div key={index}>
+                            <img
+                                src={image[`image_gallery${index + 1}`]}
+                                style={{
+                                display: 'block',
+                                height: '100%',
+                                margin: 'auto',
+                                width: '100%',
+                                objectFit: 'cover',
+                                maxHeight: '500px'
+                                }}
+                            />
+                        </div>
+                    ))}
                 </Carousel>
                 <hr className='mr-5 mt-3 opacity-5'/>
                 <h1 className='text-primary text-lg font-n27 pt-2 pb-2'>Lugar</h1>
-                <Map />
+                <Map latitude={sportCenterData?.latitude || 0} longitude={sportCenterData?.longitude || 0} />
             </div>    
         </div>
         </div>  

@@ -110,7 +110,7 @@ export const NavbarHome = () => {
           )}
           {showSearchM && (
           <div className="lg:hidden pl-2 w-full relative py-2">
-            <SearchMobile searchN={handleSearch} />
+            <SearchMobile filter={openFilter} searchN={handleSearch} />
           </div>
           )}
           {showSearchM && (
@@ -168,12 +168,12 @@ export const NavbarHome = () => {
       )}
                 </div>
                 <button className='hidden lg:inline-block' onClick={handleMenuToggleDesPer}>
-                  <img src="https://picsum.photos/40" className="rounded-full" alt="Profile 03" />
+                  <img src={user.image_profile} className="w-10 h-10 rounded-full" alt="Profile 03" />
               </button>
                 {menuOpenDesPer && (
-                  <div className="absolute top-0 right-0 pt-1 w-52 mr-2 bg-white rounded-md shadow-xl z-10" style={{marginTop:'5.4rem'}} ref={ref}>
+                  <div className="absolute top-0 right-0 pt-1 w-52 mr-2 bg-white rounded-xl shadow-xl z-10" style={{marginTop:'5.4rem'}} ref={ref}>
                     <div className='flex items-center py-2'>
-                      <img src="https://picsum.photos/40" className="ml-2 rounded-full" alt="Profile 03" />
+                      <img src={user.image_profile} className=" ml-2 w-10 h-10 rounded-full" alt="Profile 03" />
                       <div className='pl-2'>
                         <h2 className="text-base font-bold">{user.name}</h2>
                         <p className="text-gray-500">@{user.username}</p>
@@ -196,7 +196,7 @@ export const NavbarHome = () => {
                     <hr className=''/>
                     <a
                       onClick={handleLogout}
-                      className="block py-2 pb-2.5 text-center text-gray-800 hover:bg-black hover:text-white hover:rounded-b-lg"
+                      className="cursor-pointer block py-2 pb-2.5 text-center text-gray-800 hover:bg-black hover:text-white hover:rounded-b-lg"
                     >
                       Cerrar sesión
                     </a>

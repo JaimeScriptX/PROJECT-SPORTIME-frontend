@@ -2,12 +2,7 @@ import iconofalta from '../../../assets/images/IconoFalta.svg'
 import CamisetaNegra from '../../../assets/images/CamisetaNegra.svg'
 import CamisetaBlanca from '../../../assets/images/CamisetaBlanca.svg'
 
-interface ModalInfoProps {
-    onClose: any;
-    number_players: number;
-  }
-
-export const ModalInfo = ({onClose, number_players, event_players_team_a, event_players_team_b, event_id}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, event_id:string}) => {
+export const ModalInfo = ({onClose, number_players, event_players_team_a, team_a_shirt, team_b_shirt, event_players_team_b}:{onClose:any, number_players:any, event_players_team_a:any, event_players_team_b:any, team_a_shirt:string | null, team_b_shirt:string | null,}) => {
 
 
     const handleOverlayClick = (event:any) => {
@@ -32,7 +27,7 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                         {event_players_team_a.map((player:any, index:any) => (
                                 <div key={index}>
                                     <button className='cursor-default'>
-                                        <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                        <img src={player.image_profile} className='w-12 h-12 rounded-full' alt={`Profile ${index}`} />
                                     </button>
                                 </div>
                             ))}
@@ -51,7 +46,7 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                         {event_players_team_b.map((player:any, index:any) => (
                                 <div key={index}>
                                     <button className='cursor-default'>
-                                        <img src={`https://preapi.sportime.fun/public${player.image_profile}`} className='rounded-full' width={'40'} alt={`Profile ${index}`} />
+                                        <img src={player.image_profile} className='w-12 h-12 rounded-full' alt={`Profile ${index}`} />
                                     </button>
                                 </div>
                             ))}
@@ -67,13 +62,13 @@ export const ModalInfo = ({onClose, number_players, event_players_team_a, event_
                     </div>
                 </div>
                 <div className='relative'>
-                    <div className='bg-primary absolute p-2 px-5 rounded-xl sm:top-[-1rem] sm:left-[5.5rem] max-sm:top-[-1rem] max-sm:left-[4.5rem]'>
-                        <img src={CamisetaBlanca}/>
-                    </div>
+                <div className='bg-primary absolute p-2 px-5 rounded-xl sm:top-[-1rem] sm:left-[5.5rem] max-sm:top-[-1rem] max-sm:left-[4.5rem]'>
+                    <img src={team_a_shirt || ""}/>
+                </div>
                 </div>
                 <div className='relative'>
                     <div className='bg-primary absolute p-2 px-5 rounded-xl sm:top-[-1rem] sm:right-[6rem] max-sm:top-[-1rem] max-sm:right-[5rem]'>
-                        <img src={CamisetaNegra}/>
+                        <img src={team_b_shirt || ""}/>
                     </div>
                 </div>
                 <div className='px-6 py-4 pt-8 bg-fondo text-center'>

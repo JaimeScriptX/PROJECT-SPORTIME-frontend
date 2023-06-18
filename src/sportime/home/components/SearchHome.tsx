@@ -8,12 +8,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import "../../../assets/css/datepicker.css"
 
 const sportOptions:Array<any> = [
+  { value: '', label: 'Deporte' },
   { value: 'baloncesto', label: 'Baloncesto' },
   { value: 'futbol', label: 'Fútbol' },
   { value: 'futbol sala', label: 'Fútbol sala' },
   { value: 'padel', label: 'Pádel' },
   { value: 'tenis', label: 'Tenis' }
 ];
+
+const hourPlaceholderOption = { value: '', label: 'Hora' };
 
 interface Select {
   value: string;
@@ -29,7 +32,7 @@ export const SearchHome = () => {
   const [sport, setSport] = useState<Select | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedHour, setSelectedHour] = useState<Select | null>(null);
-  const [hourOptions, setHourOptions] = useState([]);
+  const [hourOptions, setHourOptions] = useState<Array<Select>>([]);
 
   const handleDateChange = (date:any) => {
     setSelectedDate(date);
@@ -62,7 +65,7 @@ export const SearchHome = () => {
     };
 
     const options = generateHourOptions();
-    setHourOptions(options);
+    setHourOptions([hourPlaceholderOption, ...options]);
   }, [selectedDate]);
 
   const handleSubmit = async(e:any) => {
@@ -73,28 +76,28 @@ export const SearchHome = () => {
       dateS.setUTCDate(dateS.getUTCDate() + 1);
     }  
 
-    let timeString = ""
-    if (selectedHour && selectedHour.label) {
+    let timeString = "";
+    if (selectedHour && selectedHour.label && selectedHour.value.length !== 0) {
       const timeParts = selectedHour.label.split(':');
       const hour = parseInt(timeParts[0]);
       const minute = parseInt(timeParts[1]);
-      
+    
       const selectedDateTime = new Date();
       selectedDateTime.setHours(hour);
       selectedDateTime.setMinutes(minute);
       timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
-      console.log(timeString)
+      console.log(timeString);
     }
 
-
+    const time = timeString.length === 0 ? undefined : timeString
+    console.log(time)
     try {
-      const searchData = await getSearch({search, date:dateS, sport: sportS || "", time: timeString});
-      history("/search", { state: { searchData } });
+      const searchData = await getSearch({search, date:dateS, sport: sportS || "", time: time });
+      history("/search", { state: { searchData , search, sport, selectedDate, selectedHour, hourOptions } });
     } catch (error) {
       console.error(error);
-      // Manejar el error de búsqueda
     }
-  }  
+  }
 
   return (
     <>
@@ -105,71 +108,71 @@ export const SearchHome = () => {
             <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
             <input type="search" 
-            className="py-4 pl-6 text-md text-black bg-transparent focus:ring-none focus:outline-none  dark:bg-transparent dark:placeholder-gray-400 dark:text-black dark:focus:ring-black dark:focus:border-none" 
-            name='search'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Dirección, centro de..." 
-            />
-          <ReactSelect
-            options={sportOptions}
-            id="sport"
-            value={sport}
-            onChange={setSport}
-            placeholder="Deporte"
-            className="text-lg border-x-2 focus:outline-none"
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                height: '43px',
-                width: '150px',
-                border: '0px',
-              }),
-              indicatorSeparator: () => ({ display: 'none' }),
-            }}
-            theme={(theme:any) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary25: '#a5ff1b',
-                primary: '#222222',
-              },
-            })}
-          />
-          <DatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
-            dateFormat="dd/MM/yyyy"
-            className=" border-gray-300 pl-2 py-2 w-32"
-            placeholderText='Fecha'
-            locale={es}
-            minDate={new Date()}
-          />
-          <ReactSelect
-              options={hourOptions}
-              value={selectedHour}
-              onChange={setSelectedHour}
-              placeholder="Hora"
-              className=" ml-2 text-lg border-l-2 focus:outline-none"
-              styles={{
-                control: (provided) => ({
-                  ...provided,
-                  height: '43px',
-                  width: '120px',
-                  border: '0px',
-                }),
-                indicatorSeparator: () => ({ display: 'none' }),
-              }}
-              theme={(theme:any) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary25: '#a5ff1b',
-                  primary: '#222222',
-                },
-              })}
-            />
-            <button type="submit" className="text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
+    className="py-4 pl-6 text-md text-black bg-transparent focus:ring-none focus:outline-none  dark:bg-transparent dark:placeholder-gray-400 dark:text-black dark:focus:ring-black dark:focus:border-none" 
+    name='search'
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder="Dirección, centro de..." 
+    />
+    <ReactSelect
+      options={sportOptions}
+      id="sport"
+      value={sport}
+      onChange={setSport}
+      placeholder={sportOptions[0].label}
+      className="text-lg border-x-2 focus:outline-none"
+      styles={{
+        control: (provided) => ({
+          ...provided,
+          height: '43px',
+          width: '150px',
+          border: '0px',
+        }),
+        indicatorSeparator: () => ({ display: 'none' }),
+      }}
+      theme={(theme:any) => ({
+        ...theme,
+        colors: {
+          ...theme.colors,
+          primary25: '#a5ff1b',
+          primary: '#222222',
+        },
+      })}
+    />
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleDateChange}
+        dateFormat="dd/MM/yyyy"
+        className=" border-gray-300 pl-2 py-2 w-32"
+        placeholderText='Fecha'
+        locale={es}
+        minDate={new Date()}
+      />
+      <ReactSelect
+          options={hourOptions}
+          value={selectedHour}
+          onChange={setSelectedHour}
+          placeholder={hourPlaceholderOption.label}
+          className=" ml-2 text-lg border-l-2 focus:outline-none"
+          styles={{
+            control: (provided) => ({
+              ...provided,
+              height: '43px',
+              width: '120px',
+              border: '0px',
+            }),
+            indicatorSeparator: () => ({ display: 'none' }),
+          }}
+          theme={(theme:any) => ({
+            ...theme,
+            colors: {
+              ...theme.colors,
+              primary25: '#a5ff1b',
+              primary: '#222222',
+            },
+          })}
+        />
+            <button type="submit" className="text-black bg-lime-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
         </div>
     </form>
     </>

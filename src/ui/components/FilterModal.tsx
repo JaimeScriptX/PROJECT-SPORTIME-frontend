@@ -6,12 +6,15 @@ import { useSearchStore } from "../../hooks/useSearchStore";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const sportOptions:Array<any> = [
+  { value: '', label: 'Deporte' },
   { value: 'baloncesto', label: 'Baloncesto' },
   { value: 'futbol', label: 'Fútbol' },
   { value: 'futbol sala', label: 'Fútbol sala' },
   { value: 'padel', label: 'Pádel' },
   { value: 'tenis', label: 'Tenis' }
 ];
+
+const hourPlaceholderOption = { value: '', label: 'Hora' };
 
 interface Select {
   value: string;
@@ -33,7 +36,13 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
   const [sport, setSport] = useState<Select | null>(null || sportData);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null || selectedDateData);
   const [selectedHour, setSelectedHour] = useState<Select | null>(null || selectedHourData);
-  const [hourOptions, setHourOptions] = useState([] || hourOptionsData);
+  const [hourOptions, setHourOptions] = useState<Array<Select>>([] || hourOptionsData);
+
+  const handleOverlayClick = (event:any) => {
+    if (event.target === event.currentTarget) {
+      closeModal();
+    }
+  };
 
   useEffect(() => {
     const generateHourOptions = () => {
@@ -60,7 +69,7 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
       return options;
     };
     const options = generateHourOptions();
-    setHourOptions(options);
+    setHourOptions([hourPlaceholderOption, ...options]);
   }, [selectedDate]);
 
   const handleDateChange = (date:any) => {
@@ -87,8 +96,10 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
       timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
       console.log(timeString)
     }
+    const time = timeString.length === 0 ? undefined : timeString
+    
       try {
-        const searchData = await getSearch({search, date: dateS, sport:sportS || "", time:timeString});
+        const searchData = await getSearch({search, date: dateS, sport:sportS || "", time:time});
         history("/search", { state: { searchData, sport, selectedDate, selectedHour, hourOptions } });
         closeModal()
       } catch (error) {
@@ -101,7 +112,7 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
 
 
   return (
-<div className="fixed mt-16 inset-0 items-center justify-center z-50  bg-fondo bg-opacity-60">
+<div className="fixed mt-16 inset-0 items-center justify-center z-50 bg-fondo bg-opacity-60" onClick={handleOverlayClick}>
       <div className="bg-white px-10 pt-3 pb-5 rounded-b-xl">
         <h2 className="text-xl font-semibold mb-4">Filtros</h2>
         <form onSubmit={handleSubmit}>  
@@ -121,7 +132,7 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
             id="sport"
             value={sport}
             onChange={setSport}
-            placeholder="Selecciona un deporte"
+            placeholder={sportOptions[0].label}
             className="text-lg mt-2"
             styles={{
               control: (provided) => ({
@@ -177,7 +188,7 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
           options={hourOptions}
           value={selectedHour}
           onChange={setSelectedHour}
-          placeholder="Hora"
+          placeholder={hourPlaceholderOption.label}
           className=" text-lg mt-2"
           styles={{
             control: (provided) => ({
@@ -213,7 +224,7 @@ export const FilterModal = ({ closeModal , searchN }:{closeModal:any, searchN:st
         <div className="flex ">
           <button
             type="submit"
-            className="w-full bg-primary hover:bg-blue-600 text-black font-semibold py-2 px-4 rounded-md"
+            className="w-full bg-primary hover:bg-lime-500 text-black font-semibold py-2 px-4 rounded-md"
             >
             Buscar
           </button>

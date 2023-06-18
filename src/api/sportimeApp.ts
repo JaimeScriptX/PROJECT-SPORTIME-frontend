@@ -1,21 +1,23 @@
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 import { getEnvVariables } from "../helpers";
 
-const {VITE_API_URL} = getEnvVariables()
+const { VITE_API_URL } = getEnvVariables();
 
 const sportimeApi = axios.create({
-    baseURL: VITE_API_URL
+  baseURL: VITE_API_URL,
+});
 
-})
+sportimeApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
 
-sportimeApi.interceptors.request.use( (config:any)  => {
-
+  if (token) {
     config.headers = {
-        ...config.headers,
-        'x-token': localStorage.getItem('token')
-    }
+      ...config.headers,
+      'Authorization': `Bearer ${token}`,
+    } as AxiosRequestHeaders;
+  }
 
-    return config
-})
+  return config;
+});
 
-export default sportimeApi
+export default sportimeApi;

@@ -3,24 +3,40 @@ import ReactSelect  from 'react-select';
 import Select from "react-select/dist/declarations/src/Select";
 import { usePersonStore } from "../../hooks/usePersonStore";
 import ReactDatePicker from "react-datepicker";
+import { es } from "date-fns/locale";
 
 const genderOptions:Array<any> = [
   { value: 'Masculino', label: 'Masculino' },
-  { value: 'femenino', label: 'Femenino' },
-  { value: 'mixto', label: 'Mixto' }
+  { value: 'Femenino', label: 'Femenino' },
+  { value: 'Mixto', label: 'Mixto' }
 ];
 
-export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacionality, location, age, height, weight, sex }:{onClose:any, photo_profile:string, name_lastname:string, nacionality:string, location:string, age:string, height:number, weight:number, sex:string}) => {
+export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacionality, location, birthday, height, weight, sex }:{onClose:any, photo_profile:string, name_lastname:string, nacionality:string, location:string, birthday:string, height:number, weight:number, sex:string}) => {
 
     const [nameLastname, setNameLastname] = useState(name_lastname)
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [nacionalityE, setNacionalityE] = useState(nacionality)
     const [locationE, setLocationE] = useState(location)
-    const [date, setDate] = useState<Date | null>(null);
+    const [date, setDate] = useState<Date | null>(new Date());
     const [heightE, setHeightE] = useState<number>(height)
     const [weightE, setWeightE] = useState<number>(weight)
     const [sexE, setSexE] = useState<{ value: string; label: string } | null>(genderOptions.find(option => option.value === sex) || null)
     const {UpdatePersonById, user} = usePersonStore()
+
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+          const base64String = reader.result as string;
+          console.log(base64String)
+          setSelectedImage(base64String);
+      };
+
+      if (file) {
+          reader.readAsDataURL(file);
+      }
+  };
 
 
     const handleOverlayClick = (event:any) => {
@@ -83,34 +99,40 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
               <hr className="opacity-5 mt-2"/>
               <form className="mt-3" onSubmit={handleSubmit}>
               <div>
-                  <label htmlFor="profile-picture" className="block text-sm text-primary font-bold">
+                <label htmlFor="profile-picture" className="block text-sm text-primary font-bold">
                     Foto de perfil
-                  </label>
-                  <input
+                </label>
+                <input
                     type="file"
                     id="profile-picture"
                     accept="image/*"
                     className="hidden"
                     formEncType="multipart/form-data"
-                    onChange={(e) => setSelectedImage(e.target.files?.[0] || null)}
-                  />
+                    onChange={handleImageUpload}
+                />
 
                   <label htmlFor="profile-picture" className="block cursor-pointer pt-2">
-                    <div className="relative w-16 h-16 rounded-full border-2 border-gray-200 overflow-hidden">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                      <div className="relative w-16 h-16 rounded-full border-2 border-gray-200 overflow-hidden">
+                          <div className="absolute inset-0 flex items-center justify-center">
+                              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                          </div>
+                          {selectedImage ? (
+                              <img
+                                  src={selectedImage}
+                                  alt="Profile picture"
+                                  className="w-full h-full object-cover"
+                              />
+                          ) : (
+                              <img
+                                  src={photo_profile}
+                                  alt="Profile picture"
+                                  className="w-full h-full object-cover"
+                              />
+                          )}
                       </div>
-                      <img
-                        src={photo_profile}
-                        alt="Profile picture"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
                   </label>
-                </div>
-                <div>
                   <label htmlFor="user name" className="block text-sm text-primary font-bold mt-4">
                     Nombre y apellidos
                   </label>
@@ -162,7 +184,9 @@ export const ModalEditarPerfil = ({onClose, photo_profile, name_lastname, nacion
                       <ReactDatePicker
                           selected={date}
                           onChange={setDate}
+                          dateFormat="dd/MM/yyyy"
                           className="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                          locale={es}
                       />
                   </div>
                   <div className="mt-4">

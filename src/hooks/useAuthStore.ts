@@ -19,7 +19,7 @@ export const useAuthStore = () => {
             localStorage.setItem('token', data.token)
             const expirate = decoded.exp * 1000
             localStorage.setItem('expiration', expirate.toString())
-            dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
+            dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id, image_profile:decoded.image_profile}));
         } catch (error) {
             dispatch(onLogout('Asegúrate de que estás utilizando la dirección de correo electrónico o usuario, y la contraseña correctas.'))
             setTimeout(() => {
@@ -38,7 +38,12 @@ export const useAuthStore = () => {
             const expirate = decoded.exp * 1000
             localStorage.setItem('expiration', expirate.toString())
             localStorage.setItem('token', data.user.token)
-            dispatch(onLogin({name:data.user.name_and_lastname, uuid: data.user.id, tokenExpiration: decoded.exp}))
+            dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id, image_profile:decoded.image_profile}))
+            localStorage.removeItem('nameValue');
+            localStorage.removeItem('usernameValue');
+            localStorage.removeItem('emailValue');
+            localStorage.removeItem('passwordValue');
+            localStorage.removeItem('phoneValue');
             window.location.href = '/';
         } catch (error:any) {
             dispatch(onLogout(error.response.data.message ||"Error en el registro"))
@@ -63,7 +68,7 @@ export const useAuthStore = () => {
             const nowTime = Date.now(); // Obtener la fecha actual en milisegundos
             if (tokenExpirationTime > nowTime) {
               // El token aún no ha expirado
-              dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id}));
+              dispatch(onLogin({name:decoded.name_and_lastname,username:decoded.username,email:decoded.email, uuid: decoded.id, image_profile:decoded.image_profile}));
             } else {
               // El token ha expirado
               localStorage.removeItem('token')
