@@ -85,11 +85,13 @@ const scrollToRightCreated = () => {
     <>
     <Navbar />
     <div className="bg-fondo py-5 pb-6">
+        <div>
+          <h1 className="text-white text-4xl pl-5 pb-2">Perfil</h1>
+        </div>
         <div className="bg-white shadow-md rounded-lg p-6 mx-5">
             <div className="relative py-7">
                 <div
-                    className="absolute inset-0 "
-                    style={{ backgroundImage: "url(https://picsum.photos/800)" }}
+                    className="absolute inset-0 bg-portada"
                 ></div>
                 <div className="relative">
                     <img

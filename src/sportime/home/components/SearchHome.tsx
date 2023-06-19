@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import ReactSelect  from 'react-select';
-import DatePicker from "react-datepicker"
-import { useNavigate } from "react-router-dom";
-import { useSearchStore } from "../../../hooks/useSearchStore";
+import DatePicker from 'react-datepicker';
 import es from 'date-fns/locale/es';
 import 'react-datepicker/dist/react-datepicker.css';
 import "../../../assets/css/datepicker.css"
+import { useSearchStore } from '../../../hooks/useSearchStore';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const sportOptions:Array<any> = [
   { value: '', label: 'Deporte' },
@@ -24,15 +24,21 @@ interface Select {
 }
 
 export const SearchHome = () => {
-
   const { getSearch } = useSearchStore();
   const history = useNavigate();
 
-  const [search, setSearch] = useState("")
-  const [sport, setSport] = useState<Select | null>(null);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedHour, setSelectedHour] = useState<Select | null>(null);
-  const [hourOptions, setHourOptions] = useState<Array<Select>>([]);
+  const location = useLocation();
+  const searchData = location.state?.search;
+  const sportData = location.state?.sport;
+  const selectedDateData = location.state?.selectedDate;
+  const selectedHourData = location.state?.selectedHour;
+  const hourOptionsData = location.state?.hourOptions;
+
+  const [search, setSearch] = useState("" || searchData)
+  const [sport, setSport] = useState<Select | null>(null || sportData);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null || selectedDateData);
+  const [selectedHour, setSelectedHour] = useState<Select | null>(null || selectedHourData);
+  const [hourOptions, setHourOptions] = useState<Array<Select>>([] || hourOptionsData);
 
   const handleDateChange = (date:any) => {
     setSelectedDate(date);
@@ -98,16 +104,15 @@ export const SearchHome = () => {
       console.error(error);
     }
   }
-
   return (
-    <>
-    <form className="bg-white px-12 py-4 border-gray-300 rounded-full" onSubmit={handleSubmit}>
-    <label className="text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div className="relative flex flex-row items-center">
-            <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-            <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </div>
-            <input type="search" 
+
+<form className="bg-white p-2 px-5 flex items-center justify-between border border-gray-300 rounded-full" onSubmit={handleSubmit}>
+  <label className="text-sm font-medium text-gray-900 sr-only dark:text-white">Buscar</label>
+  <div className="relative flex flex-row items-center">
+    <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+      <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </div>
+    <input type="search" 
     className="py-4 pl-6 text-md text-black bg-transparent focus:ring-none focus:outline-none  dark:bg-transparent dark:placeholder-gray-400 dark:text-black dark:focus:ring-black dark:focus:border-none" 
     name='search'
     value={search}
@@ -172,9 +177,8 @@ export const SearchHome = () => {
             },
           })}
         />
-            <button type="submit" className="text-black bg-lime-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
-        </div>
-    </form>
-    </>
+    <button type="submit" className="text-black bg-lime-500 hover:bg-lime-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-primary dark:hover:bg-lime-400 dark:focus:ring-blue-800">Buscar</button>
+  </div>
+</form>
   )
 }

@@ -1,4 +1,4 @@
-export const ConditionalUser = ({ eventData, user, personData, handleDeletePlayer, openModalElegir }: { eventData: any, user: any, personData: any, handleDeletePlayer: any, openModalElegir: any }) => {
+export const ConditionalUser = ({ eventData, user, personData, handleDeletePlayer, openModalElegir, cancellation_reason }: { eventData: any, user: any, personData: any, handleDeletePlayer: any, openModalElegir: any, cancellation_reason:any }) => {
   const isEventInProgressOrCompleted = eventData?.state.type === "Creado" || eventData?.state.type === "Completado";
   const isEventCanceled = eventData?.state.type === "Cancelado";
   const isEventInProgress = eventData?.state.type === "En curso";
@@ -23,7 +23,7 @@ export const ConditionalUser = ({ eventData, user, personData, handleDeletePlaye
             </>
           ) : (
             <>
-              {!user.uuid || personData?.fk_sex_id?.gender === "Mixto" || (personData?.fk_sex_id?.gender && eventData && personData?.fk_sex_id?.gender === eventData?.fk_sex_id?.gender) ? (
+              {!user.uuid || eventData?.fk_sex_id?.gender === "Mixto" || (personData?.fk_sex_id?.gender && eventData && personData?.fk_sex_id?.gender === eventData?.fk_sex_id?.gender) ? (
                 <>
                   {eventData?.state.type === "Completado" ? (
                     <h1 className='bg-white text-black font-n27 text-lg text-center p-2 rounded-3xl w-72 mr-2'>No hay plazas disponibles</h1>
@@ -68,7 +68,7 @@ export const ConditionalUser = ({ eventData, user, personData, handleDeletePlaye
         <h1 className='bg-white text-black font-n27 text-lg text-center p-2 rounded-3xl w-72 mr-2'>El partido ha sido cancelado</h1>
       )}
       {eventData?.fk_sportcenter_id?.id && isEventCanceled && eventData.fk_person_id.id !== user.uuid && (
-        <h1 className='bg-white text-black font-n27 text-lg text-center p-2 rounded-3xl w-72 mr-2'>Causa de la cancelación: </h1>
+        <h1 className='bg-white text-black font-n27 text-lg text-center p-2 rounded-3xl w-72 mr-2'>Causa de la cancelación: {cancellation_reason}</h1>
       )}
     </>
   );

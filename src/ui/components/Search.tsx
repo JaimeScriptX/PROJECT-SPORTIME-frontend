@@ -102,7 +102,6 @@ export const Search = () => {
       history("/search", { state: { searchData , search, sport, selectedDate, selectedHour, hourOptions } });
     } catch (error) {
       console.error(error);
-      // Manejar el error de búsqueda
     }
   }
   return (

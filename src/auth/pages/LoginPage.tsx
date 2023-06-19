@@ -12,6 +12,7 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {startLogin, errorMessage} = useAuthStore()
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     if ( errorMessage !== undefined ) {
@@ -22,6 +23,23 @@ export const LoginPage = () => {
   const handleSubmit = async(event:any) => {
       event.preventDefault()
       await startLogin({ email:email, password:password})
+  };
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('rememberedEmail');
+    if (storedEmail) {
+      setEmail(storedEmail);
+      setRememberMe(true)
+    }
+  }, []);
+
+  const handleRememberMeChange = (event: any) => {
+    setRememberMe(event.target.checked);
+    if (event.target.checked) {
+      localStorage.setItem('rememberedEmail', email);
+    } else {
+      localStorage.removeItem('rememberedEmail');
+    }
   };
 
   return (
@@ -114,22 +132,22 @@ export const LoginPage = () => {
         </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-white">
-                  Recuérdame
-                </label>
-              </div>
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-primary focus:ring-indigo-500 border-gray-300 rounded"
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-white">
+                Recuérdame
+              </label>
+            </div>
 
               <div className="text-sm">
-                <a href="/restablecer-contraseña" className="font-medium text-primary hover:text-lime-600">
-                  ¿Olvidaste la contraseña?
-                </a>
+                
               </div>
             </div>
 

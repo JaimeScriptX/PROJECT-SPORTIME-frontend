@@ -79,8 +79,7 @@ const scrollToRightCreated = () => {
         <div className="bg-white shadow-md rounded-lg p-6 mx-5">
             <div className="relative py-7">
                 <div
-                    className="absolute inset-0 "
-                    style={{ backgroundImage: "url(https://picsum.photos/800)" }}
+                  className="absolute inset-0 bg-portada"
                 ></div>
                 <div className="relative">
                     <img

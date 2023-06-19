@@ -269,8 +269,12 @@ export const CreateEventSportimePage = () => {
     }
 
     const handlePrice = () => {
-      setPrice(selectedHours.length * sportCenterPrice / (Number(playerCount) * 2))
+      const price = selectedHours.length * sportCenterPrice / (Number(playerCount) * 2);
+      const roundedPrice = price.toFixed(1);
+      setPrice(parseFloat(roundedPrice));
     }
+    
+    
 
     const isWeekday = (date:any) => {
       const day = date.getDay();

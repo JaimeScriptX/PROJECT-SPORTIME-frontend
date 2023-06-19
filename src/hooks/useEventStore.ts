@@ -74,7 +74,7 @@ export const useEventStore = () => {
     const changeResult = async({event_id, team_a, team_b }:{event_id:string, team_a:any, team_b:any}) => {
         const {data} = await sportimeApi.put(`/eventsResults/${event_id}`,{ team_a, team_b });
         console.log(data)
-        return data
+        window.location.href = `/evento/${event_id}`
     }
     
     const addReason = async({id, cancellationReason }:{id:any, cancellationReason:any}) => {

@@ -31,6 +31,7 @@ interface initialState {
     price: number,
     date: string,
     time: string,
+    cancellation_reason: string,
     time_end: string,
     duration:string,
     number_players: number,
@@ -292,7 +293,7 @@ export const EventPage = () => {
           </div>
           <hr className='mr-5 mt-2 opacity-5 pb-3'/>
           <div className='flex justify-center'>
-          <ConditionalUser eventData={eventData} user={user} personData={personData}  handleDeletePlayer={handleDeletePlayer} openModalElegir={openModalElegir}  />
+          <ConditionalUser eventData={eventData} user={user} personData={personData}  handleDeletePlayer={handleDeletePlayer} openModalElegir={openModalElegir} cancellation_reason={eventData?.cancellation_reason || ""} />
           {showModalElegir && (
             <ModalElegir handleJoinEvent={handleJoinEvent} number_players={eventData?.number_players} event_players_team_a={eventData?.event_players?.event_players_A} event_players_team_b={eventData?.event_players.event_players_B} team_a_shirt={eventData?.fk_teamcolor_id.image_shirt || null} team_b_shirt={eventData?.fk_teamcolor_two_id.image_shirt || null}  onClose={closeModalElegir}/>
           )}
@@ -301,7 +302,7 @@ export const EventPage = () => {
             <ModalMarcador onClose={closeModalMarcador} team_a={eventData?.events_results?.team_a} team_b={eventData?.events_results?.team_b} event_id={eventData?.id}/>
           )}
           {showModalCause && (
-            <ModalAddCause onClose={closeModalCause} handleAddCause={handleAddCause}/>
+            <ModalAddCause onClose={closeModalCause} handleAddCause={handleAddCause} cancellation_reason={eventData?.cancellation_reason || ""}/>
           )}
           </div>
           <hr className='mr-5 mt-3 opacity-5'/>

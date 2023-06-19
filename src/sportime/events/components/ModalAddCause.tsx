@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-export const ModalAddCause = ({onClose, handleAddCause}:{onClose:any, handleAddCause:any}) => {
+export const ModalAddCause = ({onClose, handleAddCause, cancellation_reason}:{onClose:any, handleAddCause:any, cancellation_reason:any}) => {
 
-    const [causeText, setCauseText] = useState('');
+    const [causeText, setCauseText] = useState('' || cancellation_reason);
 
     const handleOverlayClick = (event:any) => {
         if (event.target === event.currentTarget) {
